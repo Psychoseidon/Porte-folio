@@ -12,29 +12,25 @@
       "objectifs": [
         { "titre": "Mettre ce site en ligne", "statut": "fait", "note": "Eleventy et GitHub Pages, septembre 2026." },
         { "titre": "Démarrer l’alternance", "statut": "prevu", "note": "" },
-        { "titre": "Documenter chaque TP dans le journal", "statut": "prevu", "note": "Une entrée le jour même, même courte." },
-        { "titre": "Choisir un sujet de veille technologique", "statut": "prevu", "note": "" },
-        { "titre": "Monter un labo virtualisé à la maison", "statut": "idee", "note": "VirtualBox ou Proxmox." },
-        { "titre": "Un domaine Active Directory de test", "statut": "idee", "note": "Utilisateurs, groupes, GPO, partage de fichiers." },
-        { "titre": "GLPI en conteneur Docker", "statut": "idee", "note": "Gestion de parc et tickets." }
+        { "titre": "Apprendre à créer des sites pour des clients", "statut": "en-cours", "note": "Premier client : T-Bird Paris, boutique en ligne en pré-ouverture." },
+        { "titre": "Monter un NAS à la maison", "statut": "prevu", "note": "Stockage partagé et sauvegardes." }
       ]
     },
     {
       "periode": "2027 – 2028",
       "titre": "Deuxième année de BTS",
       "objectifs": [
-        { "titre": "Préparer les épreuves du BTS", "statut": "prevu", "note": "" },
-        { "titre": "Superviser un petit réseau", "statut": "idee", "note": "Zabbix, Grafana ou équivalent." },
-        { "titre": "Accéder au labo à distance par VPN", "statut": "idee", "note": "" }
+        { "titre": "Obtenir le BTS SIO option SISR", "statut": "prevu", "note": "" },
+        { "titre": "Préparer la poursuite d’études", "statut": "prevu", "note": "Candidatures en licence." }
       ]
     },
     {
-      "periode": "Et après",
-      "titre": "Plus loin",
+      "periode": "Après le BTS",
+      "titre": "Poursuite d’études",
       "objectifs": [
-        { "titre": "Une certification réseau", "statut": "idee", "note": "Par exemple Cisco CCNA." },
-        { "titre": "Héberger ce site sur mon propre serveur", "statut": "idee", "note": "Serveur web, HTTPS, sauvegardes." },
-        { "titre": "Un nom de domaine à mon nom", "statut": "idee", "note": "" }
+        { "titre": "Une licence", "statut": "prevu", "note": "Parcours à choisir." },
+        { "titre": "Un master", "statut": "idee", "note": "Peut-être, selon la suite." },
+        { "titre": "Héberger ce site sur mon propre NAS ou serveur", "statut": "idee", "note": "" }
       ]
     }
   ]
