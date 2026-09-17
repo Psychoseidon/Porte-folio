@@ -1,0 +1,41 @@
+{
+  "legende": {
+    "fait": "Fait",
+    "en-cours": "En cours",
+    "prevu": "Prévu",
+    "idee": "Idée"
+  },
+  "etapes": [
+    {
+      "periode": "2026 – 2027",
+      "titre": "Première année de BTS",
+      "objectifs": [
+        { "titre": "Mettre ce site en ligne", "statut": "fait", "note": "Eleventy et GitHub Pages, septembre 2026." },
+        { "titre": "Démarrer l’alternance", "statut": "prevu", "note": "" },
+        { "titre": "Documenter chaque TP dans le journal", "statut": "prevu", "note": "Une entrée le jour même, même courte." },
+        { "titre": "Choisir un sujet de veille technologique", "statut": "prevu", "note": "" },
+        { "titre": "Monter un labo virtualisé à la maison", "statut": "idee", "note": "VirtualBox ou Proxmox." },
+        { "titre": "Un domaine Active Directory de test", "statut": "idee", "note": "Utilisateurs, groupes, GPO, partage de fichiers." },
+        { "titre": "GLPI en conteneur Docker", "statut": "idee", "note": "Gestion de parc et tickets." }
+      ]
+    },
+    {
+      "periode": "2027 – 2028",
+      "titre": "Deuxième année de BTS",
+      "objectifs": [
+        { "titre": "Préparer les épreuves du BTS", "statut": "prevu", "note": "" },
+        { "titre": "Superviser un petit réseau", "statut": "idee", "note": "Zabbix, Grafana ou équivalent." },
+        { "titre": "Accéder au labo à distance par VPN", "statut": "idee", "note": "" }
+      ]
+    },
+    {
+      "periode": "Et après",
+      "titre": "Plus loin",
+      "objectifs": [
+        { "titre": "Une certification réseau", "statut": "idee", "note": "Par exemple Cisco CCNA." },
+        { "titre": "Héberger ce site sur mon propre serveur", "statut": "idee", "note": "Serveur web, HTTPS, sauvegardes." },
+        { "titre": "Un nom de domaine à mon nom", "statut": "idee", "note": "" }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+---
+layout: base.njk
+title: Objectifs
+permalink: /objectifs/
+---
+{%- set total = objectifs.etapes | compterStatut("engages") %}
+{%- set idees = objectifs.etapes | compterStatut("idee") %}
+{%- set faits = objectifs.etapes | compterStatut("fait") %}
+{%- set enCours = objectifs.etapes | compterStatut("en-cours") %}
+<header class="bandeau">
+  <div class="conteneur">
+    <p class="surtitre">Objectifs</p>
+    <h1>Ma feuille de route</h1>
+    <p class="chapeau">Ce que je vise en informatique pour les années à venir. Une « idée » n’est pas un engagement : c’est une piste que je garde sous le coude.</p>
+    <div class="progression" role="img" aria-label="{{ faits }} objectif{% if faits > 1 %}s{% endif %} atteint{% if faits > 1 %}s{% endif %} sur {{ total }} prévus">
+      <div class="progression-barre">
+        <span class="progression-fait" style="width: {{ (faits / total * 100) | round(1) }}%"></span>
+        <span class="progression-en-cours" style="width: {{ (enCours / total * 100) | round(1) }}%"></span>
+      </div>
+      <p class="mono"><span class="accent">{{ faits }}</span> / {{ total }} atteint{% if faits > 1 %}s{% endif %}{% if enCours %} · {{ enCours }} en cours{% endif %}{% if idees %} · {{ idees }} idée{% if idees > 1 %}s{% endif %} en réserve{% endif %}</p>
+    </div>
+  </div>
+</header>
+
+<section class="conteneur section">
+  <ol class="etapes">
+    {%- for etape in objectifs.etapes %}
+    <li class="etape">
+      <div class="etape-tete">
+        <span class="frise-periode">{{ etape.periode }}</span>
+        <h2>{{ etape.titre }}</h2>
+      </div>
+      <ul class="objectifs">
+        {%- for o in etape.objectifs %}
+        <li class="objectif objectif-{{ o.statut }}">
+          <span class="pastille-statut">{{ objectifs.legende[o.statut] }}</span>
+          <div>
+            <h3>{{ o.titre }}</h3>
+            {%- if o.note %}<p>{{ o.note }}</p>{% endif %}
+          </div>
+        </li>
+        {%- endfor %}
+      </ul>
+    </li>
+    {%- endfor %}
+  </ol>
+</section>

@@ -1,17 +1,20 @@
 ---
 layout: base.njk
 ---
+{%- set derniere = collections.journal[0] %}
+{%- set faits = objectifs.etapes | compterStatut("fait") %}
+{%- set total = objectifs.etapes | compterStatut("engages") %}
 <section class="accueil">
   <canvas class="reseau" aria-hidden="true"></canvas>
   <div class="conteneur accueil-grille">
     <div class="accueil-texte-bloc">
-      <p class="surtitre"><span class="point-vivant" aria-hidden="true"></span>{{ "En alternance" if site.alternance.enCours else "Disponible pour une alternance" }}</p>
+      <p class="surtitre"><span class="point-vivant" aria-hidden="true"></span>BTS SIO · SISR · en alternance</p>
       <h1 class="accueil-nom">{{ site.nom | replace(" ", "<br>") | safe }}</h1>
       <p class="accueil-titre">{{ site.titre }}</p>
-      <p class="accueil-texte">Venu à l’informatique par le jeu vidéo, je transforme cinq ans de bricolage en métier : systèmes, réseaux, et un site e-commerce construit avec une IA.</p>
+      <p class="accueil-texte">Venu à l’informatique par le jeu vidéo. Ici, je garde la trace de ce que je construis, de ce que j’apprends et de ce que je vise.</p>
       <div class="actions">
         <a class="bouton" href="/realisations/">Voir mes réalisations</a>
-        <a class="bouton bouton-secondaire" href="/contact/">Me contacter</a>
+        <a class="bouton bouton-secondaire" href="/journal/">Lire le journal</a>
       </div>
     </div>
 
@@ -24,13 +27,15 @@ layout: base.njk
         <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">whoami</span></p>
         <p class="ligne-sortie">{{ site.nom }} — étudiant en BTS SIO, option SISR</p>
         <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">cat statut.txt</span></p>
-        <p class="ligne-sortie"><span class="ok">●</span>
-          {%- if site.alternance.enCours %} en alternance chez {{ site.alternance.entreprise }}
-          {%- else %} recherche une alternance · {{ site.disponibilite | lower }}{% endif %}</p>
+        <p class="ligne-sortie"><span class="ok">●</span> en alternance{% if site.alternance.entreprise %} chez {{ site.alternance.entreprise }}{% endif %} · {{ faits }}/{{ total }} objectifs atteints</p>
         <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">ls realisations/</span></p>
         <p class="ligne-sortie ligne-liens">
           {%- for item in collections.realisations %}<a href="{{ item.url }}">{{ item.fileSlug }}/</a>{% endfor -%}
         </p>
+        {%- if derniere %}
+        <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">tail -n 1 journal.log</span></p>
+        <p class="ligne-sortie">[{{ derniere.date | dateIso }}] <a href="{{ derniere.url }}">{{ derniere.data.title }}</a></p>
+        {%- endif %}
         <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">echo $AIDE</span></p>
         <p class="ligne-sortie">Le bouton <span class="accent">&gt;_</span> en haut (ou Ctrl+K) ouvre un vrai terminal.</p>
         <p class="ligne-commande ligne-attente"><span class="invite">$</span> <span class="curseur" aria-hidden="true"></span></p>
@@ -42,8 +47,8 @@ layout: base.njk
     <ul class="chiffres">
       <li><strong>2020</strong><span>début de la pratique en autodidacte</span></li>
       <li><strong>{{ collections.realisations.length }}</strong><span>réalisation{% if collections.realisations.length > 1 %}s{% endif %} documentée{% if collections.realisations.length > 1 %}s{% endif %}</span></li>
-      <li><strong>1 / 1</strong><span>semaine en entreprise, semaine en école</span></li>
-      <li><strong>77</strong><span>{{ site.localisation }} · alternance en Île-de-France</span></li>
+      <li><strong>{{ collections.journal.length }}</strong><span>entrée{% if collections.journal.length > 1 %}s{% endif %} de journal</span></li>
+      <li><strong>{{ faits }}/{{ total }}</strong><span><a href="/objectifs/">objectifs atteints</a></span></li>
     </ul>
   </div>
 </section>
@@ -52,12 +57,57 @@ layout: base.njk
   <div class="conteneur deux-colonnes">
     <div>
       <p class="surtitre">Qui suis-je</p>
-      <h2>D’un loisir de joueur à un projet professionnel</h2>
+      <h2>D’un loisir de joueur à un métier</h2>
     </div>
     <div class="prose">
       <p>L’informatique a commencé chez moi par le jeu vidéo : faire tourner un jeu, monter une machine correcte, héberger un serveur pour jouer avec des amis. De fil en aiguille, j’y ai passé cinq ans en autodidacte, à coups de documentation et de tutoriels.</p>
       <p>À côté, il y a eu mes études, mon métier d’enseignant, une activité indépendante et du sport. L’informatique est longtemps restée le loisir — jusqu’à ce que je décide d’en faire mon métier.</p>
-      <p>Je commence le BTS SIO option SISR en sachant ce qui me manque : la méthode, le cadre professionnel et l’expérience en entreprise. C’est exactement ce que je viens chercher en alternance.</p>
+      <p>Je commence le BTS SIO option SISR en alternance, en sachant ce qui me manque : la méthode, le cadre professionnel et l’expérience en entreprise. Ce site en garde la trace, au fil des deux ans et au-delà.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section apparition">
+  <div class="conteneur deux-colonnes deux-colonnes-egales">
+    <div>
+      <div class="titre-ligne">
+        <div>
+          <p class="surtitre">Journal</p>
+          <h2>Dernières notes</h2>
+        </div>
+        <a class="lien-fleche" href="/journal/">Tout lire <span aria-hidden="true">→</span></a>
+      </div>
+      <ol class="journal journal-compact">
+        {%- for entree in collections.journal.slice(0, 4) %}
+        <li>
+          <time datetime="{{ entree.date | dateIso }}">{{ entree.date | dateLongue }}</time>
+          <h3><a href="{{ entree.url }}">{{ entree.data.title }}</a></h3>
+        </li>
+        {%- else %}
+        <li><p class="vide">Première entrée à venir.</p></li>
+        {%- endfor %}
+      </ol>
+    </div>
+    <div>
+      <div class="titre-ligne">
+        <div>
+          <p class="surtitre">Objectifs</p>
+          <h2>En ligne de mire</h2>
+        </div>
+        <a class="lien-fleche" href="/objectifs/">Feuille de route <span aria-hidden="true">→</span></a>
+      </div>
+      <ul class="objectifs objectifs-compacts">
+        {%- for etape in objectifs.etapes %}
+          {%- for o in etape.objectifs %}
+            {%- if o.statut == "en-cours" or o.statut == "prevu" %}
+            <li class="objectif objectif-{{ o.statut }}">
+              <span class="pastille-statut">{{ objectifs.legende[o.statut] }}</span>
+              <div><h3>{{ o.titre }}</h3></div>
+            </li>
+            {%- endif %}
+          {%- endfor %}
+        {%- endfor %}
+      </ul>
     </div>
   </div>
 </section>

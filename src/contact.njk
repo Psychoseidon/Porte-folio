@@ -7,7 +7,7 @@ permalink: /contact/
   <div class="conteneur">
     <p class="surtitre">Contact</p>
     <h1>Échangeons</h1>
-    <p class="chapeau">Une offre d’alternance, une question sur une réalisation : je réponds rapidement.</p>
+    <p class="chapeau">Une question sur une réalisation, un conseil, une idée de projet : écris-moi.</p>
   </div>
 </header>
 
@@ -32,7 +32,7 @@ permalink: /contact/
     {%- if site.github %}
     <div>
       <dt>GitHub</dt>
-      <dd><a href="{{ site.github }}" rel="noopener">Voir mes dépôts</a></dd>
+      <dd><a href="{{ site.github }}" rel="noopener">Voir mes dépôts</a>{% if site.depot %} · <a href="{{ site.depot }}" rel="noopener">le code de ce site</a>{% endif %}</dd>
     </div>
     {%- endif %}
     <div>

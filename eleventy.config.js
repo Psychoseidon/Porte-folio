@@ -23,6 +23,36 @@ export default function (eleventyConfig) {
     collectionApi.getFilteredByGlob("src/realisations/*.md").sort((a, b) => b.date - a.date)
   );
 
+  // Le journal : une entrée = un fichier Markdown. Les plus récentes d'abord.
+  eleventyConfig.addCollection("journal", (collectionApi) =>
+    collectionApi.getFilteredByGlob("src/journal/*.md").sort((a, b) => b.date - a.date)
+  );
+
+  // « 2026-09-17 » -> « 17 septembre 2026 »
+  eleventyConfig.addFilter("dateLongue", (date) =>
+    new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" }).format(date)
+  );
+
+  // Regroupe des entrées par année : [{ annee: 2026, entrees: [...] }, ...]
+  eleventyConfig.addFilter("parAnnee", (items) => {
+    const groupes = new Map();
+    for (const item of items) {
+      const annee = item.date.getUTCFullYear();
+      if (!groupes.has(annee)) groupes.set(annee, []);
+      groupes.get(annee).push(item);
+    }
+    return [...groupes].map(([annee, entrees]) => ({ annee, entrees }));
+  });
+
+  // Pour l'attribut datetime des balises <time>.
+  eleventyConfig.addFilter("dateIso", (date) => date.toISOString().slice(0, 10));
+
+  // Objectifs : nombre d'objectifs d'un statut donné, toutes étapes confondues.
+  // « engages » = tout sauf les idées (ce qui compte dans la progression).
+  eleventyConfig.addFilter("compterStatut", (etapes, statut) =>
+    etapes.flatMap((e) => e.objectifs).filter((o) => (statut === "engages" ? o.statut !== "idee" : o.statut === statut)).length
+  );
+
   // « 2026-09-01 » -> « septembre 2026 »
   eleventyConfig.addFilter("moisAnnee", (date) =>
     new Intl.DateTimeFormat("fr-FR", { month: "long", year: "numeric", timeZone: "UTC" }).format(date)

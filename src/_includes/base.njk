@@ -3,6 +3,8 @@
   ["/parcours/", "Parcours", "parcours"],
   ["/competences/", "Compétences", "competences"],
   ["/realisations/", "Réalisations", "realisations"],
+  ["/journal/", "Journal", "journal"],
+  ["/objectifs/", "Objectifs", "objectifs"],
   ["/veille/", "Veille", "veille"],
   ["/alternance/", "Alternance", "alternance"],
   ["/contact/", "Contact", "contact"]
@@ -30,9 +32,9 @@
         <span>{{ site.nom | lower | replace(" ", ".") }}</span>
       </a>
       <nav id="menu" class="menu" aria-label="Navigation principale">
-        {%- for lien in liens %}
+        {%- for lien in liens %}{% if lien[0] != "/" %}
         <a href="{{ lien[0] }}"{% if page.url == lien[0] or (lien[0] != "/" and page.url.startsWith(lien[0])) %} aria-current="page"{% endif %}>{{ lien[1] }}</a>
-        {%- endfor %}
+        {%- endif %}{% endfor %}
       </nav>
       <button class="terminal-bouton" type="button" data-ouvrir-terminal aria-haspopup="dialog">
         <span aria-hidden="true">&gt;_</span><span class="terminal-libelle">Terminal</span><kbd>Ctrl K</kbd>
@@ -50,7 +52,7 @@
   <footer class="pied">
     <div class="conteneur pied-ligne">
       <p><span class="mono accent">$</span> {{ site.nom }} · {{ site.titre }}</p>
-      <p><a href="mailto:{{ site.email }}">{{ site.email }}</a> · Site fait main, <a href="https://www.11ty.dev/" rel="noopener">Eleventy</a></p>
+      <p><a href="mailto:{{ site.email }}">{{ site.email }}</a> · Fait main avec <a href="https://www.11ty.dev/" rel="noopener">Eleventy</a>{% if site.depot %} · <a href="{{ site.depot }}" rel="noopener">code source</a>{% endif %}</p>
     </div>
   </footer>
 
@@ -75,7 +77,9 @@
       nom: site.nom,
       email: site.email,
       pages: liens,
-      realisations: collections.realisations | carteTerminal
+      realisations: collections.realisations | carteTerminal,
+      journal: collections.journal | carteTerminal,
+      objectifs: objectifs
     } | dump | safe }}
   </script>
   <script src="/assets/site.js" defer></script>

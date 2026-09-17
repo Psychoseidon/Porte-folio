@@ -1,0 +1,34 @@
+---
+layout: base.njk
+title: Journal
+permalink: /journal/
+---
+<header class="bandeau">
+  <div class="conteneur">
+    <p class="surtitre">Journal</p>
+    <h1>Ce que je fais, au fil de l’eau</h1>
+    <p class="chapeau">Des notes datées : ce que j’ai monté, cassé, réparé ou appris. Moins soigné qu’une réalisation, mais écrit le jour même.</p>
+  </div>
+</header>
+
+<section class="conteneur conteneur-etroit section">
+  {%- for groupe in collections.journal | parAnnee %}
+    <h2 class="journal-annee">{{ groupe.annee }}</h2>
+    <ol class="journal">
+    {%- for entree in groupe.entrees %}
+      <li>
+        <time datetime="{{ entree.date | dateIso }}">{{ entree.date | dateLongue }}</time>
+        <h3><a href="{{ entree.url }}">{{ entree.data.title }}</a></h3>
+        {%- if entree.data.resume %}<p>{{ entree.data.resume }}</p>{% endif %}
+        {%- if entree.data.tags %}
+        <ul class="etiquettes etiquettes-petites">
+          {%- for t in entree.data.tags %}<li>{{ t }}</li>{% endfor %}
+        </ul>
+        {%- endif %}
+      </li>
+    {%- endfor %}
+    </ol>
+  {%- else %}
+  <p class="vide">Aucune entrée pour l’instant.</p>
+  {%- endfor %}
+</section>

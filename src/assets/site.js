@@ -244,10 +244,13 @@ const lien = (chemin) => BASE + chemin.replace(/^\//, "");
       },
     },
     ls: {
-      aide: "liste les pages (ls realisations : les projets)",
+      aide: "liste les pages (ls realisations, ls journal)",
       lancer: ([dossier]) => {
-        if (dossier?.replace(/\/$/, "") === "realisations") {
-          donnees.realisations.forEach((r) => ecrire(`<a href="${lien(r.url)}">${r.nom}/</a>  <span class="faible">${echapper(r.titre)}</span>`));
+        const nom = dossier?.replace(/\/$/, "");
+        if (nom === "realisations" || nom === "journal") {
+          const liste = donnees[nom];
+          if (!liste.length) ecrire("(vide)", "faible");
+          liste.forEach((r) => ecrire(`<a href="${lien(r.url)}">${r.nom}/</a>  <span class="faible">${echapper(r.titre)}</span>`));
         } else {
           ecrire(donnees.pages.filter((p) => p[2] !== "~").map((p) => `<a href="${lien(p[0])}">${p[2]}/</a>`).join("  "));
         }
@@ -262,6 +265,8 @@ const lien = (chemin) => BASE + chemin.replace(/^\//, "");
         if (page) return aller(page[0]);
         const projet = donnees.realisations.find((r) => nettoye === `realisations/${r.nom}` || nettoye === r.nom);
         if (projet) return aller(projet.url);
+        const entree = donnees.journal.find((r) => nettoye === `journal/${r.nom}`);
+        if (entree) return aller(entree.url);
         ecrire(`cd: ${echapper(cible)}: aucun dossier de ce nom — essaie <span class="accent">ls</span>`, "erreur");
       },
     },
@@ -270,6 +275,19 @@ const lien = (chemin) => BASE + chemin.replace(/^\//, "");
       if (projet) aller(projet.url);
       else ecrire(`open: aucune réalisation ne correspond à « ${echapper(mot)} »`, "erreur");
     } },
+    todo: {
+      aide: "mes objectifs (todo --tout : avec les idées)",
+      lancer: ([option]) => {
+        const cases = { fait: "[x]", "en-cours": "[~]", prevu: "[ ]", idee: "[?]" };
+        for (const etape of donnees.objectifs.etapes) {
+          const liste = etape.objectifs.filter((o) => option === "--tout" || o.statut !== "idee");
+          if (!liste.length) continue;
+          ecrire(`<span class="accent">## ${echapper(etape.periode)} — ${echapper(etape.titre)}</span>`);
+          liste.forEach((o) => ecrire(`${cases[o.statut] || "[ ]"} ${echapper(o.titre)}`, o.statut === "fait" ? "faible" : ""));
+        }
+        ecrire(`Le détail : <a href="${lien("/objectifs/")}">cd objectifs</a>`, "faible");
+      },
+    },
     whoami: { aide: "qui suis-je", lancer: () => ecrire(`${echapper(donnees.nom)} — étudiant en BTS SIO, option SISR`) },
     contact: { aide: "écrire un email", lancer: () => {
       ecrire(`Ouverture de la messagerie vers <a href="mailto:${donnees.email}">${donnees.email}</a>…`);
@@ -352,7 +370,11 @@ const lien = (chemin) => BASE + chemin.replace(/^\//, "");
         const dernier = mots.at(-1);
         const candidats = mots.length === 1
           ? Object.keys(commandes)
-          : [...donnees.pages.map((p) => p[2]), ...donnees.realisations.map((r) => `realisations/${r.nom}`)];
+          : [
+              ...donnees.pages.map((p) => p[2]),
+              ...donnees.realisations.map((r) => `realisations/${r.nom}`),
+              ...donnees.journal.map((r) => `journal/${r.nom}`),
+            ];
         const trouves = candidats.filter((c) => c.startsWith(dernier));
         if (trouves.length === 1) {
           mots[mots.length - 1] = trouves[0];

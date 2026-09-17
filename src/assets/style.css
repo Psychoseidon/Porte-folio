@@ -209,7 +209,7 @@ kbd {
 .terminal-bouton > span:first-child { color: var(--accent); }
 .terminal-bouton .terminal-libelle { color: inherit; }
 /* Sur téléphone, et quand le menu complet prend la place, le bouton se réduit à « >_ ». */
-@media (max-width: 39.99rem), (min-width: 60rem) and (max-width: 74.99rem) {
+@media (max-width: 39.99rem), (min-width: 70rem) and (max-width: 84.99rem) {
   .terminal-bouton .terminal-libelle,
   .terminal-bouton kbd { display: none; }
 }
@@ -254,8 +254,8 @@ kbd {
 }
 .menu.ouvert a { font-size: 1.05rem; padding: 0.75rem 0.5rem; }
 
-@media (min-width: 60rem) {
-  .menu { display: flex; gap: 0.15rem; }
+@media (min-width: 70rem) {
+  .menu { display: flex; gap: 0.1rem; }
   .menu-bouton { display: none; }
   .marque { margin-right: 1rem; }
   .menu { margin-right: auto; }
@@ -803,3 +803,120 @@ kbd {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .js .apparition { opacity: 1; transform: none; }
 }
+
+/* ------------------------------------------------------------------ Journal */
+
+.conteneur-etroit { max-width: 50rem; }
+.section-courte { padding-block: 2.5rem; }
+
+.journal-annee {
+  font-family: var(--police-mono);
+  font-size: 1rem;
+  color: var(--texte-faible);
+  margin: 2.5rem 0 1rem;
+}
+.journal-annee:first-child { margin-top: 0; }
+
+.journal { list-style: none; margin: 0; padding: 0 0 0 1.4rem; border-left: 2px solid var(--bord); }
+.journal > li { position: relative; padding-bottom: 1.8rem; }
+.journal > li::before {
+  content: "";
+  position: absolute;
+  left: calc(-1.4rem - 6px);
+  top: 0.45rem;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--fond);
+  border: 2px solid var(--accent-2);
+}
+.journal > li:first-child::before { background: var(--accent-2); box-shadow: 0 0 12px rgba(122, 167, 255, 0.8); }
+.journal time { font-family: var(--police-mono); font-size: 0.8rem; color: var(--accent-2); }
+.journal h3 { margin: 0.2rem 0 0.3rem; font-size: 1.2rem; }
+.journal h3 a { color: var(--texte); text-decoration: none; }
+.journal h3 a:hover { color: var(--accent); }
+.journal p { color: var(--texte-doux); margin: 0; }
+.journal .etiquettes { margin-top: 0.6rem; }
+.journal-compact > li { padding-bottom: 1.2rem; }
+.journal-compact h3 { font-size: 1.05rem; }
+
+.navigation-entrees { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+
+.prose code {
+  font-family: var(--police-mono);
+  font-size: 0.88em;
+  padding: 0.1em 0.4em;
+  border-radius: 5px;
+  background: var(--surface-2);
+  border: 1px solid var(--bord);
+  color: var(--texte);
+}
+.prose pre {
+  overflow-x: auto;
+  padding: 1rem 1.2rem;
+  border-radius: var(--rayon);
+  background: rgba(10, 14, 20, 0.92);
+  border: 1px solid var(--bord-fort);
+  font-size: 0.88rem;
+}
+.prose pre code { padding: 0; border: 0; background: none; }
+.prose img { border-radius: var(--rayon); border: 1px solid var(--bord); }
+
+/* ---------------------------------------------------------------- Objectifs */
+
+.progression { margin-top: 1.75rem; max-width: 30rem; }
+.progression-barre {
+  display: flex;
+  height: 0.6rem;
+  border-radius: 999px;
+  background: var(--surface-2);
+  border: 1px solid var(--bord);
+  overflow: hidden;
+}
+.progression-fait { background: linear-gradient(90deg, var(--accent-fonce), var(--accent)); box-shadow: 0 0 12px rgba(63, 208, 184, 0.6); }
+.progression-en-cours { background: repeating-linear-gradient(45deg, var(--chaud), var(--chaud) 6px, rgba(242, 179, 91, 0.6) 6px, rgba(242, 179, 91, 0.6) 12px); }
+.progression p { margin: 0.6rem 0 0; font-size: 0.9rem; color: var(--texte-doux); }
+
+.etapes { list-style: none; margin: 0; padding: 0; display: grid; gap: 3rem; }
+.etape { display: grid; gap: 1rem 3rem; }
+@media (min-width: 52rem) {
+  .etape { grid-template-columns: 15rem 1fr; }
+  .etape-tete { position: sticky; top: 6rem; align-self: start; }
+}
+.etape-tete h2 { font-size: 1.5rem; margin-top: 0.3rem; }
+
+.objectifs { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
+.objectif {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 0.9rem 1.1rem;
+  border: 1px solid var(--bord);
+  border-radius: var(--rayon);
+  background: var(--surface);
+}
+.objectif h3 { font-size: 1rem; margin: 0.1rem 0 0; }
+.objectif p { margin: 0.25rem 0 0; font-size: 0.92rem; color: var(--texte-doux); }
+.pastille-statut {
+  flex: none;
+  min-width: 5.6rem;
+  text-align: center;
+  font-family: var(--police-mono);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  border: 1px solid var(--bord-fort);
+  color: var(--texte-faible);
+}
+.objectif-fait .pastille-statut { color: #04201b; background: var(--accent); border-color: var(--accent); }
+.objectif-fait h3 { color: var(--texte-doux); text-decoration: line-through; text-decoration-color: var(--accent-fonce); }
+.objectif-en-cours { border-color: rgba(242, 179, 91, 0.45); }
+.objectif-en-cours .pastille-statut { color: var(--chaud); border-color: rgba(242, 179, 91, 0.6); }
+.objectif-prevu .pastille-statut { color: var(--accent-2); border-color: rgba(122, 167, 255, 0.5); }
+.objectif-idee { background: transparent; border-style: dashed; }
+.objectifs-compacts .objectif { padding: 0.7rem 0.9rem; }
+.objectifs-compacts li:nth-child(n + 6) { display: none; }
+
+.chiffres a { color: inherit; }

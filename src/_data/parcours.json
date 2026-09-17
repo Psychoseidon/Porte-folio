@@ -6,6 +6,7 @@
     { "periode": "2014", "titre": "Baccalauréat Littéraire", "lieu": "Lycée Branly, Nogent-sur-Marne (94)", "detail": "" }
   ],
   "experience": [
+    { "periode": "Rentrée 2026", "titre": "Alternance en informatique", "lieu": "En parallèle du BTS SIO option SISR", "detail": "Détails à venir sur la page Alternance." },
     { "periode": "Depuis 2025", "titre": "Enseignant de français langue étrangère, indépendant", "lieu": "COZ’FLE, auto-entrepreneur", "detail": "Facturation, suivi des clients, organisation des sessions." },
     { "periode": "Depuis 2024", "titre": "Enseignant de français langue étrangère", "lieu": "ISEP Paris / Institut Catholique de Paris", "detail": "Accompagnement des étudiants sur les outils numériques et les plateformes d’enseignement en ligne." },
     { "periode": "Depuis 2020", "titre": "Informatique en autodidacte", "lieu": "Projets personnels et pour des proches", "detail": "Montage de PC, serveur de jeu, scripts, conteneurs, site web." }

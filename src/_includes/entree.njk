@@ -1,0 +1,29 @@
+---
+layout: base.njk
+---
+<article>
+  <header class="bandeau">
+    <div class="conteneur conteneur-etroit">
+      <p class="surtitre"><a href="/journal/">Journal</a> · <time datetime="{{ page.date | dateIso }}">{{ page.date | dateLongue }}</time></p>
+      <h1>{{ title }}</h1>
+      {%- if resume %}<p class="chapeau">{{ resume }}</p>{% endif %}
+      {%- if tags %}
+      <ul class="etiquettes">
+        {%- for t in tags %}<li>{{ t }}</li>{% endfor %}
+      </ul>
+      {%- endif %}
+    </div>
+  </header>
+
+  <div class="conteneur conteneur-etroit section-courte prose">
+    {{ content | safe }}
+  </div>
+
+  <nav class="conteneur conteneur-etroit retour navigation-entrees" aria-label="Autres entrées">
+    {%- set precedente = collections.journal | getNextCollectionItem(page) %}
+    {%- set suivante = collections.journal | getPreviousCollectionItem(page) %}
+    {%- if precedente %}<a class="bouton bouton-secondaire" href="{{ precedente.url }}">← {{ precedente.data.title }}</a>{% endif %}
+    <a class="bouton bouton-secondaire" href="/journal/">Tout le journal</a>
+    {%- if suivante %}<a class="bouton bouton-secondaire" href="{{ suivante.url }}">{{ suivante.data.title }} →</a>{% endif %}
+  </nav>
+</article>

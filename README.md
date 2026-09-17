@@ -1,6 +1,8 @@
 # Portfolio — Matthias Cozic
 
-Site personnel et recueil des réalisations du BTS SIO (option SISR).
+Site personnel : réalisations, journal de bord et feuille de route, pendant le BTS SIO
+(option SISR) en alternance et au-delà.
+En ligne : https://psychoseidon.github.io/Porte-folio/
 Généré avec [Eleventy](https://www.11ty.dev/) : le résultat est du HTML, du CSS et du
 JavaScript ordinaires, hébergeables n'importe où.
 
@@ -19,6 +21,7 @@ Le site se recharge tout seul à chaque modification.
 | Je veux changer… | Fichier |
 |---|---|
 | Mes infos (email, LinkedIn, GitHub, CV, alternance) | `src/_data/site.json` |
+| Ma feuille de route (statuts : `fait`, `en-cours`, `prevu`, `idee`) | `src/_data/objectifs.json` |
 | Mes compétences, langues, centres d'intérêt | `src/_data/competences.json` |
 | Ma formation et mon expérience | `src/_data/parcours.json` |
 | Les couleurs, les polices, l'ambiance | `src/assets/style.css` (variables en tête) |
@@ -44,6 +47,20 @@ La page, la carte dans la liste, les filtres et la commande `ls realisations` du
 se mettent à jour tout seuls.
 
 Bonne habitude : créer le fichier **le jour même** du TP, même brouillon.
+
+## Écrire dans le journal
+
+1. Copier `MODELE-journal.md` dans `src/journal/`.
+2. Le nommer avec la date du jour : `2026-10-03-premier-tp-reseau.md`.
+3. Écrire. Trois lignes suffisent : l'important est de le faire le jour même.
+
+L'entrée apparaît en tête du journal, sur l'accueil et dans `ls journal`.
+
+## Suivre ses objectifs
+
+Dans `src/_data/objectifs.json`, changer le `statut` d'une ligne suffit.
+La barre de progression compte ce qui est `fait` sur tout ce qui n'est pas une `idee`.
+La commande `todo` du terminal affiche la liste (`todo --tout` avec les idées).
 
 ## Publier sur GitHub Pages (gratuit)
 
