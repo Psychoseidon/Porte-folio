@@ -1,0 +1,22 @@
+{
+  "nom": "Matthias Cozic",
+  "initiales": "MC",
+  "titre": "Étudiant en BTS SIO — option SISR",
+  "accroche": "En recherche d’une alternance en support informatique et administration systèmes.",
+  "ecole": "UTEC de Melun (77)",
+  "rythme": "1 semaine en entreprise / 1 semaine en école",
+  "disponibilite": "Disponible immédiatement",
+  "localisation": "Seine-Port (77)",
+  "permis": "Permis B",
+  "email": "matthias.cozic@live.fr",
+  "telephone": "",
+  "linkedin": "",
+  "github": "",
+  "cv": "",
+  "alternance": {
+    "enCours": false,
+    "entreprise": "",
+    "poste": "",
+    "debut": ""
+  }
+}

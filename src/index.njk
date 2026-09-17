@@ -1,0 +1,80 @@
+---
+layout: base.njk
+---
+<section class="accueil">
+  <canvas class="reseau" aria-hidden="true"></canvas>
+  <div class="conteneur accueil-grille">
+    <div class="accueil-texte-bloc">
+      <p class="surtitre"><span class="point-vivant" aria-hidden="true"></span>{{ "En alternance" if site.alternance.enCours else "Disponible pour une alternance" }}</p>
+      <h1 class="accueil-nom">{{ site.nom | replace(" ", "<br>") | safe }}</h1>
+      <p class="accueil-titre">{{ site.titre }}</p>
+      <p class="accueil-texte">Venu à l’informatique par le jeu vidéo, je transforme cinq ans de bricolage en métier : systèmes, réseaux, et un site e-commerce construit avec une IA.</p>
+      <div class="actions">
+        <a class="bouton" href="/realisations/">Voir mes réalisations</a>
+        <a class="bouton bouton-secondaire" href="/contact/">Me contacter</a>
+      </div>
+    </div>
+
+    <div class="terminal" data-terminal-accueil>
+      <div class="terminal-barre">
+        <span class="feu"></span><span class="feu"></span><span class="feu"></span>
+        <span class="terminal-titre">{{ site.initiales | lower }}@sio: ~</span>
+      </div>
+      <div class="terminal-corps">
+        <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">whoami</span></p>
+        <p class="ligne-sortie">{{ site.nom }} — étudiant en BTS SIO, option SISR</p>
+        <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">cat statut.txt</span></p>
+        <p class="ligne-sortie"><span class="ok">●</span>
+          {%- if site.alternance.enCours %} en alternance chez {{ site.alternance.entreprise }}
+          {%- else %} recherche une alternance · {{ site.disponibilite | lower }}{% endif %}</p>
+        <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">ls realisations/</span></p>
+        <p class="ligne-sortie ligne-liens">
+          {%- for item in collections.realisations %}<a href="{{ item.url }}">{{ item.fileSlug }}/</a>{% endfor -%}
+        </p>
+        <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">echo $AIDE</span></p>
+        <p class="ligne-sortie">Le bouton <span class="accent">&gt;_</span> en haut (ou Ctrl+K) ouvre un vrai terminal.</p>
+        <p class="ligne-commande ligne-attente"><span class="invite">$</span> <span class="curseur" aria-hidden="true"></span></p>
+      </div>
+    </div>
+  </div>
+
+  <div class="conteneur">
+    <ul class="chiffres">
+      <li><strong>2020</strong><span>début de la pratique en autodidacte</span></li>
+      <li><strong>{{ collections.realisations.length }}</strong><span>réalisation{% if collections.realisations.length > 1 %}s{% endif %} documentée{% if collections.realisations.length > 1 %}s{% endif %}</span></li>
+      <li><strong>1 / 1</strong><span>semaine en entreprise, semaine en école</span></li>
+      <li><strong>77</strong><span>{{ site.localisation }} · alternance en Île-de-France</span></li>
+    </ul>
+  </div>
+</section>
+
+<section class="section apparition">
+  <div class="conteneur deux-colonnes">
+    <div>
+      <p class="surtitre">Qui suis-je</p>
+      <h2>D’un loisir de joueur à un projet professionnel</h2>
+    </div>
+    <div class="prose">
+      <p>L’informatique a commencé chez moi par le jeu vidéo : faire tourner un jeu, monter une machine correcte, héberger un serveur pour jouer avec des amis. De fil en aiguille, j’y ai passé cinq ans en autodidacte, à coups de documentation et de tutoriels.</p>
+      <p>À côté, il y a eu mes études, mon métier d’enseignant, une activité indépendante et du sport. L’informatique est longtemps restée le loisir — jusqu’à ce que je décide d’en faire mon métier.</p>
+      <p>Je commence le BTS SIO option SISR en sachant ce qui me manque : la méthode, le cadre professionnel et l’expérience en entreprise. C’est exactement ce que je viens chercher en alternance.</p>
+    </div>
+  </div>
+</section>
+
+<section class="section apparition">
+  <div class="conteneur">
+    <div class="titre-ligne">
+      <div>
+        <p class="surtitre">Réalisations</p>
+        <h2>Les plus récentes</h2>
+      </div>
+      <a class="lien-fleche" href="/realisations/">Tout voir <span aria-hidden="true">→</span></a>
+    </div>
+    <div class="grille-cartes">
+      {%- for item in collections.realisations.slice(0, 3) %}
+      {% include "carte-realisation.njk" %}
+      {%- endfor %}
+    </div>
+  </div>
+</section>

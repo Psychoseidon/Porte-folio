@@ -1,0 +1,33 @@
+---
+layout: base.njk
+title: Réalisations
+permalink: /realisations/
+---
+<header class="bandeau">
+  <div class="conteneur">
+    <p class="surtitre">Réalisations</p>
+    <h1>Mes projets, du BTS et d’ailleurs</h1>
+    <p class="chapeau">Chaque réalisation suit le même plan : le contexte, ce que j’ai fait, les difficultés rencontrées et ce que j’en retiens.</p>
+  </div>
+</header>
+
+<section class="conteneur section">
+  <div class="filtres" data-filtres hidden>
+    {%- for groupe in [["cadre", "Cadre"], ["annee", "Année"]] %}
+    <div class="filtre-groupe" role="group" aria-label="{{ groupe[1] }}">
+      <span class="filtre-titre">{{ groupe[1] }}</span>
+      <button type="button" data-filtre="{{ groupe[0] }}" data-valeur="" aria-pressed="true">Tout</button>
+      {%- for v in collections.realisations | valeurs(groupe[0]) %}
+      <button type="button" data-filtre="{{ groupe[0] }}" data-valeur="{{ v | cle }}" aria-pressed="false">{{ v }}</button>
+      {%- endfor %}
+    </div>
+    {%- endfor %}
+  </div>
+
+  <div class="grille-cartes" data-liste>
+    {%- for item in collections.realisations %}
+    {% include "carte-realisation.njk" %}
+    {%- endfor %}
+  </div>
+  <p class="vide" data-vide hidden>Aucune réalisation pour ce choix — pas encore.</p>
+</section>

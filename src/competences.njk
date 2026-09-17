@@ -1,0 +1,55 @@
+---
+layout: base.njk
+title: Compétences
+permalink: /competences/
+---
+<header class="bandeau">
+  <div class="conteneur">
+    <p class="surtitre">Compétences</p>
+    <h1>Ce que j’ai déjà mis en pratique</h1>
+    <p class="chapeau">Des compétences acquises en autodidacte, que le BTS va structurer. Le détail est dans les <a href="/realisations/">réalisations</a>.</p>
+  </div>
+</header>
+
+<section class="conteneur section">
+  <h2>Techniques</h2>
+  <div class="grille-cartes">
+    {%- for c in competences.techniques %}
+    <article class="carte">
+      <h3><span class="numero">{{ "0" if loop.index < 10 }}{{ loop.index }}</span>{{ c.titre }}</h3>
+      <ul class="liste">
+        {%- for p in c.points %}<li>{{ p }}</li>{% endfor %}
+      </ul>
+    </article>
+    {%- endfor %}
+  </div>
+</section>
+
+<section class="section section-teintee">
+  <div class="conteneur">
+    <h2>Ce que l’enseignement apporte au support</h2>
+    <div class="grille-cartes">
+      {%- for h in competences.humaines %}
+      <article class="carte carte-blanche">
+        <h3>{{ h.titre }}</h3>
+        <p>{{ h.texte }}</p>
+      </article>
+      {%- endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="conteneur section deux-colonnes deux-colonnes-egales">
+  <div>
+    <h2>Langues</h2>
+    <ul class="liste">
+      {%- for l in competences.langues %}<li><strong>{{ l.langue }}</strong> — {{ l.niveau }}</li>{% endfor %}
+    </ul>
+  </div>
+  <div>
+    <h2>Centres d’intérêt</h2>
+    <ul class="liste">
+      {%- for i in competences.interets %}<li>{{ i }}</li>{% endfor %}
+    </ul>
+  </div>
+</section>

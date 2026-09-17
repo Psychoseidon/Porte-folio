@@ -1,0 +1,83 @@
+{%- set liens = [
+  ["/", "Accueil", "~"],
+  ["/parcours/", "Parcours", "parcours"],
+  ["/competences/", "Compétences", "competences"],
+  ["/realisations/", "Réalisations", "realisations"],
+  ["/veille/", "Veille", "veille"],
+  ["/alternance/", "Alternance", "alternance"],
+  ["/contact/", "Contact", "contact"]
+] -%}
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% if title %}{{ title }} — {% endif %}{{ site.nom }}</title>
+  <meta name="description" content="{{ resume or site.accroche }}">
+  <meta name="theme-color" content="#0b1017">
+  <link rel="preload" href="/assets/fonts/inter-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/jetbrains-mono-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%230b1017'/%3E%3Cpath d='M8 11l6 5-6 5' stroke='%233fd0b8' stroke-width='2.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3Cpath d='M16 22h8' stroke='%23e6edf3' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+  <a class="evitement" href="#contenu">Aller au contenu</a>
+
+  <header class="entete">
+    <div class="conteneur entete-ligne">
+      <a class="marque" href="/">
+        <span class="marque-invite" aria-hidden="true">&gt;_</span>
+        <span>{{ site.nom | lower | replace(" ", ".") }}</span>
+      </a>
+      <nav id="menu" class="menu" aria-label="Navigation principale">
+        {%- for lien in liens %}
+        <a href="{{ lien[0] }}"{% if page.url == lien[0] or (lien[0] != "/" and page.url.startsWith(lien[0])) %} aria-current="page"{% endif %}>{{ lien[1] }}</a>
+        {%- endfor %}
+      </nav>
+      <button class="terminal-bouton" type="button" data-ouvrir-terminal aria-haspopup="dialog">
+        <span aria-hidden="true">&gt;_</span><span class="terminal-libelle">Terminal</span><kbd>Ctrl K</kbd>
+      </button>
+      <button class="menu-bouton" type="button" aria-expanded="false" aria-controls="menu">
+        <span class="menu-icone" aria-hidden="true"></span><span class="visuellement-cache">Menu</span>
+      </button>
+    </div>
+  </header>
+
+  <main id="contenu">
+    {{ content | safe }}
+  </main>
+
+  <footer class="pied">
+    <div class="conteneur pied-ligne">
+      <p><span class="mono accent">$</span> {{ site.nom }} · {{ site.titre }}</p>
+      <p><a href="mailto:{{ site.email }}">{{ site.email }}</a> · Site fait main, <a href="https://www.11ty.dev/" rel="noopener">Eleventy</a></p>
+    </div>
+  </footer>
+
+  {#- Invite de commandes : Ctrl+K ou « / » pour l'ouvrir. Les commandes vivent dans assets/site.js. #}
+  <dialog class="terminal-dialogue" aria-label="Terminal de navigation">
+    <form class="terminal-fenetre" data-formulaire>
+      <div class="terminal-barre">
+        <span class="feu"></span><span class="feu"></span><span class="feu"></span>
+        <span class="terminal-titre">navigation — tape <b>help</b></span>
+        <button class="terminal-fermer" type="button" data-fermer aria-label="Fermer">Échap</button>
+      </div>
+      <div class="terminal-sortie" data-sortie aria-live="polite"></div>
+      <label class="terminal-ligne">
+        <span class="invite">visiteur@{{ site.initiales | lower }}:~$</span>
+        <input type="text" data-saisie autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="Commande">
+      </label>
+    </form>
+  </dialog>
+
+  <script type="application/json" id="donnees-terminal">
+    {{ {
+      nom: site.nom,
+      email: site.email,
+      pages: liens,
+      realisations: collections.realisations | carteTerminal
+    } | dump | safe }}
+  </script>
+  <script src="/assets/site.js" defer></script>
+</body>
+</html>

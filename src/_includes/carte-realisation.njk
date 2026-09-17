@@ -1,0 +1,8 @@
+<article class="carte" data-cadre="{{ item.data.cadre | cle }}" data-annee="{{ item.data.annee | cle }}">
+  <p class="carte-meta">{{ item.data.cadre }} · {{ item.data.annee }}</p>
+  <h3><a href="{{ item.url }}">{{ item.data.title }}</a></h3>
+  <p>{{ item.data.resume }}</p>
+  <ul class="etiquettes etiquettes-petites">
+    {%- for d in item.data.domaines %}<li>{{ d }}</li>{% endfor %}
+  </ul>
+</article>

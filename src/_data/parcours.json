@@ -1,0 +1,13 @@
+{
+  "formation": [
+    { "periode": "2026 – 2028", "titre": "BTS SIO — option SISR", "lieu": "UTEC de Melun (77)", "detail": "Services informatiques aux organisations, systèmes et réseaux. En alternance." },
+    { "periode": "2020", "titre": "Master 2 MEEF — Conseiller principal d’éducation", "lieu": "INSPE de Créteil (94)", "detail": "Mention Assez Bien." },
+    { "periode": "2017", "titre": "Licence de Psychologie", "lieu": "Université Paris 13 Nord (93)", "detail": "" },
+    { "periode": "2014", "titre": "Baccalauréat Littéraire", "lieu": "Lycée Branly, Nogent-sur-Marne (94)", "detail": "" }
+  ],
+  "experience": [
+    { "periode": "Depuis 2025", "titre": "Enseignant de français langue étrangère, indépendant", "lieu": "COZ’FLE, auto-entrepreneur", "detail": "Facturation, suivi des clients, organisation des sessions." },
+    { "periode": "Depuis 2024", "titre": "Enseignant de français langue étrangère", "lieu": "ISEP Paris / Institut Catholique de Paris", "detail": "Accompagnement des étudiants sur les outils numériques et les plateformes d’enseignement en ligne." },
+    { "periode": "Depuis 2020", "titre": "Informatique en autodidacte", "lieu": "Projets personnels et pour des proches", "detail": "Montage de PC, serveur de jeu, scripts, conteneurs, site web." }
+  ]
+}

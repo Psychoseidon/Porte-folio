@@ -1,0 +1,33 @@
+---
+layout: base.njk
+---
+<article>
+  <header class="bandeau">
+    <div class="conteneur">
+      <p class="surtitre"><a href="/realisations/">Réalisations</a> · {{ cadre }} · {{ annee }}</p>
+      <h1>{{ title }}</h1>
+      <p class="chapeau">{{ resume }}</p>
+      <ul class="etiquettes">
+        {%- for t in technologies %}<li>{{ t }}</li>{% endfor %}
+      </ul>
+    </div>
+  </header>
+
+  <div class="conteneur fiche">
+    <aside class="fiche-infos">
+      <dl>
+        <dt>Période</dt><dd>{{ periode or (page.date | moisAnnee) }}</dd>
+        <dt>Cadre</dt><dd>{{ cadre }}</dd>
+        <dt>Domaines</dt><dd>{{ domaines | join(", ") }}</dd>
+        {%- if statut %}<dt>Statut</dt><dd>{{ statut }}</dd>{% endif %}
+      </dl>
+    </aside>
+    <div class="prose">
+      {{ content | safe }}
+    </div>
+  </div>
+
+  <nav class="conteneur retour" aria-label="Retour">
+    <a class="bouton bouton-secondaire" href="/realisations/">← Toutes les réalisations</a>
+  </nav>
+</article>

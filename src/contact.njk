@@ -1,0 +1,43 @@
+---
+layout: base.njk
+title: Contact
+permalink: /contact/
+---
+<header class="bandeau">
+  <div class="conteneur">
+    <p class="surtitre">Contact</p>
+    <h1>Échangeons</h1>
+    <p class="chapeau">Une offre d’alternance, une question sur une réalisation : je réponds rapidement.</p>
+  </div>
+</header>
+
+<section class="conteneur section">
+  <dl class="contacts">
+    <div>
+      <dt>Email</dt>
+      <dd><a href="mailto:{{ site.email }}">{{ site.email }}</a></dd>
+    </div>
+    {%- if site.telephone %}
+    <div>
+      <dt>Téléphone</dt>
+      <dd><a href="tel:{{ site.telephone | replace(' ', '') }}">{{ site.telephone }}</a></dd>
+    </div>
+    {%- endif %}
+    {%- if site.linkedin %}
+    <div>
+      <dt>LinkedIn</dt>
+      <dd><a href="{{ site.linkedin }}" rel="noopener">Voir mon profil</a></dd>
+    </div>
+    {%- endif %}
+    {%- if site.github %}
+    <div>
+      <dt>GitHub</dt>
+      <dd><a href="{{ site.github }}" rel="noopener">Voir mes dépôts</a></dd>
+    </div>
+    {%- endif %}
+    <div>
+      <dt>Localisation</dt>
+      <dd>{{ site.localisation }} · {{ site.permis }}</dd>
+    </div>
+  </dl>
+</section>

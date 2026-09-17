@@ -1,0 +1,33 @@
+---
+layout: base.njk
+title: Parcours
+permalink: /parcours/
+---
+<header class="bandeau">
+  <div class="conteneur">
+    <p class="surtitre">Parcours</p>
+    <h1>Formation et expérience</h1>
+    <p class="chapeau">Un parcours d’abord tourné vers l’éducation, avec l’informatique en fil rouge, jusqu’à la reconversion.</p>
+    {%- if site.cv %}
+    <p><a class="bouton" href="{{ site.cv }}">Télécharger mon CV (PDF)</a></p>
+    {%- endif %}
+  </div>
+</header>
+
+<div class="conteneur section deux-colonnes deux-colonnes-egales">
+  {%- for bloc in [["Formation", parcours.formation], ["Expérience", parcours.experience]] %}
+  <section>
+    <h2>{{ bloc[0] }}</h2>
+    <ol class="frise">
+      {%- for e in bloc[1] %}
+      <li>
+        <span class="frise-periode">{{ e.periode }}</span>
+        <h3>{{ e.titre }}</h3>
+        <p class="frise-lieu">{{ e.lieu }}</p>
+        {%- if e.detail %}<p>{{ e.detail }}</p>{% endif %}
+      </li>
+      {%- endfor %}
+    </ol>
+  </section>
+  {%- endfor %}
+</div>

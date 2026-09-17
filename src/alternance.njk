@@ -1,0 +1,52 @@
+---
+layout: base.njk
+title: Alternance
+permalink: /alternance/
+---
+<header class="bandeau">
+  <div class="conteneur">
+    <p class="surtitre">Alternance</p>
+    {%- if site.alternance.enCours %}
+    <h1>{{ site.alternance.poste }} chez {{ site.alternance.entreprise }}</h1>
+    <p class="chapeau">Depuis {{ site.alternance.debut }}, en alternance avec le BTS SIO SISR ({{ site.rythme }}).</p>
+    {%- else %}
+    <h1>Je cherche l’entreprise qui m’accueillera</h1>
+    <p class="chapeau">Mon BTS a commencé, il ne manque que le contrat d’alternance. Je peux démarrer immédiatement.</p>
+    {%- endif %}
+  </div>
+</header>
+
+{%- set alternances = collections.realisations | filtrerPar("cadre", "Alternance") %}
+
+{%- if site.alternance.enCours %}
+<section class="conteneur section">
+  <h2>Ce que j’y fais</h2>
+  {%- if alternances.length %}
+  <div class="grille-cartes">
+    {%- for item in alternances %}
+    {% include "carte-realisation.njk" %}
+    {%- endfor %}
+  </div>
+  {%- else %}
+  <p class="vide">Les premières missions seront décrites ici.</p>
+  {%- endif %}
+</section>
+{%- else %}
+<section class="conteneur section">
+  <div class="grille-cartes">
+    <article class="carte">
+      <h3><span class="numero">01</span>Le contrat</h3>
+      <p>Alternance sur deux ans, rythme {{ site.rythme }}.</p>
+    </article>
+    <article class="carte">
+      <h3><span class="numero">02</span>Le poste</h3>
+      <p>Support utilisateurs, systèmes et réseaux — pour apprendre le métier sur le terrain.</p>
+    </article>
+    <article class="carte">
+      <h3><span class="numero">03</span>Le secteur</h3>
+      <p>Seine-et-Marne, Paris et toute l’Île-de-France. {{ site.permis }}.</p>
+    </article>
+  </div>
+  <p class="actions"><a class="bouton" href="/contact/">Me contacter</a></p>
+</section>
+{%- endif %}

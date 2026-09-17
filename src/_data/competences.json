@@ -1,0 +1,48 @@
+{
+  "techniques": [
+    {
+      "titre": "Systèmes",
+      "points": ["Windows 10 / 11 : installation, réglages, réinstallation", "Comptes utilisateurs et permissions", "Bureau à distance (RDP)"]
+    },
+    {
+      "titre": "Réseaux",
+      "points": ["TCP/IP, DHCP, DNS, adressage local", "Box et routeur : redirection de ports, pare-feu", "Diagnostic de connectivité et de latence"]
+    },
+    {
+      "titre": "Matériel",
+      "points": ["Assemblage et upgrade de PC", "Entretien : nettoyage, pâte thermique, composants", "Diagnostic de pannes courantes"]
+    },
+    {
+      "titre": "Scripting",
+      "points": ["Scripts simples en Bash, PowerShell et Python", "Automatisation de tâches répétitives", "Lecture et adaptation de scripts existants"]
+    },
+    {
+      "titre": "Conteneurs",
+      "points": ["Docker : déploiement d’applications en local", "Gestion d’images locales"]
+    },
+    {
+      "titre": "Outils et développement",
+      "points": ["Microsoft 365", "Développement web avec un agent IA (Claude Code)", "Git"]
+    }
+  ],
+  "humaines": [
+    {
+      "titre": "Relation utilisateur",
+      "texte": "Des années à expliquer des notions à des publics non francophones : reformuler, vulgariser, vérifier que la personne a compris. C’est le quotidien d’un support de niveau 1."
+    },
+    {
+      "titre": "Gestion de situations complexes",
+      "texte": "Animer un groupe, arbitrer les urgences, rester calme face à l’imprévu et rendre compte de ce qui a été fait."
+    },
+    {
+      "titre": "Autonomie et rigueur",
+      "texte": "Auto-entrepreneur : facturation, suivi client, organisation des sessions. Je sais tenir un dossier, un délai et une trace écrite."
+    }
+  ],
+  "langues": [
+    { "langue": "Français", "niveau": "langue maternelle" },
+    { "langue": "Anglais", "niveau": "B2" },
+    { "langue": "Espagnol", "niveau": "B1" }
+  ],
+  "interets": ["Judo — ceinture noire 1er dan", "Longboard", "Ski et snowboard", "Informatique et nouvelles technologies"]
+}
