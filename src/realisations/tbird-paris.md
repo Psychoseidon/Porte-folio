@@ -3,16 +3,27 @@ title: "T-Bird Paris : une boutique en ligne"
 resume: "Le site e-commerce d’une boutique parisienne, construit avec un agent IA de développement : catalogue, paiement, livraison et administration."
 date: 2026-08-13
 periode: "Depuis août 2026"
-statut: "Site déployé, en pré-ouverture (protégé par mot de passe)"
+statut: "En ligne depuis le 22 septembre 2026"
+lien: "https://tbird68.fr"
 annee: "Avant le BTS"
 cadre: "Personnel"
 domaines: ["Développement web", "Hébergement", "Sécurité"]
-technologies: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Vercel", "Git", "Claude Code"]
+technologies: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Boxtal", "Vercel", "Git", "Claude Code"]
 ---
 
 ## Contexte
 
-T-Bird Paris est une boutique de vêtements et d’accessoires biker et americana, dans le 6ᵉ arrondissement. Elle n’avait pas de site. Je construis sa boutique en ligne avec **un agent IA de développement (Claude Code)**. Le site est déployé mais pas encore ouvert au public : un mot de passe en protège l’accès pendant la pré-ouverture.
+T-Bird Paris est une boutique de vêtements et d’accessoires biker et americana, dans le 6ᵉ arrondissement. Elle n’avait pas de site. J’ai construit sa boutique en ligne avec **un agent IA de développement (Claude Code)**. Après quelques semaines de pré-ouverture protégée par un mot de passe, le site est ouvert au public depuis le 22 septembre 2026, à l’adresse [tbird68.fr](https://tbird68.fr).
+
+<div class="captures captures-ordi">
+  <figure><img src="/assets/img/tbird/accueil-ordi.jpg" alt="Page d’accueil de T-Bird Paris sur ordinateur" width="1440" height="900" loading="lazy"><figcaption>Accueil, sur ordinateur</figcaption></figure>
+  <figure><img src="/assets/img/tbird/produit-ordi.jpg" alt="Fiche d’un t-shirt sur ordinateur : photos, prix, tailles et boutons d’achat" width="1440" height="900" loading="lazy"><figcaption>Fiche produit, sur ordinateur</figcaption></figure>
+</div>
+
+<div class="captures captures-mobile">
+  <figure><img src="/assets/img/tbird/accueil-mobile.jpg" alt="Page d’accueil de T-Bird Paris sur téléphone" width="780" height="1688" loading="lazy"><figcaption>Accueil, sur téléphone</figcaption></figure>
+  <figure><img src="/assets/img/tbird/produit-mobile.jpg" alt="Fiche d’un t-shirt sur téléphone : prix et tailles dès le premier écran" width="780" height="1688" loading="lazy"><figcaption>Fiche produit, sur téléphone</figcaption></figure>
+</div>
 
 ## Ce que j’ai fait
 
@@ -23,6 +34,9 @@ T-Bird Paris est une boutique de vêtements et d’accessoires biker et american
 - Emails de confirmation et de suivi de commande
 - Une interface d’administration pensée pour des propriétaires peu à l’aise avec le numérique : gros boutons, textes lisibles, confirmation avant toute suppression
 - Déploiement sur Vercel, base de données PostgreSQL hébergée (Neon), historique complet sous Git
+- Nom de domaine, référencement sur Google (Search Console) et pages légales : mentions légales, CGV, politique de confidentialité
+- Ouverture au public après un achat test réel de bout en bout : paiement, étiquette d’expédition, puis remboursement
+- Le lendemain de l’ouverture, un audit du site en ligne (sécurité, affichage sur mobile, référencement, obligations légales), puis la correction des points relevés
 
 ## Construire avec une IA : qui fait quoi
 
@@ -34,6 +48,7 @@ T-Bird Paris est une boutique de vêtements et d’accessoires biker et american
       <li>Explique ses choix quand je le lui demande</li>
       <li>Corrige ce que je lui signale</li>
       <li>Tient à jour la documentation des pièges connus</li>
+      <li>Audite le site en ligne quand je le lui demande</li>
     </ul>
   </div>
   <div>
@@ -43,6 +58,7 @@ T-Bird Paris est une boutique de vêtements et d’accessoires biker et american
       <li>Tester chaque fonction dans le navigateur, sur ordinateur et sur mobile</li>
       <li>Relire, refuser, faire recommencer</li>
       <li>Gérer les comptes : hébergement, paiement, base de données, emails</li>
+      <li>Décider de ce qu’on corrige, et de ce qui revient à la boutique</li>
     </ul>
   </div>
 </div>

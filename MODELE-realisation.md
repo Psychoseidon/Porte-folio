@@ -17,6 +17,7 @@ cadre: "Formation"              # « Formation », « Alternance » ou « Person
 domaines: ["Réseau", "Systèmes"]
 technologies: ["Windows Server", "Active Directory"]
 # statut: "En cours"            # facultatif
+# lien: "https://exemple.fr"    # facultatif : adresse du site ou du projet en ligne
 ---
 
 ## Contexte

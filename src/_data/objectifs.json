@@ -12,7 +12,7 @@
       "objectifs": [
         { "titre": "Mettre ce site en ligne", "statut": "fait", "note": "Eleventy et GitHub Pages, septembre 2026." },
         { "titre": "Démarrer l’alternance", "statut": "prevu", "note": "" },
-        { "titre": "Apprendre à créer des sites pour des clients", "statut": "en-cours", "note": "Premier client : T-Bird Paris, boutique en ligne en pré-ouverture." },
+        { "titre": "Apprendre à créer des sites pour des clients", "statut": "en-cours", "note": "Premier client : T-Bird Paris, boutique en ligne ouverte le 22 septembre 2026." },
         { "titre": "Monter un NAS à la maison", "statut": "prevu", "note": "Stockage partagé et sauvegardes." }
       ]
     },

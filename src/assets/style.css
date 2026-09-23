@@ -862,6 +862,14 @@ kbd {
 .prose pre code { padding: 0; border: 0; background: none; }
 .prose img { border-radius: var(--rayon); border: 1px solid var(--bord); }
 
+/* Captures d'écran : ordinateur en pleine largeur, téléphone côte à côte */
+.captures { display: grid; gap: 1rem; margin: 1.5rem 0; }
+.captures figure { margin: 0; }
+.captures img { display: block; width: 100%; height: auto; }
+.captures figcaption { margin-top: 0.4rem; font-family: var(--police-mono); font-size: 0.78rem; color: var(--texte-faible); }
+.captures-mobile { grid-template-columns: repeat(2, minmax(0, 15rem)); justify-content: start; }
+@media (min-width: 40rem) { .captures-ordi { grid-template-columns: 1fr 1fr; } }
+
 /* ---------------------------------------------------------------- Objectifs */
 
 .progression { margin-top: 1.75rem; max-width: 30rem; }
