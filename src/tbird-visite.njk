@@ -1,0 +1,96 @@
+---
+layout: base.njk
+title: "T-Bird Paris : visite guidée"
+resume: "Le site T-Bird Paris en images : ce que voit un client, puis l’espace réservé à la boutique."
+permalink: /realisations/tbird-paris/visite/
+---
+{#- Une étape = un titre, un texte, des captures (dossier assets/img/tbird/visite/).
+    Type « ordi » (1440×900) ou « mobile » (390×844, écran de téléphone). -#}
+{%- set client = [
+  { titre: "L’accueil", texte: "La porte d’entrée : la vitrine de la boutique, l’accès au catalogue et à Instagram, et les trois promesses (livraison offerte dès 120 € en point relais, retrait gratuit, 14 jours pour changer d’avis).",
+    images: [["accueil-ordi", "ordi", "Accueil sur ordinateur"], ["accueil-mobile", "mobile", "Accueil sur téléphone"]] },
+  { titre: "Le catalogue", texte: "Par catégorie ou par marque, avec la photo, le prix et la marque de chaque article.",
+    images: [["categorie-ordi", "ordi", "Une catégorie : les t-shirts"], ["marques-ordi", "ordi", "Toutes les marques"]] },
+  { titre: "La recherche", texte: "Une recherche dans tout le catalogue, accessible depuis la loupe de l’en-tête.",
+    images: [["recherche-ordi", "ordi", "Résultats pour « stetson »"]] },
+  { titre: "La fiche article et les coloris", texte: "Un même article en plusieurs couleurs, chacune avec ses tailles et son propre stock. Depuis Google Shopping, le lien ouvre directement la bonne couleur et la bonne taille.",
+    images: [["coloris-ordi", "ordi", "Fiche article avec trois coloris"], ["coloris-mobile", "mobile", "La même fiche sur téléphone"]] },
+  { titre: "« Prévenez-moi »", texte: "Quand une taille est épuisée, le client laisse son email : il reçoit un seul message quand elle revient, puis sa demande est effacée.",
+    images: [["prevenez-moi-mobile", "mobile", "Taille épuisée : bouton « Prévenez-moi »"]] },
+  { titre: "Le tunnel de commande", texte: "Trois étapes : coordonnées, mode de livraison (retrait en boutique, point relais ou domicile, au prix réel du transporteur), paiement. Achat possible sans compte ; code promo juste avant de payer.",
+    images: [["tunnel-ordi", "ordi", "Le tunnel sur ordinateur"], ["tunnel-mobile", "mobile", "Choix du mode de livraison"]] },
+  { titre: "Le compte client", texte: "Connexion par email ou par Google, suivi des commandes, favoris, alertes, et suppression du compte par le client lui-même.",
+    images: [["compte-mobile", "mobile", "Connexion au compte"]] }
+] -%}
+{%- set boutique = [
+  { titre: "L’accueil de l’espace boutique", texte: "Pensé pour des propriétaires peu à l’aise avec le numérique : de grosses cartes, un mot par action, et en tête la plus fréquente, « Vendu en boutique ». Les commandes à préparer sont signalées d’un badge.",
+    images: [["admin-accueil", "ordi", "Accueil de l’espace boutique"], ["admin-accueil-mobile", "mobile", "Le même accueil sur téléphone"]] },
+  { titre: "« Vendu en boutique »", texte: "La boutique encaisse sur un simple terminal, sans caisse reliée au site. Un article vendu au magasin se retire ici en trois gestes, pour qu’il ne soit jamais vendu deux fois.",
+    images: [["admin-vente-recherche", "ordi", "1. Rechercher l’article vendu"], ["admin-vente-choix", "ordi", "2. Le retirer du site"], ["admin-vente-boutique-mobile", "mobile", "Sur téléphone, au comptoir"]] },
+  { titre: "Les articles", texte: "La liste des articles, et la fiche de chaque article : description remplie case par case, photos, tailles, coloris et stock. Un nouvel article s’enregistre tout seul en brouillon pendant la saisie.",
+    images: [["admin-articles", "ordi", "Liste des articles"], ["admin-article-fiche", "ordi", "Modifier un article"], ["admin-article-nouveau", "ordi", "Nouvel article (brouillon automatique)"]] },
+  { titre: "Les commandes", texte: "Les commandes par statut, et le détail de chacune : client, livraison, articles, étiquette d’expédition et facture. Le fichier pour le comptable se télécharge ici.",
+    images: [["admin-commandes", "ordi", "Liste des commandes"], ["admin-commande-detail", "ordi", "Détail d’une commande"]] },
+  { titre: "Promotions et codes promo", texte: "Des opérations programmées (Noël, soldes, Black Friday) qui changent les prix toutes seules au début et à la fin, et des codes promo, dont des ventes privées réservées aux inscrits.",
+    images: [["admin-operation-form", "ordi", "Préparer une opération"], ["admin-code-form", "ordi", "Créer un code promo"]] },
+  { titre: "Comptabilité", texte: "Ce que la boutique a réellement encaissé, mois par mois, avec la TVA collectée.",
+    images: [["admin-comptabilite", "ordi", "Tableau de comptabilité"]] },
+  { titre: "Personnalisation et paramètres", texte: "Couleurs, polices et photos du site modifiables sans développeur ; coordonnées, livraison, paiement et réseaux sociaux dans les paramètres.",
+    images: [["admin-personnalisation", "ordi", "Couleurs et polices"], ["admin-parametres", "ordi", "Paramètres"]] },
+  { titre: "Le mode d’emploi", texte: "Un guide écrit pour les propriétaires, dans l’espace boutique et imprimable.",
+    images: [["admin-mode-emploi", "ordi", "Mode d’emploi"]] }
+] -%}
+{%- macro etapes(liste) -%}
+  {%- for e in liste %}
+  <section class="visite-etape apparition">
+    <div class="visite-texte">
+      <span class="numero">{{ "0" if loop.index < 10 }}{{ loop.index }}</span>
+      <h3>{{ e.titre }}</h3>
+      <p>{{ e.texte }}</p>
+    </div>
+    <div class="visite-images">
+      {%- for img in e.images %}
+      <figure class="visite-{{ img[1] }}">
+        <a href="/assets/img/tbird/visite/{{ img[0] }}.jpg" target="_blank" rel="noopener">
+          <img src="/assets/img/tbird/visite/{{ img[0] }}.jpg" alt="{{ img[2] }}" loading="lazy"
+               width="{{ 1440 if img[1] == 'ordi' else 780 }}" height="{{ 900 if img[1] == 'ordi' else 1688 }}">
+        </a>
+        <figcaption>{{ img[2] }}</figcaption>
+      </figure>
+      {%- endfor %}
+    </div>
+  </section>
+  {%- endfor %}
+{%- endmacro -%}
+
+<header class="bandeau">
+  <div class="conteneur">
+    <p class="surtitre"><a href="/realisations/">Réalisations</a> · <a href="/realisations/tbird-paris/">T-Bird Paris</a> · Visite guidée</p>
+    <h1>T-Bird Paris en images</h1>
+    <p class="chapeau">Ce que voit un client sur <a href="https://tbird68.fr" rel="noopener">tbird68.fr</a>, puis l’espace réservé à la boutique. Captures du 30 septembre 2026.</p>
+    <div class="actions">
+      <a class="bouton" href="#cote-client">Côté client</a>
+      <a class="bouton bouton-secondaire" href="#cote-boutique">Côté boutique</a>
+    </div>
+  </div>
+</header>
+
+<section class="conteneur section" id="cote-client">
+  <p class="surtitre">Côté client</p>
+  <h2>La boutique en ligne</h2>
+  <p class="chapeau">Captures du site en ligne, tel que le voit n’importe quel visiteur.</p>
+  {{ etapes(client) }}
+</section>
+
+<section class="section section-teintee" id="cote-boutique">
+  <div class="conteneur">
+    <p class="surtitre">Côté boutique</p>
+    <h2>L’espace des propriétaires</h2>
+    <p class="chapeau">Captures faites sur une copie de développement du site, avec des données de test. <strong>Les noms, adresses, emails, téléphones et montants des commandes sont masqués</strong>, tout comme les clés des services (paiement, envois).</p>
+    {{ etapes(boutique) }}
+  </div>
+</section>
+
+<nav class="conteneur retour" aria-label="Retour">
+  <a class="bouton bouton-secondaire" href="/realisations/tbird-paris/">← Retour à la fiche T-Bird Paris</a>
+</nav>

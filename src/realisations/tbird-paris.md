@@ -6,6 +6,8 @@ periode: "Depuis août 2026"
 statut: "En ligne depuis le 22 septembre 2026, mis à jour en continu"
 lien: "https://tbird68.fr"
 liens:
+  - titre: "Visite guidée en images"
+    url: "/realisations/tbird-paris/visite/"
   - titre: "Le site"
     url: "https://tbird68.fr"
   - titre: "La boutique (photos et vidéo)"
@@ -33,6 +35,8 @@ T-Bird Paris est une boutique de vêtements et d’accessoires biker et american
   <figure><img src="/assets/img/tbird/accueil-mobile.jpg" alt="Page d’accueil de T-Bird Paris sur téléphone" width="780" height="1688" loading="lazy"><figcaption>Accueil, sur téléphone</figcaption></figure>
   <figure><img src="/assets/img/tbird/produit-mobile.jpg" alt="Fiche d’un t-shirt sur téléphone : prix et tailles dès le premier écran" width="780" height="1688" loading="lazy"><figcaption>Fiche produit, sur téléphone</figcaption></figure>
 </div>
+
+<p><a class="bouton" href="/realisations/tbird-paris/visite/">Voir la visite guidée : le site et l’espace boutique en images →</a></p>
 
 ## Ce que j’ai fait
 

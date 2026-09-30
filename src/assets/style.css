@@ -669,7 +669,7 @@ kbd {
 .fiche-infos dd:last-child { margin-bottom: 0; }
 .fiche-liens { list-style: none; margin: 0.2rem 0 0; padding: 0; display: grid; gap: 0.35rem; }
 .fiche-liens a { text-decoration: none; }
-.fiche-liens a::after { content: " ↗"; font-size: 0.85em; }
+.fiche-liens a[href^="http"]::after { content: " ↗"; font-size: 0.85em; }
 .fiche-liens a:hover { text-decoration: underline; }
 .retour { padding-bottom: 4rem; }
 
@@ -872,6 +872,33 @@ kbd {
 .captures img { display: block; width: 100%; height: auto; }
 .captures figcaption { margin-top: 0.4rem; font-family: var(--police-mono); font-size: 0.78rem; color: var(--texte-faible); }
 .captures-mobile { grid-template-columns: repeat(2, minmax(0, 15rem)); justify-content: start; }
+
+/* Photo de présentation (fond transparent) */
+.portrait {
+  display: block;
+  width: 8rem;
+  height: auto;
+  margin-bottom: 1.5rem;
+  border-radius: 1.25rem;
+  border: 2px solid rgba(63, 208, 184, 0.55);
+  background: var(--surface);
+  box-shadow: 0 0 0 6px rgba(63, 208, 184, 0.08), 0 18px 50px -18px rgba(63, 208, 184, 0.55);
+}
+
+/* Visite guidée d'une réalisation : une étape = texte + captures */
+.visite-etape { display: grid; gap: 1.25rem 2.5rem; padding-block: 2.25rem; border-top: 1px solid var(--bord); }
+.visite-etape:first-of-type { border-top: 0; }
+@media (min-width: 60rem) { .visite-etape { grid-template-columns: 17rem 1fr; } .visite-texte { position: sticky; top: 6rem; align-self: start; } }
+.visite-texte h3 { margin: 0.7rem 0 0.4rem; font-size: 1.25rem; }
+.visite-texte p { color: var(--texte-doux); margin: 0; }
+.visite-images { display: flex; flex-wrap: wrap; gap: 1rem; align-items: flex-start; }
+.visite-images figure { margin: 0; }
+.visite-ordi { flex: 1 1 22rem; max-width: 46rem; }
+.visite-mobile { flex: 0 1 12.5rem; }
+.visite-images a { display: block; border-radius: var(--rayon); overflow: hidden; border: 1px solid var(--bord); transition: border-color 0.2s, transform 0.2s; }
+.visite-images a:hover { border-color: var(--accent-fonce); transform: translateY(-2px); }
+.visite-images img { display: block; width: 100%; height: auto; }
+.visite-images figcaption { margin-top: 0.45rem; font-family: var(--police-mono); font-size: 0.78rem; color: var(--texte-faible); }
 @media (min-width: 40rem) { .captures-ordi { grid-template-columns: 1fr 1fr; } }
 
 /* ---------------------------------------------------------------- Objectifs */
