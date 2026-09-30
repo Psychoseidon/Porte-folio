@@ -667,6 +667,10 @@ kbd {
 .fiche-infos dt { font-family: var(--police-mono); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--texte-faible); }
 .fiche-infos dd { margin: 0.15rem 0 0.9rem; color: var(--texte); }
 .fiche-infos dd:last-child { margin-bottom: 0; }
+.fiche-liens { list-style: none; margin: 0.2rem 0 0; padding: 0; display: grid; gap: 0.35rem; }
+.fiche-liens a { text-decoration: none; }
+.fiche-liens a::after { content: " ↗"; font-size: 0.85em; }
+.fiche-liens a:hover { text-decoration: underline; }
 .retour { padding-bottom: 4rem; }
 
 /* Deux colonnes « qui fait quoi » dans une réalisation */

@@ -20,7 +20,14 @@ layout: base.njk
         <dt>Cadre</dt><dd>{{ cadre }}</dd>
         <dt>Domaines</dt><dd>{{ domaines | join(", ") }}</dd>
         {%- if statut %}<dt>Statut</dt><dd>{{ statut }}</dd>{% endif %}
-        {%- if lien %}<dt>Site</dt><dd><a href="{{ lien }}" rel="noopener">{{ lien | replace("https://", "") }}</a></dd>{% endif %}
+        {%- if liens %}
+        <dt>Liens</dt>
+        <dd>
+          <ul class="fiche-liens">
+            {%- for l in liens %}<li><a href="{{ l.url }}" rel="noopener">{{ l.titre }}</a></li>{% endfor %}
+          </ul>
+        </dd>
+        {%- elif lien %}<dt>Site</dt><dd><a href="{{ lien }}" rel="noopener">{{ lien | replace("https://", "") }}</a></dd>{% endif %}
       </dl>
     </aside>
     <div class="prose">
