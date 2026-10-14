@@ -3,7 +3,7 @@ title: "T-Bird Paris : une boutique en ligne"
 resume: "Le site e-commerce d’une boutique parisienne, construit avec un agent IA de développement : catalogue, paiement, livraison, administration — et son exploitation au quotidien."
 date: 2026-08-13
 periode: "Depuis août 2026"
-statut: "En ligne depuis le 22 septembre 2026, mis à jour en continu"
+statut: "En ligne depuis le 22 septembre 2026, mis à jour en continu (fiche à jour au 14 octobre 2026)"
 lien: "https://tbird68.fr"
 liens:
   - titre: "Visite guidée en images"
@@ -61,7 +61,7 @@ T-Bird Paris est une boutique de vêtements et d’accessoires biker et american
 - Ouverture au public après un achat test réel de bout en bout : paiement, étiquette d’expédition, puis remboursement
 - Le lendemain de l’ouverture, un audit du site en ligne (sécurité, affichage sur mobile, référencement, obligations légales), puis la correction des points relevés
 
-### Depuis l’ouverture (22 – 30 septembre 2026)
+### Juste après l’ouverture (22 – 30 septembre 2026)
 
 **Vente et clients**
 
@@ -97,6 +97,34 @@ T-Bird Paris est une boutique de vêtements et d’accessoires biker et american
 - Mises à jour des bibliothèques proposées chaque mois (Dependabot), et vérifications automatiques (tests, TypeScript) avant chaque fusion
 - Site plus rapide sur mobile : polices hébergées par le site, photos principales chargées en priorité
 
+### En octobre 2026
+
+**Ventes et service client**
+
+- Livraison dans neuf pays d’Europe en plus de la France, au prix réel du transporteur, après la demande d’un client belge
+- Retours, échanges et avoirs : le client annonce son retour en ligne, la boutique l’enregistre en un bouton, et le remboursement, la remise en stock et l’email partent seuls
+- Échange par la poste : la nouvelle taille est mise de côté pour le client, puis envoyée dès que l’article revient
+- Avis clients : un seul email « Votre avis » une semaine après la livraison, avis possible sans compte, tous les avis réunis en bas de l’accueil
+
+**Faire connaître la boutique**
+
+- Une page « Faire venir des clients » dans l’espace boutique : cinq gestes à cocher chaque semaine, des suggestions tirées du site, des idées à piocher
+- « Nos coups de cœur » sur l’accueil, et des statistiques simples : les articles les plus regardés, ceux qu’on n’ouvre presque jamais
+- Vitrines : des pages façon magazine que les propriétaires composent eux-mêmes (photos d’un bord à l’autre, textes, vidéos, articles), en voyant la page se construire pendant qu’ils écrivent
+- Le Journal : des articles signés par les propriétaires, avec le même outil
+- Une annonce en grand à l’arrivée sur le site pour un arrivage ou une promotion, avec trois animations au choix, dont la une d’un journal qui arrive en tournoyant, comme dans les vieux films
+
+**Espace boutique**
+
+- Les écrans du quotidien repensés pour le téléphone, avec un accueil « Aujourd’hui » qui montre ce qu’il y a à faire
+- Les réglages sensibles (paiement, transporteurs, TVA, pages légales) mis à part, hors de portée d’une fausse manipulation
+- Rester connecté 30 jours sur son appareil, au lieu de retaper le mot de passe chaque semaine
+
+**Exploitation**
+
+- Correctifs de sécurité appliqués le jour de leur publication (Next.js)
+- Moins de calcul côté serveur : pages gardées en cache et rafraîchies seulement quand un article change
+
 ## Construire avec une IA : qui fait quoi
 
 <div class="comparaison">
@@ -126,7 +154,7 @@ Je n’ai pas écrit ce code à la main, et je ne le prétends pas. Mon travail 
 
 ## Difficultés rencontrées
 
-Cinq problèmes réels, repérés puis corrigés :
+Six problèmes réels, repérés puis corrigés :
 
 **Les paiements n’étaient jamais confirmés.** Le mot de passe de pré-ouverture protégeait tout le site, y compris l’adresse que Stripe appelle pour signaler un paiement réussi. Stripe était redirigé vers la page de mot de passe : aucune commande n’était validée. Correction : une liste d’adresses accessibles sans mot de passe, réservée aux services extérieurs. C’est le même raisonnement qu’avec un pare-feu : une règle d’accès bloque aussi ce qu’on n’avait pas prévu.
 
@@ -137,6 +165,8 @@ Cinq problèmes réels, repérés puis corrigés :
 **Un seul email refusé coupait toutes les alertes de la boutique.** Le lendemain de l’ouverture, l’alerte d’une réservation n’est jamais arrivée. Un email vers l’adresse de contact avait été refusé une fois : le service d’envoi avait alors mis l’adresse sur sa liste de blocage, et n’y envoyait plus rien, sans aucune erreur visible côté site. Correction : retirer l’adresse de la liste, et désormais vérifier toute nouvelle redirection d’email *avant* de supprimer l’ancienne.
 
 **La sauvegarde de la nuit sautait parfois.** GitHub ne lance pas toujours les tâches planifiées à l’heure. Correction : trois créneaux par jour (le premier qui passe fait la sauvegarde du jour), et la surveillance horaire relance la sauvegarde si la dernière date de plus de 26 heures.
+
+**Une erreur invisible, environ 500 fois par semaine.** La page d’accueil était reconstruite entièrement dans le navigateur à chaque visite. L’outil de suivi des erreurs n’en montrait rien : un filtre réglé par défaut jetait ce type d’erreur avant même de l’enregistrer. En cherchant dans les événements écartés, la cause est apparue : la version gardée en cache par l’hébergeur croyait être une autre page que l’accueil, et n’affichait pas le même logo que le navigateur. Correction : la page dit elle-même qu’elle est l’accueil. Leçon : un tableau de bord vide ne prouve pas qu’il n’y a pas d’erreur, il faut aussi savoir ce qu’il filtre.
 
 ## Ce que j’en retiens
 
