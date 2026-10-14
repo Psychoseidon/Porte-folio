@@ -4,7 +4,7 @@ layout: base.njk
 <article>
   <header class="bandeau">
     <div class="conteneur">
-      <p class="surtitre"><a href="/realisations/">Réalisations</a> · {{ cadre }} · {{ annee }}</p>
+      <p class="surtitre"><a href="/realisations/">Réalisations</a></p>
       <h1>{{ title }}</h1>
       <p class="chapeau">{{ resume }}</p>
       <ul class="etiquettes">
@@ -18,8 +18,17 @@ layout: base.njk
       <dl>
         <dt>Période</dt><dd>{{ periode or (page.date | moisAnnee) }}</dd>
         <dt>Cadre</dt><dd>{{ cadre }}</dd>
+        {%- if aide %}<dt>Avec quoi</dt><dd>{{ aide }}</dd>{% endif %}
         <dt>Domaines</dt><dd>{{ domaines | join(", ") }}</dd>
         {%- if statut %}<dt>Statut</dt><dd>{{ statut }}</dd>{% endif %}
+        {%- if competencesBTS %}
+        <dt>Compétences du BTS</dt>
+        <dd>
+          <ul class="fiche-competences">
+            {%- for c in competencesBTS %}<li>{{ c }}</li>{% endfor %}
+          </ul>
+        </dd>
+        {%- endif %}
         {%- if liens %}
         <dt>Liens</dt>
         <dd>
@@ -36,6 +45,6 @@ layout: base.njk
   </div>
 
   <nav class="conteneur retour" aria-label="Retour">
-    <a class="bouton bouton-secondaire" href="/realisations/">← Toutes les réalisations</a>
+    <a class="bouton bouton-secondaire" href="/realisations/">Toutes les réalisations</a>
   </nav>
 </article>

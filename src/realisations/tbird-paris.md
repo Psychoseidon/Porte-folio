@@ -17,7 +17,15 @@ liens:
   - titre: "Facebook"
     url: "https://www.facebook.com/tbirdshop"
 annee: "Avant le BTS"
-cadre: "Personnel"
+cadre: "Pour un client"
+vedette: true
+image: "/assets/img/tbird/accueil-ordi.jpg"
+aide: "Claude Code, un agent IA de développement : il écrit le code, je décide, je teste et je fais corriger"
+competencesBTS:
+  - "Développer la présence en ligne de l’organisation"
+  - "Travailler en mode projet"
+  - "Mettre à disposition des utilisateurs un service informatique"
+  - "Répondre aux incidents et aux demandes d’assistance et d’évolution"
 domaines: ["Développement web", "Hébergement", "Sécurité", "Sauvegarde et supervision"]
 technologies: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Boxtal", "Resend", "Vercel", "GitHub Actions", "Sentry", "Git", "Claude Code"]
 ---
@@ -36,7 +44,7 @@ T-Bird Paris est une boutique de vêtements et d’accessoires biker et american
   <figure><img src="/assets/img/tbird/produit-mobile.jpg" alt="Fiche d’un t-shirt sur téléphone : prix et tailles dès le premier écran" width="780" height="1688" loading="lazy"><figcaption>Fiche produit, sur téléphone</figcaption></figure>
 </div>
 
-<p><a class="bouton" href="/realisations/tbird-paris/visite/">Voir la visite guidée : le site et l’espace boutique en images →</a></p>
+<p><a class="bouton" href="/realisations/tbird-paris/visite/">Voir la visite guidée : le site et l’espace boutique en images</a></p>
 
 ## Ce que j’ai fait
 

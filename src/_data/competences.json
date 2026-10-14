@@ -44,5 +44,11 @@
     { "langue": "Anglais", "niveau": "B2" },
     { "langue": "Espagnol", "niveau": "B1" }
   ],
-  "interets": ["Judo — ceinture noire 1er dan", "Longboard", "Ski et snowboard", "Informatique et nouvelles technologies"]
+  "interets": [
+    { "titre": "Jeu vidéo", "texte": "Là où tout a commencé : faire tourner les jeux, monter mes PC, héberger un serveur pour jouer entre amis.", "couleur": "ciel" },
+    { "titre": "Mode", "texte": "", "couleur": "rose" },
+    { "titre": "Longboard", "texte": "", "couleur": "menthe" },
+    { "titre": "Judo", "texte": "Ceinture noire, 1er dan.", "couleur": "fluo" },
+    { "titre": "Ski et snowboard", "texte": "", "couleur": "ciel" }
+  ]
 }

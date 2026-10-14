@@ -5,6 +5,9 @@ date: 2020-01-02
 periode: "Depuis 2020"
 annee: "Avant le BTS"
 cadre: "Personnel"
+aide: "Tutoriels, documentation et scripts existants que j’adapte"
+competencesBTS:
+  - "Gérer le patrimoine informatique"
 domaines: ["Systèmes", "Automatisation"]
 technologies: ["PowerShell", "Bash", "Python", "Docker"]
 ---

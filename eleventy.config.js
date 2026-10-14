@@ -9,8 +9,9 @@ export default function (eleventyConfig) {
 
   // Polices hébergées avec le site (pas d'appel à Google : rien ne part chez un tiers).
   const polices = {
-    "@fontsource-variable/inter": ["inter-latin-wght-normal", "inter-latin-ext-wght-normal"],
-    "@fontsource-variable/jetbrains-mono": ["jetbrains-mono-latin-wght-normal", "jetbrains-mono-latin-ext-wght-normal"],
+    // Bricolage Grotesque : titres et texte. Kalam : les notes au stylo dans les marges.
+    "@fontsource-variable/bricolage-grotesque": ["bricolage-grotesque-latin-wght-normal", "bricolage-grotesque-latin-ext-wght-normal"],
+    "@fontsource/kalam": ["kalam-latin-400-normal", "kalam-latin-700-normal"],
   };
   for (const [paquet, fichiers] of Object.entries(polices)) {
     for (const f of fichiers) {
@@ -66,11 +67,6 @@ export default function (eleventyConfig) {
   // Réalisations dont un champ vaut une valeur donnée (ex. cadre = Alternance).
   eleventyConfig.addFilter("filtrerPar", (items, champ, valeur) =>
     items.filter((item) => item.data[champ] === valeur)
-  );
-
-  // Ce que le terminal de navigation doit savoir de chaque réalisation.
-  eleventyConfig.addFilter("carteTerminal", (items) =>
-    items.map((item) => ({ url: item.url, titre: item.data.title, nom: item.fileSlug }))
   );
 
   // « Formation » -> « formation », pour les attributs de filtre.

@@ -3,8 +3,7 @@
 # MODÈLE DE RÉALISATION
 # 1. Copie ce fichier dans src/realisations/ et renomme-le :
 #    minuscules, tirets, sans accent (ex. labo-active-directory.md).
-#    Le nom du fichier devient l'adresse de la page et le nom
-#    dans le terminal du site (ls realisations).
+#    Le nom du fichier devient l'adresse de la page.
 # 2. Remplis l'en-tête ci-dessous, puis le texte.
 # 3. Les lignes qui commencent par # sont des commentaires : tu peux les effacer.
 # ------------------------------------------------------------------
@@ -13,7 +12,12 @@ resume: "Une phrase : ce que c'est, pour qui, avec quoi."
 date: 2026-10-01                # sert à trier : les plus récentes d'abord
 periode: "Octobre 2026"         # facultatif, sinon le mois de la date
 annee: "1re année"              # « Avant le BTS », « 1re année » ou « 2e année »
-cadre: "Formation"              # « Formation », « Alternance » ou « Personnel »
+cadre: "Formation"              # « Formation », « Alternance », « Pour un client » ou « Personnel »
+aide: "Tutoriels et documentation"   # avec quoi : guide, prof, IA… honnêtement
+competencesBTS:                 # compétences du référentiel mobilisées (à vérifier avec les profs)
+  - "Mettre à disposition des utilisateurs un service informatique"
+# vedette: true                 # facultatif : mise à la une de l'accueil (une seule)
+# image: "/assets/img/projet/capture.jpg"   # capture affichée à la une
 domaines: ["Réseau", "Systèmes"]
 technologies: ["Windows Server", "Active Directory"]
 # statut: "En cours"            # facultatif

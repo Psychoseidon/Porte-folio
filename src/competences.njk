@@ -16,7 +16,7 @@ permalink: /competences/
   <div class="grille-cartes">
     {%- for c in competences.techniques %}
     <article class="carte">
-      <h3><span class="numero">{{ "0" if loop.index < 10 }}{{ loop.index }}</span>{{ c.titre }}</h3>
+      <h3>{{ c.titre }}</h3>
       <ul class="liste">
         {%- for p in c.points %}<li>{{ p }}</li>{% endfor %}
       </ul>
@@ -43,13 +43,13 @@ permalink: /competences/
   <div>
     <h2>Langues</h2>
     <ul class="liste">
-      {%- for l in competences.langues %}<li><strong>{{ l.langue }}</strong> — {{ l.niveau }}</li>{% endfor %}
+      {%- for l in competences.langues %}<li><strong>{{ l.langue }}</strong>, {{ l.niveau }}</li>{% endfor %}
     </ul>
   </div>
   <div>
-    <h2>Centres d’intérêt</h2>
-    <ul class="liste">
-      {%- for i in competences.interets %}<li>{{ i }}</li>{% endfor %}
+    <h2>À côté</h2>
+    <ul class="stickers">
+      {%- for i in competences.interets %}<li class="sticker sticker-{{ i.couleur }}">{{ i.titre }}</li>{% endfor %}
     </ul>
   </div>
 </section>

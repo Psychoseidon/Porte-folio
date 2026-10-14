@@ -1,101 +1,94 @@
 ---
 layout: base.njk
 ---
+{%- set vedette = collections.realisations | filtrerPar("vedette", true) | first %}
 {%- set derniere = collections.journal[0] %}
-{%- set faits = objectifs.etapes | compterStatut("fait") %}
-{%- set total = objectifs.etapes | compterStatut("engages") %}
 <section class="accueil">
-  <canvas class="reseau" aria-hidden="true"></canvas>
   <div class="conteneur accueil-grille">
-    <div class="accueil-texte-bloc">
-      <p class="surtitre"><span class="point-vivant" aria-hidden="true"></span>BTS SIO · SISR · en alternance</p>
+    <div class="accueil-texte">
       <h1 class="accueil-nom">{{ site.nom | replace(" ", "<br>") | safe }}</h1>
-      <p class="accueil-titre">{{ site.titre }}</p>
-      <p class="accueil-texte">Venu à l’informatique par le jeu vidéo. Ici, je garde la trace de ce que je construis, de ce que j’apprends et de ce que je vise.</p>
+      <p class="accueil-titre">{{ site.titre }}.</p>
+      <p class="accueil-intro">Je suis venu à l’informatique par le jeu vidéo, après un premier parcours dans l’éducation. Ici, mes réalisations, ce que j’apprends et ce que je vise.</p>
       <div class="actions">
         <a class="bouton" href="/realisations/">Voir mes réalisations</a>
-        <a class="bouton bouton-secondaire" href="/journal/">Lire le journal</a>
+        <a class="bouton bouton-secondaire" href="/contact/">Me contacter</a>
       </div>
     </div>
 
-    <div class="terminal" data-terminal-accueil>
-      <div class="terminal-barre">
-        <span class="feu"></span><span class="feu"></span><span class="feu"></span>
-        <span class="terminal-titre">{{ site.initiales | lower }}@sio: ~</span>
-      </div>
-      <div class="terminal-corps">
-        <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">whoami</span></p>
-        <p class="ligne-sortie">{{ site.nom }} — étudiant en BTS SIO, option SISR</p>
-        <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">cat statut.txt</span></p>
-        <p class="ligne-sortie"><span class="ok">●</span> en alternance{% if site.alternance.entreprise %} chez {{ site.alternance.entreprise }}{% endif %} · {{ faits }}/{{ total }} objectifs atteints</p>
-        <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">ls realisations/</span></p>
-        <p class="ligne-sortie ligne-liens">
-          {%- for item in collections.realisations %}<a href="{{ item.url }}">{{ item.fileSlug }}/</a>{% endfor -%}
-        </p>
-        {%- if derniere %}
-        <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">tail -n 1 journal.log</span></p>
-        <p class="ligne-sortie">[{{ derniere.date | dateIso }}] <a href="{{ derniere.url }}">{{ derniere.data.title }}</a></p>
-        {%- endif %}
-        <p class="ligne-commande"><span class="invite">$</span> <span class="cmd">echo $AIDE</span></p>
-        <p class="ligne-sortie">Le bouton <span class="accent">&gt;_</span> en haut (ou Ctrl+K) ouvre un vrai terminal.</p>
-        <p class="ligne-commande ligne-attente"><span class="invite">$</span> <span class="curseur" aria-hidden="true"></span></p>
-      </div>
+    {#- La planche de stickers : la photo détourée et ce qui m'occupe. #}
+    <div class="planche" aria-label="Photo et centres d’intérêt">
+      <img class="planche-photo" src="/assets/img/photo.png" alt="Photo de {{ site.nom }}" width="112" height="112">
+      <ul class="planche-stickers">
+        <li class="sticker sticker-bic">Systèmes et réseaux</li>
+        {%- for i in competences.interets %}<li class="sticker sticker-{{ i.couleur }}">{{ i.titre }}</li>{% endfor %}
+      </ul>
+      <p class="note note-planche" aria-hidden="true">pas de fond noir ni de code vert qui défile ici. c’était la version 1</p>
     </div>
   </div>
+</section>
 
+<section class="section">
   <div class="conteneur">
-    <ul class="chiffres">
-      <li><strong>2020</strong><span>début de la pratique en autodidacte</span></li>
-      <li><strong>{{ collections.realisations.length }}</strong><span>réalisation{% if collections.realisations.length > 1 %}s{% endif %} documentée{% if collections.realisations.length > 1 %}s{% endif %}</span></li>
-      <li><strong>{{ collections.journal.length }}</strong><span>entrée{% if collections.journal.length > 1 %}s{% endif %} de journal</span></li>
-      <li><strong>{{ faits }}/{{ total }}</strong><span><a href="/objectifs/">objectifs atteints</a></span></li>
+    <div class="titre-ligne">
+      <h2>Ce que j’ai construit</h2>
+      <a class="lien-discret" href="/realisations/">Toutes les réalisations</a>
+    </div>
+
+    {%- if vedette %}
+    <article class="vedette">
+      <a class="vedette-image" href="{{ vedette.url }}" tabindex="-1" aria-hidden="true">
+        <img src="{{ vedette.data.image }}" alt="" width="1440" height="900" loading="lazy">
+      </a>
+      <div class="vedette-texte">
+        <p class="vedette-cadre">{{ vedette.data.periode }}</p>
+        <h3><a href="{{ vedette.url }}">{{ vedette.data.title }}</a></h3>
+        <p>{{ vedette.data.resume }}</p>
+        <dl class="vedette-faits">
+          {%- if vedette.data.statut %}<div><dt>Statut</dt><dd>{{ vedette.data.statut }}</dd></div>{% endif %}
+          {%- if vedette.data.aide %}<div><dt>Avec quoi</dt><dd>{{ vedette.data.aide }}</dd></div>{% endif %}
+        </dl>
+        <div class="actions">
+          <a class="bouton" href="{{ vedette.url }}">Lire la fiche</a>
+          {%- for l in vedette.data.liens %}{% if loop.first %}<a class="bouton bouton-secondaire" href="{{ l.url }}">{{ l.titre }}</a>{% endif %}{% endfor %}
+        </div>
+      </div>
+    </article>
+    {%- endif %}
+
+    <ul class="autres-realisations">
+      {%- for item in collections.realisations %}{% if not item.data.vedette %}
+      <li>
+        <h3><a href="{{ item.url }}">{{ item.data.title }}</a></h3>
+        <p>{{ item.data.resume }}</p>
+        <p class="autres-meta">{{ item.data.periode }}</p>
+      </li>
+      {%- endif %}{% endfor %}
     </ul>
+    <p class="note note-realisations" aria-hidden="true">chaque fiche dit ce qui vient de moi, et ce qui vient d’un guide ou d’une IA</p>
   </div>
 </section>
 
-<section class="section apparition">
-  <div class="conteneur deux-colonnes">
-    <div>
-      <img class="portrait" src="/assets/img/photo.png" alt="Photo de {{ site.nom }}" width="112" height="112">
-      <p class="surtitre">Qui suis-je</p>
-      <h2>D’un loisir de joueur à un métier</h2>
-    </div>
-    <div class="prose">
-      <p>L’informatique a commencé chez moi par le jeu vidéo : faire tourner un jeu, monter une machine correcte, héberger un serveur pour jouer avec des amis. De fil en aiguille, j’y ai passé cinq ans en autodidacte, à coups de documentation et de tutoriels.</p>
-      <p>À côté, il y a eu mes études, mon métier d’enseignant, une activité indépendante et du sport. L’informatique est longtemps restée le loisir — jusqu’à ce que je décide d’en faire mon métier.</p>
-      <p>Je commence le BTS SIO option SISR en alternance, en sachant ce qui me manque : la méthode, le cadre professionnel et l’expérience en entreprise. Ce site en garde la trace, au fil des deux ans et au-delà.</p>
-    </div>
-  </div>
-</section>
-
-<section class="section apparition">
+<section class="section section-teintee">
   <div class="conteneur deux-colonnes deux-colonnes-egales">
     <div>
       <div class="titre-ligne">
-        <div>
-          <p class="surtitre">Journal</p>
-          <h2>Dernières notes</h2>
-        </div>
-        <a class="lien-fleche" href="/journal/">Tout lire <span aria-hidden="true">→</span></a>
+        <h2>D’où je viens</h2>
+        <a class="lien-discret" href="/parcours/">Tout le parcours</a>
       </div>
-      <ol class="journal journal-compact">
-        {%- for entree in collections.journal.slice(0, 4) %}
+      <ol class="frise">
+        {%- for e in parcours.formation.slice(0, 3) %}
         <li>
-          <time datetime="{{ entree.date | dateIso }}">{{ entree.date | dateLongue }}</time>
-          <h3><a href="{{ entree.url }}">{{ entree.data.title }}</a></h3>
+          <span class="frise-periode">{{ e.periode }}</span>
+          <h3>{{ e.titre }}</h3>
+          <p class="frise-lieu">{{ e.lieu }}</p>
         </li>
-        {%- else %}
-        <li><p class="vide">Première entrée à venir.</p></li>
         {%- endfor %}
       </ol>
     </div>
     <div>
       <div class="titre-ligne">
-        <div>
-          <p class="surtitre">Objectifs</p>
-          <h2>En ligne de mire</h2>
-        </div>
-        <a class="lien-fleche" href="/objectifs/">Feuille de route <span aria-hidden="true">→</span></a>
+        <h2>Où je vais</h2>
+        <a class="lien-discret" href="/objectifs/">Ma feuille de route</a>
       </div>
       <ul class="objectifs objectifs-compacts">
         {%- for etape in objectifs.etapes %}
@@ -103,29 +96,37 @@ layout: base.njk
             {%- if o.statut == "en-cours" or o.statut == "prevu" %}
             <li class="objectif objectif-{{ o.statut }}">
               <span class="pastille-statut">{{ objectifs.legende[o.statut] }}</span>
-              <div><h3>{{ o.titre }}</h3></div>
+              <h3>{{ o.titre }}</h3>
             </li>
             {%- endif %}
           {%- endfor %}
         {%- endfor %}
       </ul>
+      {%- if derniere %}
+      <p class="derniere-note">Dernière note du journal : <a href="{{ derniere.url }}">{{ derniere.data.title }}</a>, le {{ derniere.date | dateLongue }}.</p>
+      {%- endif %}
     </div>
   </div>
 </section>
 
-<section class="section apparition">
-  <div class="conteneur">
-    <div class="titre-ligne">
-      <div>
-        <p class="surtitre">Réalisations</p>
-        <h2>Les plus récentes</h2>
-      </div>
-      <a class="lien-fleche" href="/realisations/">Tout voir <span aria-hidden="true">→</span></a>
-    </div>
-    <div class="grille-cartes">
-      {%- for item in collections.realisations.slice(0, 3) %}
-      {% include "carte-realisation.njk" %}
+<section class="section">
+  <div class="conteneur a-cote">
+    <h2>À côté de l’informatique</h2>
+    <ul class="a-cote-liste">
+      {%- for i in competences.interets %}
+      <li>
+        <span class="sticker sticker-{{ i.couleur }}">{{ i.titre }}</span>
+        {%- if i.texte %}<p>{{ i.texte }}</p>{% endif %}
+      </li>
       {%- endfor %}
-    </div>
+    </ul>
+    <p class="note note-a-cote" aria-hidden="true">touche-à-tout, oui. c’est un peu le sujet</p>
+  </div>
+</section>
+
+<section class="section contact-bloc">
+  <div class="conteneur">
+    <h2>Une question sur un projet, ou envie d’échanger ?</h2>
+    <p><a class="contact-email" href="mailto:{{ site.email }}">{{ site.email }}</a></p>
   </div>
 </section>

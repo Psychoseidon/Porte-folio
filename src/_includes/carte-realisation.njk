@@ -1,5 +1,5 @@
 <article class="carte" data-cadre="{{ item.data.cadre | cle }}" data-annee="{{ item.data.annee | cle }}">
-  <p class="carte-meta">{{ item.data.cadre }} · {{ item.data.annee }}</p>
+  <p class="carte-meta">{{ item.data.periode or item.data.annee }}</p>
   <h3><a href="{{ item.url }}">{{ item.data.title }}</a></h3>
   <p>{{ item.data.resume }}</p>
   <ul class="etiquettes etiquettes-petites">

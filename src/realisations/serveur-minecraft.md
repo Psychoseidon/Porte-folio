@@ -5,6 +5,9 @@ date: 2020-01-01
 periode: "Depuis 2020"
 annee: "Avant le BTS"
 cadre: "Personnel"
+aide: "Tutoriels et documentation, appliqués et adaptés à mon installation"
+competencesBTS:
+  - "Mettre à disposition des utilisateurs un service informatique"
 domaines: ["Réseau", "Systèmes"]
 technologies: ["Windows", "Pare-feu Windows", "NAT", "DNS"]
 ---

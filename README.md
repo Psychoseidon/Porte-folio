@@ -22,16 +22,19 @@ Le site se recharge tout seul à chaque modification.
 |---|---|
 | Mes infos (email, LinkedIn, GitHub, CV, alternance) | `src/_data/site.json` |
 | Ma feuille de route (statuts : `fait`, `en-cours`, `prevu`, `idee`) | `src/_data/objectifs.json` |
-| Mes compétences, langues, centres d'intérêt | `src/_data/competences.json` |
+| Mes compétences, langues, centres d'intérêt (« À côté », avec leur couleur de sticker) | `src/_data/competences.json` |
 | Ma formation et mon expérience | `src/_data/parcours.json` |
 | Les couleurs, les polices, l'ambiance | `src/assets/style.css` (variables en tête) |
-| Les animations, le terminal, les filtres | `src/assets/site.js` (un bloc par fonction) |
+| Le menu mobile, les filtres, les stickers | `src/assets/site.js` (un bloc par fonction) |
 | L'en-tête, le menu, le pied de page | `src/_includes/base.njk` |
 | La mise en page d'une réalisation | `src/_includes/realisation.njk` |
 | Le texte de l'accueil | `src/index.njk` |
 
-**Ajouter une commande au terminal** (Ctrl+K) : bloc 7 de `site.js`, objet `commandes`.
-Une entrée = une commande, avec son texte d'aide.
+**Le style « carnet »** : papier clair, notes au stylo bleu (police Kalam, classe `note`)
+et stickers (classe `sticker sticker-fluo|rose|menthe|ciel|bic`). Garder les notes rares :
+trois par page au plus, sinon elles ne se remarquent plus.
+
+**L'accueil met une réalisation à la une** : celle qui a `vedette: true` (et une `image`).
 
 **Le téléphone est vide exprès** dans `site.json` : le site est public, et un numéro
 publié en ligne attire le démarchage. Il reste sur le CV envoyé aux entreprises.
@@ -43,8 +46,8 @@ publié en ligne attire le démarchage. Il reste sur le CV envoyé aux entrepris
 3. Remplir l'en-tête et le texte.
 4. Les captures vont dans `src/assets/img/`.
 
-La page, la carte dans la liste, les filtres et la commande `ls realisations` du terminal
-se mettent à jour tout seuls.
+La page, la carte dans la liste et les filtres se mettent à jour tout seuls.
+Les champs `aide` (avec quoi : guide, IA…) et `competencesBTS` s'affichent dans la fiche.
 
 Bonne habitude : créer le fichier **le jour même** du TP, même brouillon.
 
@@ -54,13 +57,12 @@ Bonne habitude : créer le fichier **le jour même** du TP, même brouillon.
 2. Le nommer avec la date du jour : `2026-10-03-premier-tp-reseau.md`.
 3. Écrire. Trois lignes suffisent : l'important est de le faire le jour même.
 
-L'entrée apparaît en tête du journal, sur l'accueil et dans `ls journal`.
+L'entrée apparaît en tête du journal et sur l'accueil.
 
 ## Suivre ses objectifs
 
 Dans `src/_data/objectifs.json`, changer le `statut` d'une ligne suffit.
 La barre de progression compte ce qui est `fait` sur tout ce qui n'est pas une `idee`.
-La commande `todo` du terminal affiche la liste (`todo --tout` avec les idées).
 
 ## Publier sur GitHub Pages (gratuit)
 
