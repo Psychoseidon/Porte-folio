@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Infrastructure T-Bird</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Plan : fond bleu nuit T-Bird, texte crème, accent or ; une couleur par couche de l'infrastructure.
+   Mise en page : en-tête court, schéma en cascade (du haut = les gens qui décident, au bas = le client),
+   deux parcours en étapes, puis une fiche par élément. Un seul univers visuel, sombre. */
+:root {
+  color-scheme: dark;
+  --fond: #121b30;
+  --fond-2: #1a2744;
+  --fond-3: #22325a;
+  --trait: #33466f;
+  --texte: #f5f0e8;
+  --texte-doux: #b9c0d0;
+  --or: #c8962a;
+  --or-clair: #e2b65a;
+  /* couches */
+  --c-personnes: #e2b65a;
+  --c-atelier: #7fb3e0;
+  --c-code: #a99cf0;
+  --c-serveur: #5fc79e;
+  --c-services: #ef9465;
+  --c-internet: #e07a9b;
+  --titre: "Playfair Display", Georgia, "Times New Roman", serif;
+  --corps: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } * { transition: none !important; animation: none !important; } }
+body { margin: 0; background: var(--fond); color: var(--texte); font-family: var(--corps); font-size: 16px; line-height: 1.6; }
+a { color: var(--or-clair); }
+a:focus-visible, button:focus-visible, [tabindex]:focus-visible { outline: 2px solid var(--or-clair); outline-offset: 3px; border-radius: 4px; }
+.page { max-width: 1180px; margin: 0 auto; padding: 32px 20px 80px; display: grid; gap: 48px; }
+header { display: grid; gap: 12px; }
+.surtitre { font: 600 12px/1 var(--corps); letter-spacing: .16em; text-transform: uppercase; color: var(--or-clair); }
+h1 { font: 700 clamp(30px, 5vw, 46px)/1.1 var(--titre); margin: 0; text-wrap: balance; }
+h2 { font: 700 clamp(24px, 3.4vw, 32px)/1.2 var(--titre); margin: 0 0 6px; text-wrap: balance; }
+h3 { font: 700 21px/1.25 var(--titre); margin: 0; text-wrap: balance; }
+.chapeau { max-width: 68ch; color: var(--texte-doux); font-size: 17px; margin: 0; }
+.chapeau strong, .fiche strong { color: var(--texte); font-weight: 600; }
+.mise-a-jour { font: 400 13px var(--mono); color: var(--texte-doux); }
+
+/* En-tête court : le schéma est la pièce maîtresse, tout le reste est replié dessous. */
+.page { max-width: 1360px; gap: 22px; }
+.page > *, .annexes > *, details.annexe > * { min-width: 0; }
+header.tete { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 10px 24px; }
+header.tete h1 { font-size: clamp(26px, 3.6vw, 36px); }
+header.tete .chapeau { font-size: 15px; margin-top: 4px; }
+header.tete .legende b { color: var(--texte); font-weight: 600; margin-right: 2px; }
+.pastille-vide { background: transparent; border: 1px solid var(--texte-doux); }
+.annexes { display: grid; gap: 10px; margin-top: 10px; }
+details.annexe { background: var(--fond-2); border: 1px solid var(--trait); border-radius: 12px; }
+details.annexe > summary { list-style: none; cursor: pointer; padding: 14px 18px; display: flex; align-items: center; gap: 12px; min-height: 52px; }
+details.annexe > summary::-webkit-details-marker { display: none; }
+details.annexe > summary::before { content: "▸"; color: var(--or-clair); font-size: 16px; transition: transform .15s; }
+details.annexe[open] > summary::before { transform: rotate(90deg); }
+details.annexe > summary h2 { font-size: 19px; margin: 0; }
+details.annexe > summary:hover h2 { color: var(--or-clair); }
+details.annexe > :not(summary) { margin: 0 18px 18px; }
+
+/* Légende des couches */
+.legende { display: flex; flex-wrap: wrap; gap: 8px 10px; list-style: none; padding: 0; margin: 4px 0 0; }
+.legende li { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; color: var(--texte-doux); background: var(--fond-2); border: 1px solid var(--trait); border-radius: 999px; padding: 4px 12px 4px 8px; }
+.pastille { width: 10px; height: 10px; border-radius: 50%; flex: none; }
+
+/* Schéma */
+.schema { background: var(--fond-2); border: 1px solid var(--trait); border-radius: 14px; padding: 18px 12px 10px; position: relative; }
+.schema-entete { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 20px; align-items: baseline; padding: 0 8px 10px; }
+.schema-entete p { margin: 0; font-size: 14px; color: var(--texte-doux); }
+.defilement { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+svg.cascade { display: block; width: 100%; min-width: 900px; height: auto; color: var(--texte-doux); }
+.noeud { cursor: pointer; }
+.noeud rect { stroke-width: 1.6; transition: fill .15s, stroke-width .15s; }
+.noeud .boite-fond { fill: var(--fond-2); stroke: none; }
+.noeud .boite.niveau-organe { stroke-width: 3.4; }
+.noeud .boite.niveau-sens { stroke-width: 2.2; }
+.noeud.discret .boite { stroke-width: 1; stroke-opacity: .45; }
+.noeud.discret .nom { fill: var(--texte-doux); font-weight: 500; }
+.noeud.discret .sous { opacity: .7; }
+.noeud.discret:hover .boite, .noeud.discret:focus .boite, .noeud.discret.actif .boite { stroke-opacity: 1; }
+.noeud .etiquette-niveau { font: 700 8.5px var(--corps); letter-spacing: .1em; }
+.noeud .nom { fill: var(--texte); font: 600 12.5px var(--corps); }
+.noeud .sous { fill: var(--texte-doux); font: 400 9.5px var(--corps); }
+.noeud:hover .boite-fond, .noeud:focus .boite-fond, .noeud.actif .boite-fond { fill: #2b3d6b; }
+.noeud:hover .boite, .noeud:focus .boite, .noeud.actif .boite { stroke-width: 3.2; }
+.lien path { fill: none; stroke: currentColor; stroke-width: 1.3; opacity: .55; transition: opacity .15s, stroke-width .15s; }
+.lien text { fill: var(--texte-doux); font: 500 10px var(--corps); paint-order: stroke; stroke: var(--fond-2); stroke-width: 4px; stroke-linejoin: round; transition: opacity .15s; }
+.lien.secondaire { display: none; }
+svg.tous-liens .lien.secondaire, svg .lien.secondaire.touche { display: inline; }
+.couche-label { fill: var(--texte-doux); font: 600 10px var(--corps); letter-spacing: .14em; text-transform: uppercase; }
+.groupe-serveur { fill: rgba(95, 199, 158, .06); stroke: var(--c-serveur); stroke-dasharray: 6 5; stroke-width: 1.2; }
+.groupe-titre { fill: var(--c-serveur); font: 600 12px var(--corps); }
+/* Survol : on met en avant les liens de l'élément, on estompe le reste */
+svg.focalise .lien { opacity: .12; }
+svg.focalise .lien.touche { opacity: 1; }
+svg.focalise .lien.touche path { opacity: 1; stroke-width: 2.4; }
+svg.focalise .noeud { opacity: .35; }
+svg.focalise .noeud.voisin, svg.focalise .noeud.actif { opacity: 1; }
+
+/* Bulle */
+.bulle { position: absolute; z-index: 10; width: min(330px, calc(100% - 24px)); background: #0d1424; border: 1px solid var(--trait); border-left: 4px solid var(--or); border-radius: 10px; padding: 14px 16px 12px; box-shadow: 0 14px 40px rgba(0,0,0,.45); display: none; }
+.bulle.visible { display: block; }
+.bulle .couche { font: 600 11px var(--corps); letter-spacing: .14em; text-transform: uppercase; }
+.bulle h3 { font-size: 19px; margin: 4px 0 6px; }
+.bulle p { margin: 0 0 10px; font-size: 14px; color: var(--texte-doux); }
+.bulle .liens-bulle { font-size: 13px; color: var(--texte-doux); margin: 0 0 10px; }
+.bulle .liens-bulle b { color: var(--texte); font-weight: 600; }
+.bulle a.vers { display: inline-flex; gap: 6px; align-items: center; font-weight: 600; font-size: 14px; text-decoration: none; }
+.bulle a.vers:hover { text-decoration: underline; }
+.bulle .fermer { position: absolute; top: 6px; right: 8px; background: none; border: 0; color: var(--texte-doux); font-size: 20px; line-height: 1; cursor: pointer; padding: 6px; }
+.astuce { font-size: 13px; color: var(--texte-doux); margin: 8px 8px 0; }
+
+/* Parcours */
+.parcours { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 20px; }
+.carte { background: var(--fond-2); border: 1px solid var(--trait); border-radius: 14px; padding: 22px 22px 18px; }
+.carte > p { margin: 0 0 14px; color: var(--texte-doux); font-size: 15px; }
+ol.etapes { list-style: none; counter-reset: e; margin: 0; padding: 0; display: grid; gap: 0; }
+ol.etapes li { counter-increment: e; display: grid; grid-template-columns: 34px 1fr; gap: 12px; padding: 10px 0; position: relative; }
+ol.etapes li::before { content: counter(e); width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font: 700 13px var(--corps); color: var(--fond); background: var(--or-clair); position: relative; z-index: 1; }
+ol.etapes li:not(:last-child)::after { content: ""; position: absolute; left: 13.5px; top: 38px; bottom: -10px; width: 1px; background: var(--trait); }
+ol.etapes span { font-size: 15px; }
+.puce { display: inline-flex; align-items: center; gap: 6px; font: 600 13px var(--corps); text-decoration: none; color: var(--texte); background: var(--fond-3); border: 1px solid var(--trait); border-radius: 6px; padding: 1px 8px; white-space: nowrap; }
+.puce:hover { border-color: var(--or-clair); }
+.puce i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+/* Fiches */
+.couche-titre { display: flex; align-items: center; gap: 12px; margin: 8px 0 14px; }
+.couche-titre .barre { width: 6px; height: 28px; border-radius: 3px; }
+.couche-titre h2 { margin: 0; }
+.couche-titre .compte { font: 400 13px var(--mono); color: var(--texte-doux); }
+.fiches { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 18px; margin-bottom: 30px; }
+.fiche { background: var(--fond-2); border: 1px solid var(--trait); border-top: 3px solid var(--or); border-radius: 12px; padding: 20px 20px 16px; display: grid; gap: 10px; align-content: start; scroll-margin-top: 20px; transition: box-shadow .3s, border-color .3s; }
+.fiche.eclaire { box-shadow: 0 0 0 3px var(--or-clair); }
+.fiche .tete { display: flex; justify-content: space-between; gap: 12px; align-items: baseline; }
+.fiche .cout { font: 600 12px var(--mono); color: var(--or-clair); white-space: nowrap; }
+.fiche .role { margin: 0; font-size: 15.5px; }
+.fiche h4 { margin: 4px 0 2px; font: 600 11px var(--corps); letter-spacing: .14em; text-transform: uppercase; color: var(--texte-doux); }
+.fiche ul { margin: 0; padding-left: 18px; display: grid; gap: 3px; font-size: 14.5px; }
+.fiche ul li::marker { color: var(--or); }
+.fiche .panne { background: rgba(224, 122, 155, .08); border-left: 3px solid var(--c-internet); border-radius: 0 8px 8px 0; padding: 8px 12px; font-size: 14px; margin: 2px 0 0; }
+.fiche .panne b { color: var(--c-internet); font-weight: 600; }
+.fiche .depend { display: flex; flex-wrap: wrap; gap: 6px; }
+.fiche .ou { font-size: 13.5px; color: var(--texte-doux); margin: 0; }
+code, .mono { font-family: var(--mono); font-size: .88em; background: rgba(245, 240, 232, .07); padding: 1px 5px; border-radius: 4px; color: var(--texte); }
+.haut { font-size: 13px; text-decoration: none; }
+/* Importance et remplaçabilité */
+.badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 2px 0 6px; }
+.badge { font: 600 11.5px var(--corps); border-radius: 999px; padding: 2px 10px; white-space: nowrap; cursor: help; }
+.badge.imp { color: #0d1424; background: var(--b); }
+.badge.rem { color: var(--texte); border: 1px solid var(--trait); background: transparent; }
+.badge.rem-unique { border-color: #ff7a7a; color: #ffb3b3; }
+.badge.rem-effort { border-color: var(--or); color: var(--or-clair); }
+.badge.rem-facile { border-style: dashed; color: var(--texte-doux); }
+.pourquoi { margin: 0; font-size: 13.5px; font-style: italic; color: var(--texte-doux); }
+.bulle .pourquoi { margin-bottom: 10px; }
+.boite.interchangeable { stroke-dasharray: 5 3; }
+
+.lecture { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+.colonne { background: var(--fond-2); border: 1px solid var(--trait); border-top: 4px solid var(--b); border-radius: 12px; padding: 16px 16px 14px; display: grid; gap: 8px; align-content: start; }
+.colonne h3 { font-size: 19px; color: var(--texte); display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.colonne h3 small { font: 400 12px var(--mono); color: var(--texte-doux); }
+.colonne p { margin: 0; font-size: 13.5px; color: var(--texte-doux); }
+.colonne ul { list-style: none; margin: 4px 0 0; padding: 0; display: grid; gap: 6px; }
+.colonne li { display: flex; justify-content: space-between; gap: 8px; align-items: center; font-size: 13px; }
+.colonne li .mini { font-size: 11px; color: var(--texte-doux); white-space: nowrap; }
+.colonne li .mini.unique { color: #ffb3b3; }
+.echelle { margin-top: 14px; display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 13px; color: var(--texte-doux); }
+.echelle b { color: var(--texte); font-weight: 600; }
+.filtres { display: flex; flex-wrap: wrap; gap: 8px; padding: 0 8px 12px; }
+.filtres button { font: 600 13px var(--corps); color: var(--texte); background: var(--fond-3); border: 1px solid var(--trait); border-radius: 999px; padding: 6px 14px; cursor: pointer; display: inline-flex; gap: 8px; align-items: center; min-height: 36px; }
+.filtres button[aria-pressed="true"] { background: var(--texte); color: var(--fond); border-color: var(--texte); }
+.filtres .pastille { width: 9px; height: 9px; }
+svg.filtre .noeud.hors-filtre { opacity: .18; }
+svg.filtre .lien { opacity: .25; }
+/* Types de liens */
+.lien.type-circulation path { stroke-width: 2.4; opacity: .8; }
+.lien.type-pilotage path { stroke-width: 1.4; }
+.lien.type-protection path { stroke-width: 1.4; stroke-dasharray: 2 3; }
+.lien.type-surveillance path { stroke-width: 1; stroke-dasharray: 7 5; }
+.lien.type-travail path { stroke-width: 1.2; opacity: .5; }
+.echantillon { stroke: var(--texte-doux); }
+.echantillon.type-circulation { stroke-width: 3; stroke: var(--texte); }
+.echantillon.type-pilotage { stroke-width: 1.5; }
+.echantillon.type-protection { stroke-width: 1.5; stroke-dasharray: 2 3; stroke: #7fb3e0; }
+.echantillon.type-surveillance { stroke-width: 1.2; stroke-dasharray: 7 5; }
+.echantillon.type-travail { stroke-width: 1.2; opacity: .6; }
+.legende-liens { display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 8px 8px 0; font-size: 13px; color: var(--texte-doux); }
+.legende-liens span { display: inline-flex; align-items: center; gap: 6px; cursor: help; }
+table.liaisons { width: 100%; min-width: 640px; border-collapse: collapse; font-size: 14px; background: var(--fond-2); border: 1px solid var(--trait); border-radius: 12px; overflow: hidden; }
+.liaisons th { text-align: left; font: 600 11px var(--corps); letter-spacing: .12em; text-transform: uppercase; color: var(--texte-doux); padding: 10px 12px; border-bottom: 1px solid var(--trait); }
+.liaisons td { padding: 8px 12px; border-bottom: 1px solid rgba(51, 70, 111, .5); vertical-align: middle; }
+.liaisons td:nth-child(2) { color: var(--texte-doux); text-align: center; width: 28px; }
+.type-chip { font: 600 11.5px var(--corps); border-radius: 999px; padding: 2px 10px; white-space: nowrap; border: 1px solid var(--trait); }
+.chip-circulation { background: var(--texte); color: var(--fond); border-color: var(--texte); }
+.chip-protection { color: #7fb3e0; border-color: #7fb3e0; }
+.chip-surveillance { border-style: dashed; }
+/* Résilience */
+.scenarios { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.scenario { background: var(--fond-2); border: 1px solid var(--trait); border-left: 4px solid #7fb3e0; border-radius: 12px; padding: 18px 18px 14px; display: grid; gap: 8px; align-content: start; }
+.scenario h3 { font-size: 19px; }
+.scenario p { margin: 0; font-size: 14.5px; color: var(--texte-doux); }
+.scenario p b { color: var(--texte); font-weight: 600; }
+.scenario .tient { color: #5fc79e; }
+.scenario .delai { justify-self: start; font: 600 12.5px var(--mono); color: var(--fond); background: #7fb3e0; border-radius: 999px; padding: 2px 10px; margin-top: 4px; }
+.hors-maison { margin-top: 16px; background: rgba(240, 177, 74, .08); border: 1px solid var(--or); border-radius: 12px; padding: 16px 20px; }
+.hors-maison h3 { font-size: 18px; margin-bottom: 8px; }
+.hors-maison ul { margin: 0; padding-left: 20px; display: grid; gap: 6px; font-size: 14.5px; }
+.hors-maison em { color: #ffb3b3; font-style: normal; font-weight: 600; }
+footer { color: var(--texte-doux); font-size: 13px; border-top: 1px solid var(--trait); padding-top: 18px; }
+@media (max-width: 420px) {
+  .page { padding: 22px 16px 60px; gap: 36px; }
+  .fiches, .parcours { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+<a href="../" style="display:inline-block;margin:12px 16px 0;font:600 14px system-ui,sans-serif;color:inherit;opacity:.8">← Révisions</a>
+<div class="page" id="haut">
+
+<header class="tete">
+  <div>
+    <h1>Infrastructure T-Bird</h1>
+    <p class="chapeau">Survolez ou touchez un élément : son rôle, ce dont il dépend, ce qui se passe s'il s'arrête.</p>
+  </div>
+  <ul class="legende" aria-label="Criticité">
+    <li><span class="pastille" style="background:#ff6b6b"></span><b>Vital</b> plus aucune vente</li>
+    <li><span class="pastille" style="background:#f0b14a"></span><b>Important</b> une fonction clé s'arrête</li>
+    <li><span class="pastille pastille-vide"></span>En retrait : secours, utile, à questionner</li>
+  </ul>
+</header>
+
+<section aria-label="Schéma de l'infrastructure">
+  <div class="schema" id="schema">
+    <div class="filtres" role="group" aria-label="Montrer seulement" id="filtres"></div>
+    <div class="defilement">
+      <svg class="cascade" id="cascade" viewBox="0 0 1330 1000" role="img"
+        aria-label="Cascade de l'infrastructure : les propriétaires et le développeur décident ; le poste du développeur et Claude Code écrivent le code ; GitHub le garde et prévient Coolify ; Coolify met en ligne le site sur le serveur Hetzner ; le site s'appuie sur la base Neon et sur Stripe, Resend, Boxtal, Sentry, Google et Meta ; les visiteurs arrivent par le nom de domaine Dynadot et la porte d'entrée Traefik.">
+        <defs>
+          <marker id="fleche" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M0 0 L10 5 L0 10 z" fill="currentColor"></path>
+          </marker>
+        </defs>
+        <g id="fond-schema"></g>
+        <g id="liens"></g>
+        <g id="noeuds"></g>
+      </svg>
+    </div>
+    <div class="legende-liens" id="legende-liens"></div>
+    <p class="astuce">Bord en tirets : interchangeable. Bande à gauche : l'étage. Les liens secondaires s'allument au survol, ou avec « Tous les liens ».</p>
+    <div class="bulle" id="bulle" role="dialog" aria-live="polite">
+      <button class="fermer" type="button" aria-label="Fermer" id="bulle-fermer">×</button>
+      <div class="couche" id="bulle-couche"></div>
+      <h3 id="bulle-titre"></h3>
+      <div class="badges" id="bulle-badges"></div>
+      <p id="bulle-resume"></p>
+      <p class="pourquoi" id="bulle-pourquoi"></p>
+      <p class="liens-bulle" id="bulle-liens"></p>
+    </div>
+  </div>
+</section>
+
+<div class="annexes">
+
+<details class="annexe" id="annexe-secours">
+  <summary><h2>Et si… ? Ce qui tient, comment repartir</h2></summary>
+  <div class="scenarios">
+    <article class="scenario">
+      <h3>Le PC casse</h3>
+      <p class="tient">Tient : tout, le site n'en a pas besoin.</p>
+      <p>Perdu : le travail pas encore poussé sur GitHub.</p>
+      <p>Repartir : autre PC, code depuis GitHub ou Drive.</p>
+      <p class="delai">½ journée</p>
+    </article>
+    <article class="scenario">
+      <h3>Tout brûle à la maison</h3>
+      <p class="tient">Tient : site, base, photos, copies.</p>
+      <p>Risque : se reconnecter sans le téléphone (double authentification).</p>
+      <p>Repartir : codes de secours gardés ailleurs.</p>
+      <p class="delai">Quelques jours</p>
+    </article>
+    <article class="scenario">
+      <h3>GitHub perdu</h3>
+      <p class="tient">Tient : le site en ligne.</p>
+      <p>Perdu : mises à jour et sauvegarde quotidienne, le temps de repartir.</p>
+      <p>Repartir : code du PC ou du Drive vers un nouveau dépôt.</p>
+      <p class="delai">1 journée</p>
+    </article>
+    <article class="scenario">
+      <h3>Le serveur disparaît</h3>
+      <p class="tient">Tient : base (Neon), code (GitHub, Drive), photos (Drive).</p>
+      <p>Perdu : <strong>les clés de Coolify</strong>, seulement sur le serveur.</p>
+      <p>Repartir : nouveau serveur, Coolify, clés, photos, DNS.</p>
+      <p class="delai">1 journée</p>
+    </article>
+    <article class="scenario">
+      <h3>La base est abîmée</h3>
+      <p class="tient">Tient : code, photos, serveur.</p>
+      <p>Perdu : une journée de commandes au plus.</p>
+      <p>Repartir : sauvegarde de la nuit dans une base neuve.</p>
+      <p class="delai">Quelques heures</p>
+    </article>
+    <article class="scenario">
+      <h3>Une mise à jour casse le site</h3>
+      <p class="tient">Tient : tout, rien n'est perdu.</p>
+      <p>Repartir : « Rollback » dans Coolify.</p>
+      <p class="delai">Quelques minutes</p>
+    </article>
+  </div>
+</details>
+
+<details class="annexe" id="annexe-lecture">
+  <summary><h2>Par niveau de criticité</h2></summary>
+  <div class="lecture" id="lecture"></div>
+  <div class="echelle" id="echelle"></div>
+</details>
+
+</div>
+
+<footer>Infrastructure du site e-commerce tbird68.fr, que j'ai conçue et que j'administre. Mise à jour le 6 novembre 2026.</footer>
+</div>
+
+<script>
+/* ════════════════════════════════════════════════════════════════════════════════════════════
+   DONNÉES DE LA CARTE. Pour réutiliser l'outil sur un autre projet, ne changer que cette partie :
+   COUCHES (familles et couleurs), NIVEAUX (échelles d'importance et de remplacement), ELEMENTS
+   (une boîte chacun : x, y = centre dans le schéma), LIENS (de → vers, texte de la flèche).
+   Tout le reste (schéma, bulles, filtres, répertoire) se construit seul.
+   ════════════════════════════════════════════════════════════════════════════════════════════ */
+const NIVEAUX = {
+  importance: {
+    /* Criticité : de ce sans quoi plus rien ne se vend à ce dont on peut se demander à quoi ça sert. */
+    organe:   { nom: 'Vital', etiquette: 'VITAL', couleur: '#ff6b6b', fond: 'rgba(255, 107, 107, .26)',
+      sens: "S'il s'arrête, plus aucune vente : pour la boutique, c'est comme si le site était coupé." },
+    sens:     { nom: 'Important', etiquette: 'IMPORTANT', couleur: '#f0b14a', fond: 'rgba(240, 177, 74, .20)',
+      sens: "Le site vend encore, mais une fonction clé s'arrête : photos, emails, colis ou mises en ligne." },
+    immunite: { nom: 'Secours', etiquette: 'SECOURS', couleur: '#7fb3e0', fond: 'rgba(127, 179, 224, .16)',
+      sens: "Invisible au quotidien ; sert le jour où il faut récupérer quelque chose : les copies de secours." },
+    membre:   { nom: 'Utile', etiquette: 'UTILE', couleur: '#9aa3b8', fond: 'rgba(154, 163, 184, .08)',
+      sens: "Pratique, mais le site vend sans ; un équivalent se branche vite." },
+    question: { nom: 'À quoi ça sert ?', etiquette: 'À QUESTIONNER', couleur: '#c79ae8', fond: 'rgba(199, 154, 232, .10)',
+      sens: "Branché, mais qui ne sert pas vraiment aujourd'hui : à régler pour de bon, ou à retirer." },
+    humain:   { nom: 'Les personnes', etiquette: 'PERSONNES', couleur: 'var(--c-personnes)', fond: 'rgba(226, 182, 90, .10)',
+      sens: "Ceux qui décident et font vivre la boutique." },
+  },
+  remplace: {
+    unique:  { nom: 'Irremplaçable', sens: "Pas d'équivalent sans tout refaire (données, code, nom, comptes clients)." },
+    effort:  { nom: 'Remplaçable avec effort', sens: "Un équivalent existe, mais le changer demande une migration de quelques heures à quelques jours." },
+    facile:  { nom: 'Interchangeable', sens: "Un équivalent se branche en moins d'une heure, sans rien perdre." },
+  },
+};
+/* importance, remplacement, pourquoi (une phrase) */
+const CLASSEMENT = {
+  proprietaires: ['humain', 'unique', "La boutique, c'est eux."],
+  developpeur:   ['humain', 'unique', "Seul à tenir les comptes et les clés."],
+  notion:        ['membre', 'facile', "Un autre outil de notes ferait l'affaire ; le contenu se recopie."],
+  pc:            ['immunite', 'facile', "Une copie complète du code, en plus de GitHub et de la copie chiffrée sur Drive : un autre ordinateur le remplace en une demi-journée."],
+  claude:        ['membre', 'facile', "Aide à construire ; le site n'en dépend pas pour tourner."],
+  github:        ['sens', 'effort', "Sans lui, plus de mise en ligne. Le code et la base ont désormais une copie chiffrée chaque semaine sur Google Drive, hors de GitHub."],
+  coolify:       ['sens', 'effort', "Le site tourne sans lui, mais plus rien ne se met en ligne ; un autre outil de déploiement demanderait une journée."],
+  traefik:       ['organe', 'facile', "Toutes les visites passent par lui ; Coolify en remet un en quelques minutes."],
+  site:          ['organe', 'unique', "C'est le code de la boutique, écrit pour elle."],
+  disque:        ['sens', 'effort', "Sans lui, plus de photos ; elles se recopient depuis la sauvegarde."],
+  duplicati:     ['immunite', 'facile', "Ne sert que le jour où il faut récupérer les photos."],
+  neon:          ['organe', 'effort', "Toute la mémoire de la boutique ; on a déjà changé de base le 4 novembre, en une journée."],
+  stripe:        ['organe', 'effort', "Sans lui, plus personne ne peut payer en ligne : pour la boutique, c'est comme si le site était coupé."],
+  resend:        ['sens', 'facile', "Sans lui, plus d'emails ; un autre service d'envoi se branche vite."],
+  boxtal:        ['sens', 'effort', "Sans lui, plus d'étiquettes ni de suivi automatiques ; une autre plateforme demanderait de refaire les étiquettes."],
+  sentry:        ['membre', 'facile', "Sert à voir les erreurs ; le site marche sans."],
+  google:        ['membre', 'unique', "Google Shopping et Search Console amènent des clients ; la connexion avec Google, branchée le 5 novembre, n'a encore servi à personne."],
+  meta:          ['question', 'unique', "Branché, mais le catalogue n'est pas réglé dans Commerce Manager : il ne sert à rien tant que ce n'est pas fait."],
+  drive:         ['immunite', 'facile', "Lieu de la copie de secours des photos ; un autre stockage ferait pareil."],
+  dynadot:       ['organe', 'effort', "L'adresse tbird68.fr ; le nom se transfère chez un autre registraire en quelques jours."],
+  visiteurs:     ['humain', 'unique', "La raison d'être du site."],
+};
+const COUCHES = {
+  personnes: { nom: 'Personnes', couleur: 'var(--c-personnes)' },
+  atelier:   { nom: 'Atelier du développeur', couleur: 'var(--c-atelier)' },
+  code:      { nom: 'Code et mise en ligne', couleur: 'var(--c-code)' },
+  serveur:   { nom: 'Serveur Hetzner', couleur: 'var(--c-serveur)' },
+  services:  { nom: 'Services extérieurs', couleur: 'var(--c-services)' },
+  internet:  { nom: 'Internet et clients', couleur: 'var(--c-internet)' },
+};
+
+/* x, y = centre de la boîte dans le schéma (viewBox 1200 × 1000) */
+const ELEMENTS = [
+  { id: 'proprietaires', nom: 'Propriétaires', sous: 'la boutique, rue Mayet', couche: 'personnes', x: 380, y: 70,
+    resume: "Ils tiennent la boutique et l'espace boutique (admin) : articles, commandes, colis, messages, promotions. Ils disent ce qu'ils veulent ; le développeur le construit.", },
+  { id: 'developpeur', nom: 'Matthias', sous: 'développeur', couche: 'personnes', x: 760, y: 70,
+    resume: "Il décide avec les propriétaires, fait construire et vérifier chaque changement, fusionne sur GitHub, et tient les comptes des services (clés, factures).", },
+  { id: 'notion', nom: 'Notion', sous: 'idées, mode d\'emploi', couche: 'atelier', x: 380, y: 185,
+    resume: "L'espace de travail partagé : le tableau des idées et projets, le bloc-notes, le mode d'emploi du site et ces coulisses techniques.", },
+  { id: 'pc', nom: 'Poste Windows', sous: 'Chrome, Git, Node', couche: 'atelier', x: 690, y: 185,
+    resume: "L'ordinateur du développeur : c'est là que le code est écrit, essayé avec une base d'essai, puis envoyé sur GitHub.", },
+  { id: 'claude', nom: 'Claude Code', sous: 'assistant de développement', couche: 'atelier', x: 950, y: 185,
+    resume: "Écrit, vérifie et documente le code à la demande du développeur. Il ne fusionne pas et ne saisit aucune clé secrète lui-même.", },
+  { id: 'github', nom: 'GitHub', sous: 'code, tests, sauvegarde', couche: 'code', x: 760, y: 300,
+    resume: "Garde le code et son historique. Vérifie chaque demande de fusion, prévient Coolify à chaque fusion, sauvegarde la base chaque jour et surveille que le site répond.", },
+  { id: 'coolify', nom: 'Coolify', sous: 'pilote du serveur', couche: 'serveur', x: 760, y: 420,
+    resume: "Le tableau de bord du serveur : à chaque fusion il construit le site et le remplace sans coupure ; il garde les clés secrètes, lance les tâches de nuit et montre les journaux.", },
+  { id: 'traefik', nom: 'Traefik', sous: 'porte d\'entrée, HTTPS', couche: 'serveur', x: 330, y: 540,
+    resume: "Reçoit chaque visite et la passe au site. Fournit le cadenas HTTPS. Depuis le 5 novembre, il note chaque erreur du serveur.", },
+  { id: 'site', nom: 'Le site', sous: 'Next.js : boutique + admin', couche: 'serveur', x: 580, y: 540,
+    resume: "L'application elle-même : la boutique pour les clients et l'espace boutique pour les propriétaires. Elle calcule prix, stock et livraison, et parle à tous les services.", },
+  { id: 'disque', nom: 'Disque des photos', sous: '/app/medias', couche: 'serveur', x: 820, y: 540,
+    resume: "Toutes les photos et vidéos envoyées depuis l'admin, servies à tbird68.fr/medias. Il survit aux mises en ligne.", },
+  { id: 'duplicati', nom: 'Duplicati', sous: 'sauvegarde des photos', couche: 'serveur', x: 1060, y: 540,
+    resume: "Copie le disque des photos, chiffrée, vers Google Drive, une fois par semaine. Sans la phrase de passe, la copie est illisible.", },
+  { id: 'neon', nom: 'Neon', sous: 'base, Francfort', couche: 'services', x: 330, y: 690,
+    resume: "La mémoire de la boutique : articles, stock, commandes, clients, avis, promotions, réglages. Tout sauf les photos.", },
+  { id: 'stripe', nom: 'Stripe', sous: 'paiements', couche: 'services', x: 470, y: 690,
+    resume: "Les paiements par carte, Apple Pay, Google Pay et les remboursements. Il prévient le site quand un paiement passe : la commande est alors confirmée.", },
+  { id: 'resend', nom: 'Resend', sous: 'emails', couche: 'services', x: 610, y: 690,
+    resume: "Envoie tous les emails : confirmations, expéditions, comptes clients, réponses aux messages, alertes à la boutique, alertes promo.", },
+  { id: 'boxtal', nom: 'Boxtal', sous: 'transporteurs', couche: 'services', x: 750, y: 690,
+    resume: "Donne le prix réel des transporteurs, les points relais et leur carte, crée les étiquettes et renvoie le suivi des colis.", },
+  { id: 'sentry', nom: 'Sentry', sous: 'erreurs', couche: 'services', x: 890, y: 690,
+    resume: "Reçoit chaque bug du site en production, avec le détail pour le corriger. Données en Europe, emails masqués.", },
+  { id: 'google', nom: 'Google', sous: 'connexion, Shopping', couche: 'services', x: 1030, y: 690,
+    resume: "Trois rôles : la connexion « avec Google » des clients, les fiches gratuites Google Shopping, et le référencement (Search Console).", },
+  { id: 'meta', nom: 'Meta', sous: 'catalogue Instagram', couche: 'services', x: 1170, y: 690,
+    resume: "Le catalogue d'Instagram et Facebook lit tbird68.fr/catalogue-meta.xml pour identifier les articles dans les publications.", },
+  { id: 'drive', nom: 'Google Drive', sous: 'copie des photos', couche: 'services', x: 1250, y: 840,
+    resume: "Reçoit la copie chiffrée des photos faite par Duplicati, dans le dossier « tbird-sauvegarde ».", },
+  { id: 'dynadot', nom: 'Dynadot', sous: 'nom de domaine', couche: 'internet', x: 100, y: 690,
+    resume: "Le nom de domaine tbird68.fr : il dit au monde que tbird68.fr, c'est le serveur Hetzner. Il redirige aussi contact@ et commandes@ vers la boîte des propriétaires.", },
+  { id: 'visiteurs', nom: 'Visiteurs', sous: 'clients sur téléphone', couche: 'internet', x: 100, y: 900,
+    resume: "Ils arrivent de Google, d'Instagram ou d'un lien direct, tapent tbird68.fr, regardent, mettent au panier, paient et reçoivent leur colis.", },
+];
+
+/* de → vers : « de » sert ou appelle « vers ». sens 'deux' = échanges dans les deux sens */
+const LIENS = [
+  { de: 'proprietaires', vers: 'developpeur', texte: 'demandent', courbe: 0 },
+  { de: 'proprietaires', vers: 'notion', texte: 'notent leurs idées', secondaire: true },
+  { de: 'developpeur', vers: 'notion', texte: 'organise le travail', secondaire: true },
+  { de: 'developpeur', vers: 'pc', texte: 'travaille sur' },
+  { de: 'pc', vers: 'claude', texte: 'fait tourner' },
+  { de: 'claude', vers: 'notion', texte: 'écrit la doc dans Notion', secondaire: true, via: [ [950, 245], [520, 245] ] },
+  { de: 'pc', vers: 'github', texte: 'pousse le code' },
+  { de: 'developpeur', vers: 'github', texte: 'valide, fusionne', via: [ [830, 120], [1110, 120], [1110, 300] ], secondaire: true, etiquette: [1110, 250] },
+  { de: 'github', vers: 'coolify', texte: 'prévient à chaque fusion' },
+  { de: 'coolify', vers: 'site', texte: 'construit, met en ligne' },
+  { de: 'traefik', vers: 'site', texte: 'passe les visites' },
+  { de: 'site', vers: 'disque', texte: 'range les photos' },
+  { de: 'disque', vers: 'duplicati', texte: 'copié par' },
+  { de: 'duplicati', vers: 'drive', texte: 'chaque semaine', via: [ [1250, 540] ], etiquette: [1250, 760] },
+  { de: 'github', vers: 'drive', texte: 'copie chiffrée code + base, chaque dimanche', secondaire: true, via: [ [1300, 300], [1300, 770] ], etiquette: [1240, 640] },
+  { de: 'site', vers: 'neon', texte: 'lit, écrit' },
+  { de: 'site', vers: 'stripe', texte: 'paiements', deux: true },
+  { de: 'site', vers: 'resend', texte: 'emails' },
+  { de: 'site', vers: 'boxtal', texte: 'colis', deux: true },
+  { de: 'site', vers: 'sentry', texte: 'erreurs' },
+  { de: 'site', vers: 'google', texte: 'connexion', deux: true },
+  { de: 'meta', vers: 'site', texte: 'lit le flux', secondaire: true, via: [ [1170, 612], [650, 612] ], etiquette: [1000, 612] },
+  { de: 'github', vers: 'neon', texte: 'sauvegarde chaque jour', secondaire: true, via: [ [225, 300], [225, 640], [330, 640] ], etiquette: [225, 470] },
+  { de: 'github', vers: 'traefik', texte: 'surveille', secondaire: true, via: [ [330, 330] ], etiquette: [330, 355] },
+  { de: 'visiteurs', vers: 'dynadot', texte: 'tapent tbird68.fr' },
+  { de: 'dynadot', vers: 'traefik', texte: 'adresse du serveur', via: [ [100, 540] ], etiquette: [182, 540] },
+  { de: 'proprietaires', vers: 'dynadot', texte: 'ouvrent l\'admin', secondaire: true, via: [ [20, 70], [20, 690] ], etiquette: [52, 300] },
+];
+
+/* Type de chaque lien : circulation (à chaque visite ou commande), pilotage (ce qui fait changer le site),
+   protection (copies de secours), surveillance (regarde sans agir), travail (l'atelier). */
+const TYPES_LIENS = {
+  circulation: { nom: 'Circulation', sens: "Ce qui passe à chaque visite ou commande : sans lui, le client est bloqué." },
+  pilotage:    { nom: 'Pilotage', sens: "Ce qui fait changer le site : le code qui part en ligne." },
+  protection:  { nom: 'Protection', sens: "Les copies de secours : rien ne se voit, tout se récupère." },
+  surveillance:{ nom: 'Surveillance', sens: "Regarde sans agir et prévient en cas de problème." },
+  travail:     { nom: 'Travail', sens: "Entre les personnes et leurs outils." },
+};
+function typeLien(l) {
+  const k = l.de + '>' + l.vers;
+  if (['disque>duplicati', 'duplicati>drive', 'github>neon', 'github>drive'].includes(k)) return 'protection';
+  if (['github>traefik', 'site>sentry'].includes(k)) return 'surveillance';
+  if (['pc>github', 'developpeur>github', 'github>coolify', 'coolify>site'].includes(k)) return 'pilotage';
+  if (['proprietaires', 'developpeur', 'pc', 'claude'].includes(l.de)) return 'travail';
+  return 'circulation';
+}
+/* ════════════════════════════ FIN DES DONNÉES : le reste construit la page ════════════════════════════ */
+ELEMENTS.forEach(e => { const c = CLASSEMENT[e.id] || ['membre', 'facile', '']; [e.importance, e.remplace, e.pourquoi] = c; });
+const parId = Object.fromEntries(ELEMENTS.map(e => [e.id, e]));
+function badges(e) {
+  const f = document.createDocumentFragment();
+  const i = NIVEAUX.importance[e.importance], r = NIVEAUX.remplace[e.remplace];
+  const b1 = document.createElement('span'); b1.className = 'badge imp'; b1.style.setProperty('--b', i.couleur); b1.textContent = i.nom; b1.title = i.sens;
+  const b2 = document.createElement('span'); b2.className = 'badge rem rem-' + e.remplace; b2.textContent = r.nom; b2.title = r.sens;
+  f.append(b1, b2); return f;
+}
+const L = 136, H = 60; // taille des boîtes
+const ns = 'http://www.w3.org/2000/svg';
+const svg = document.getElementById('cascade');
+const el = (nom, attrs = {}, parent) => { const n = document.createElementNS(ns, nom); for (const [k, v] of Object.entries(attrs)) n.setAttribute(k, v); if (parent) parent.appendChild(n); return n; };
+
+/* Fond : étiquettes des étages et cadre du serveur */
+const fond = document.getElementById('fond-schema');
+[[70, 'Décident'], [185, 'Atelier'], [300, 'Code'], [440, 'Serveur'], [760, 'Services'], [920, 'Clients']].forEach(([y, t]) => {
+  const tx = el('text', { x: 1325, y: y + 4, 'text-anchor': 'end', class: 'couche-label' }, fond); tx.textContent = t;
+});
+el('rect', { x: 250, y: 378, width: 900, height: 224, rx: 14, class: 'groupe-serveur' }, fond);
+const gt = el('text', { x: 268, y: 594, class: 'groupe-titre' }, fond); gt.textContent = 'Serveur Hetzner · Falkenstein (Allemagne)';
+
+/* Point d'attache d'une boîte vers un point (bord le plus proche) */
+function bord(e, vers) {
+  const dx = vers[0] - e.x, dy = vers[1] - e.y;
+  if (Math.abs(dy) * L > Math.abs(dx) * H) return [e.x + dx * (H / 2) / Math.abs(dy || 1), e.y + Math.sign(dy) * H / 2];
+  return [e.x + Math.sign(dx) * L / 2, e.y + dy * (L / 2) / Math.abs(dx || 1)];
+}
+
+/* Liens */
+const gLiens = document.getElementById('liens');
+LIENS.forEach((l, i) => {
+  const a = parId[l.de], b = parId[l.vers];
+  const points = l.via ? l.via : [];
+  const p0 = bord(a, points[0] || [b.x, b.y]);
+  const p1 = bord(b, points[points.length - 1] || [a.x, a.y]);
+  const tous = [p0, ...points, p1];
+  const d = 'M' + tous.map(p => p.map(n => n.toFixed(1)).join(' ')).join(' L');
+  l.type = typeLien(l);
+  const g = el('g', { class: 'lien type-' + l.type + (l.secondaire ? ' secondaire' : ''), 'data-de': l.de, 'data-vers': l.vers }, gLiens);
+  g.style.color = COUCHES[a.couche].couleur;
+  el('path', { d, 'marker-end': 'url(#fleche)', ...(l.deux ? { 'marker-start': 'url(#fleche)' } : {}) }, g);
+  /* étiquette au milieu du plus long segment */
+  let best = 0, m = [0, 0];
+  for (let k = 0; k < tous.length - 1; k++) {
+    const len = Math.hypot(tous[k + 1][0] - tous[k][0], tous[k + 1][1] - tous[k][1]);
+    if (len > best) { best = len; m = [(tous[k][0] + tous[k + 1][0]) / 2, (tous[k][1] + tous[k + 1][1]) / 2]; }
+  }
+  if (l.etiquette) m = l.etiquette;
+  const t = el('text', { x: m[0], y: m[1] + 3, 'text-anchor': 'middle' }, g); t.textContent = l.texte;
+});
+
+/* Boîtes */
+const DISCRETS = ['immunite', 'membre', 'question'];
+const gNoeuds = document.getElementById('noeuds');
+ELEMENTS.forEach(e => {
+  const g = el('g', { class: 'noeud', tabindex: 0, role: 'button', 'data-id': e.id, 'aria-label': e.nom + ' : ' + e.resume }, gNoeuds);
+  g.dataset.importance = e.importance; g.dataset.remplace = e.remplace;
+  const niv = NIVEAUX.importance[e.importance];
+  /* La boîte porte sa criticité : fond teinté, bord de sa couleur (épais si critique, en tirets si
+     interchangeable), étiquette écrite en clair. La bande à gauche donne la couche. */
+  el('rect', { x: e.x - L / 2, y: e.y - H / 2, width: L, height: H, rx: 9, class: 'boite-fond' }, g);
+  const r = el('rect', { x: e.x - L / 2, y: e.y - H / 2, width: L, height: H, rx: 9,
+    class: 'boite niveau-' + e.importance + (e.remplace === 'facile' ? ' interchangeable' : '') }, g);
+  /* Sur le schéma, seuls le vital et l'important sautent aux yeux : secours, utile et « à quoi ça sert ? »
+     restent en retrait (bord fin, sans fond ni étiquette), leur niveau se lit dans la bulle et la fiche. */
+  const discret = DISCRETS.includes(e.importance);
+  if (discret) g.classList.add('discret');
+  r.style.stroke = niv.couleur; r.style.fill = discret ? 'transparent' : niv.fond;
+  el('rect', { x: e.x - L / 2 + 1, y: e.y - H / 2 + 6, width: 4, height: H - 12, rx: 2, style: 'fill:' + COUCHES[e.couche].couleur + ';stroke:none' }, g);
+  if (!discret && e.importance !== 'humain') {
+    const et = el('text', { x: e.x + 2, y: e.y - H / 2 + 13, 'text-anchor': 'middle', class: 'etiquette-niveau' }, g);
+    et.textContent = niv.etiquette + (e.remplace === 'unique' ? ' · IRREMPLAÇABLE' : '');
+    et.style.fill = niv.couleur;
+  }
+  const n = el('text', { x: e.x + 2, y: e.y + 4, 'text-anchor': 'middle', class: 'nom' }, g); n.textContent = e.nom;
+  const s = el('text', { x: e.x + 2, y: e.y + 19, 'text-anchor': 'middle', class: 'sous' }, g); s.textContent = e.sous;
+});
+
+/* Survol, focus, toucher */
+const bulle = document.getElementById('bulle'), schema = document.getElementById('schema');
+let actif = null, minuterie = null;
+function voisins(id) {
+  const avant = LIENS.filter(l => l.vers === id).map(l => l.de);
+  const apres = LIENS.filter(l => l.de === id).map(l => l.vers);
+  return { avant: [...new Set(avant)], apres: [...new Set(apres)] };
+}
+function noms(ids) { return ids.map(i => parId[i].nom).join(', '); }
+function montrer(id, ancre) {
+  clearTimeout(minuterie);
+  const e = parId[id]; actif = id;
+  svg.classList.add('focalise');
+  const v = voisins(id), proches = new Set([id, ...v.avant, ...v.apres]);
+  svg.querySelectorAll('.noeud').forEach(n => { n.classList.toggle('actif', n.dataset.id === id); n.classList.toggle('voisin', proches.has(n.dataset.id)); });
+  svg.querySelectorAll('.lien').forEach(l => l.classList.toggle('touche', l.dataset.de === id || l.dataset.vers === id));
+  document.getElementById('bulle-couche').textContent = COUCHES[e.couche].nom;
+  document.getElementById('bulle-couche').style.color = COUCHES[e.couche].couleur;
+  bulle.style.borderLeftColor = COUCHES[e.couche].couleur;
+  document.getElementById('bulle-titre').textContent = e.nom;
+  document.getElementById('bulle-resume').textContent = e.resume;
+  const bb = document.getElementById('bulle-badges'); bb.innerHTML = ''; bb.appendChild(badges(e));
+  document.getElementById('bulle-pourquoi').textContent = e.pourquoi;
+  const lb = document.getElementById('bulle-liens'); lb.innerHTML = '';
+  if (v.avant.length) { const b = document.createElement('b'); b.textContent = 'Reçoit de : '; lb.append(b, noms(v.avant)); }
+  if (v.apres.length) { if (v.avant.length) lb.append(document.createElement('br')); const b = document.createElement('b'); b.textContent = 'Agit sur : '; lb.append(b, noms(v.apres)); }
+  bulle.classList.add('visible');
+  /* position : sous la boîte, dans le cadre du schéma */
+  const rs = schema.getBoundingClientRect(), rb = ancre.getBoundingClientRect();
+  let left = rb.left - rs.left + rb.width / 2 - bulle.offsetWidth / 2;
+  left = Math.max(12, Math.min(left, rs.width - bulle.offsetWidth - 12));
+  let top = rb.bottom - rs.top + 10;
+  if (top + bulle.offsetHeight > rs.height - 8) top = rb.top - rs.top - bulle.offsetHeight - 10;
+  bulle.style.left = left + 'px'; bulle.style.top = Math.max(8, top) + 'px';
+}
+function cacher() {
+  actif = null; bulle.classList.remove('visible'); svg.classList.remove('focalise');
+  svg.querySelectorAll('.noeud').forEach(n => n.classList.remove('actif', 'voisin'));
+  svg.querySelectorAll('.lien').forEach(l => l.classList.remove('touche'));
+}
+const cacherBientot = () => { clearTimeout(minuterie); minuterie = setTimeout(cacher, 260); };
+svg.querySelectorAll('.noeud').forEach(n => {
+  n.addEventListener('mouseenter', () => montrer(n.dataset.id, n));
+  n.addEventListener('mouseleave', cacherBientot);
+  n.addEventListener('focus', () => montrer(n.dataset.id, n));
+  n.addEventListener('click', ev => { ev.stopPropagation(); montrer(n.dataset.id, n); });
+  n.addEventListener('keydown', ev => { if (ev.key === 'Enter') montrer(n.dataset.id, n); if (ev.key === 'Escape') cacher(); });
+});
+bulle.addEventListener('mouseenter', () => clearTimeout(minuterie));
+bulle.addEventListener('mouseleave', cacherBientot);
+bulle.addEventListener('click', ev => ev.stopPropagation());
+document.getElementById('bulle-fermer').addEventListener('click', cacher);
+document.addEventListener('click', () => { if (actif) cacher(); });
+document.addEventListener('keydown', ev => { if (ev.key === 'Escape') cacher(); });
+
+/* Puce : ramène au schéma et y ouvre l'élément */
+function puce(id) {
+  const e = parId[id], a = document.createElement('a');
+  a.className = 'puce'; a.href = '#schema';
+  a.addEventListener('click', ev => {
+    ev.preventDefault(); ev.stopPropagation();
+    schema.scrollIntoView({ block: 'start', behavior: 'instant' });
+    montrer(id, svg.querySelector('.noeud[data-id="' + id + '"]'));
+  });
+  const i = document.createElement('i'); i.style.background = COUCHES[e.couche].couleur;
+  a.append(i, e.nom); return a;
+}
+
+/* Lecture rapide : une colonne par niveau d'importance */
+const zl = document.getElementById('lecture');
+if (zl) ['organe', 'sens', 'immunite', 'membre', 'question'].forEach(niv => {
+  const n = NIVEAUX.importance[niv], liste = ELEMENTS.filter(e => e.importance === niv);
+  const c = document.createElement('div'); c.className = 'colonne'; c.style.setProperty('--b', n.couleur);
+  const h = document.createElement('h3'); h.textContent = n.nom;
+  const sm = document.createElement('small'); sm.textContent = liste.length; h.appendChild(sm);
+  const p = document.createElement('p'); p.textContent = n.sens;
+  const ul = document.createElement('ul');
+  const ordre = { unique: 0, effort: 1, facile: 2 };
+  liste.sort((a, b) => ordre[a.remplace] - ordre[b.remplace]).forEach(e => {
+    const li = document.createElement('li');
+    const m = document.createElement('span'); m.className = 'mini ' + e.remplace; m.title = NIVEAUX.remplace[e.remplace].sens;
+    m.textContent = { unique: 'irremplaçable', effort: 'avec effort', facile: 'interchangeable' }[e.remplace];
+    li.append(puce(e.id), m); ul.appendChild(li);
+  });
+  c.append(h, p, ul); zl.appendChild(c);
+});
+const ze = document.getElementById('echelle');
+if (ze) Object.values(NIVEAUX.remplace).forEach(r => { const s = document.createElement('span'); const b = document.createElement('b'); b.textContent = r.nom + ' : '; s.append(b, r.sens); ze.appendChild(s); });
+
+/* Filtres du schéma */
+const zfi = document.getElementById('filtres');
+const choix = [['tout', 'Tout', null], ...['organe', 'sens'].map(k => [k, NIVEAUX.importance[k].nom, NIVEAUX.importance[k].couleur]), ['unique', 'Irremplaçables', '#ff7a7a']];
+choix.forEach(([cle, nom, couleur]) => {
+  const b = document.createElement('button'); b.type = 'button'; b.dataset.filtre = cle; b.setAttribute('aria-pressed', cle === 'tout');
+  if (couleur) { const p = document.createElement('span'); p.className = 'pastille'; p.style.background = couleur; b.appendChild(p); }
+  b.append(nom);
+  b.addEventListener('click', ev => {
+    ev.stopPropagation();
+    zfi.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', x === b));
+    svg.classList.toggle('filtre', cle !== 'tout');
+    svg.querySelectorAll('.noeud').forEach(n => {
+      const garde = cle === 'tout' || (cle === 'unique' ? n.dataset.remplace === 'unique' : n.dataset.importance === cle);
+      n.classList.toggle('hors-filtre', !garde);
+    });
+  });
+  zfi.appendChild(b);
+});
+const bl = document.createElement('button'); bl.type = 'button'; bl.setAttribute('aria-pressed', 'false'); bl.textContent = 'Tous les liens';
+bl.addEventListener('click', ev => { ev.stopPropagation(); const on = !svg.classList.contains('tous-liens'); svg.classList.toggle('tous-liens', on); bl.setAttribute('aria-pressed', on); });
+zfi.appendChild(bl);
+
+/* Légende des types de liens */
+const zll = document.getElementById('legende-liens');
+Object.entries(TYPES_LIENS).forEach(([k, t]) => {
+  const s2 = document.createElement('span'); s2.title = t.sens;
+  s2.innerHTML = '<svg width="38" height="10" aria-hidden="true"><line x1="1" y1="5" x2="37" y2="5" class="echantillon type-' + k + '"/></svg>';
+  s2.append(t.nom); zll.appendChild(s2);
+});
+</script>
+</body>
+</html>

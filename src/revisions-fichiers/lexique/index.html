@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Lexique de mon infra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<style>
+/* Fiche de révision : chaque terme est une fiche bristol (nom en machine à écrire, famille surlignée,
+   fonctionnement, phrase d'entretien). Un champ de recherche filtre tout, à lire sur téléphone. */
+:root {
+  --papier: #f4f1ea; --fiche: #fffdf8; --encre: #1f2a37; --doux: #5b6573; --trait: #ddd6c8;
+  --surligneur: #fbe38a; --accent: #2457a6;
+  --titre: "Source Serif 4", Georgia, serif; --corps: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --machine: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --papier: #15191f; --fiche: #1d232b; --encre: #e8e4da; --doux: #a3abb6; --trait: #313a46;
+    --surligneur: #6b5a1c; --accent: #8db4f0; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --papier: #15191f; --fiche: #1d232b; --encre: #e8e4da; --doux: #a3abb6; --trait: #313a46;
+  --surligneur: #6b5a1c; --accent: #8db4f0; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--papier); color: var(--encre); font: 17px/1.55 var(--corps); }
+.page { max-width: 1100px; margin: 0 auto; padding: 32px 16px 64px; display: grid; gap: 28px; }
+h1 { font: 700 clamp(30px, 5vw, 44px)/1.1 var(--titre); margin: 0; text-wrap: balance; }
+h2 { font: 700 24px/1.2 var(--titre); margin: 0 0 4px; text-wrap: balance; }
+p { margin: 0; }
+.chapeau { color: var(--doux); max-width: 65ch; margin-top: 10px; }
+.resume { background: var(--fiche); border: 1px solid var(--trait); border-left: 5px solid var(--accent); border-radius: 10px; padding: 18px 20px; display: grid; gap: 8px; }
+.resume b { font: 600 12px var(--machine); letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.resume p { font-family: var(--titre); font-size: 19px; max-width: 70ch; }
+.conseil { color: var(--doux); font-size: 15px; max-width: 70ch; }
+.recherche { position: sticky; top: 0; z-index: 2; background: var(--papier); padding: 10px 0; display: grid; gap: 6px; }
+.recherche label { font: 600 13px var(--corps); color: var(--doux); }
+.recherche input { font: 17px var(--corps); color: var(--encre); background: var(--fiche); border: 1px solid var(--trait); border-radius: 8px; padding: 12px 14px; width: 100%; }
+.recherche input:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
+section { display: grid; gap: 14px; }
+.sous { color: var(--doux); font-size: 15px; }
+.fiches { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
+.fiche { background: var(--fiche); border: 1px solid var(--trait); border-radius: 8px; padding: 16px 18px; display: grid; gap: 8px; align-content: start;
+  background-image: linear-gradient(var(--fiche) 46px, var(--trait) 46px, var(--trait) 47px, var(--fiche) 47px); background-repeat: no-repeat; }
+.fiche h3 { margin: 0; font: 600 17px var(--machine); display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
+.fiche .famille { justify-self: start; font: 600 13.5px var(--corps); background: linear-gradient(transparent 45%, var(--surligneur) 45%); padding: 0 3px; margin-top: 4px; }
+.fiche .marche { font-size: 15.5px; }
+.fiche .dire { font: italic 15px/1.5 var(--titre); color: var(--doux); border-top: 1px dashed var(--trait); padding-top: 8px; }
+.fiche .dire::before { content: "À dire : "; font: 600 12px var(--machine); font-style: normal; color: var(--accent); letter-spacing: .04em; }
+.vide { color: var(--doux); font-style: italic; }
+[hidden] { display: none !important; }
+footer { color: var(--doux); font-size: 14px; border-top: 1px solid var(--trait); padding-top: 14px; }
+</style>
+</head>
+<body>
+<a href="../" style="display:inline-block;margin:12px 16px 0;font:600 14px system-ui,sans-serif;color:inherit;opacity:.8">← Révisions</a>
+<main class="page">
+
+<header>
+  <h1>Lexique de mon infra</h1>
+  <p class="chapeau">Chaque outil du site T-Bird avec le nom de sa famille, son fonctionnement en une phrase et une phrase
+    prête pour un entretien. Puis les mots du métier qui reviennent partout.</p>
+</header>
+
+<div class="resume">
+  <b>Mon architecture en une phrase</b>
+  <p>Un site e-commerce Next.js conteneurisé, déployé par un PaaS auto-hébergé (Coolify) sur un VPS Hetzner, derrière
+    un reverse proxy Traefik en HTTPS, avec une base PostgreSQL managée (Neon), le paiement par l'API de Stripe, des
+    emails transactionnels (Resend), une intégration transporteurs (Boxtal), de l'intégration continue sur GitHub Actions
+    et des sauvegardes chiffrées hors site.</p>
+  <p class="conseil">En entretien, dites ce que vous avez fait vous-même et que vous travaillez avec un assistant IA. Ça
+    devient un atout si vous savez expliquer chaque brique et pourquoi vous l'avez choisie.</p>
+</div>
+
+<div class="recherche">
+  <label for="filtre">Chercher un terme</label>
+  <input id="filtre" type="search" placeholder="ex. proxy, API, Stripe, sauvegarde" autocomplete="off">
+</div>
+
+<section aria-labelledby="t-outils">
+  <div><h2 id="t-outils">Les outils que j'utilise</h2><p class="sous">Du serveur jusqu'au client.</p></div>
+  <div class="fiches" id="outils"></div>
+</section>
+
+<section aria-labelledby="t-mots">
+  <div><h2 id="t-mots">Les mots du métier</h2><p class="sous">Les notions derrière ces outils.</p></div>
+  <div class="fiches" id="mots"></div>
+</section>
+
+<p class="vide" id="aucun" hidden>Aucun terme ne correspond. Essayez un mot plus court.</p>
+
+<footer>Établi le 6 novembre 2026 d'après l'infrastructure réelle de tbird68.fr.</footer>
+</main>
+
+<script>
+/* [terme, famille, fonctionnement, phrase d'entretien] */
+const OUTILS = [
+  ["Hetzner", "Hébergeur cloud (IaaS), location d'un VPS",
+    "Je loue un serveur virtuel en Allemagne : processeur ARM, 4 Go de mémoire, Ubuntu, 7,79 € par mois. J'y installe ce que je veux.",
+    "J'héberge le site sur un VPS Hetzner sous Ubuntu, que j'administre moi-même."],
+  ["Coolify", "PaaS auto-hébergé (plateforme de déploiement open source)",
+    "Une interface web installée sur mon serveur, qui pilote Docker : à chaque fusion sur GitHub, elle construit l'application, la remplace sans coupure, et gère certificats, variables d'environnement et tâches planifiées.",
+    "J'ai installé Coolify, un PaaS open source, en alternative auto-hébergée à Vercel : il déploie automatiquement l'application en conteneurs à chaque mise à jour."],
+  ["Docker", "Conteneurisation",
+    "Emballe l'application et tout ce dont elle a besoin dans une image ; un conteneur est cette image qui tourne, isolée du reste du serveur.",
+    "L'application est construite en image Docker à partir d'un Dockerfile, et tourne en conteneur."],
+  ["Traefik", "Reverse proxy (proxy inverse) et terminaison TLS",
+    "La porte d'entrée du serveur : il reçoit toutes les connexions sur les ports 80 et 443, déchiffre le HTTPS et transmet chaque requête au bon conteneur selon le nom de domaine.",
+    "Traefik sert de reverse proxy : il route chaque sous-domaine vers son conteneur et gère les certificats Let's Encrypt automatiquement."],
+  ["Let's Encrypt", "Autorité de certification gratuite (protocole ACME)",
+    "Délivre les certificats qui permettent le HTTPS ; Traefik les demande et les renouvelle seul tous les trois mois.",
+    "Les certificats TLS viennent de Let's Encrypt et se renouvellent automatiquement."],
+  ["Neon", "Base de données managée (DBaaS) PostgreSQL",
+    "Une base PostgreSQL hébergée à Francfort : Neon gère le serveur, les mises à jour et les copies ; je n'ai qu'une adresse de connexion.",
+    "La base est un PostgreSQL managé chez Neon, en Europe, que j'ai migré d'une région à l'autre."],
+  ["PostgreSQL", "SGBD relationnel (SGBDR)",
+    "Range les données en tables liées entre elles (articles, commandes, clients), interrogées en SQL, avec des transactions et des verrous.",
+    "Les données sont dans PostgreSQL ; j'utilise des transactions et des verrous pour ne jamais vendre deux fois le dernier article."],
+  ["Prisma", "ORM (mapping objet-relationnel)",
+    "Décrit les tables dans un fichier de schéma et permet de lire et d'écrire la base depuis le code, sans écrire le SQL à la main.",
+    "J'accède à la base avec l'ORM Prisma, qui gère aussi le schéma."],
+  ["Next.js", "Framework web full-stack (React)",
+    "Fabrique à la fois les pages vues par le client et les routes d'API côté serveur ; les pages sont mises en cache et recalculées quand le catalogue change.",
+    "Le site est une application Next.js : rendu côté serveur pour le référencement, routes d'API pour les commandes."],
+  ["Stripe", "Prestataire de services de paiement (PSP)",
+    "Encaisse cartes, Apple Pay et Google Pay. Le formulaire de carte vient de Stripe : les numéros ne passent jamais par mon serveur. Stripe prévient le site par webhook quand un paiement aboutit.",
+    "Le paiement passe par Stripe, intégré par son API et ses webhooks signés ; les données de carte restent chez Stripe, ce qui simplifie la conformité PCI DSS."],
+  ["Resend", "Service d'envoi d'emails transactionnels (ESP)",
+    "Envoie les emails du site (confirmations, expéditions, alertes) par une API, depuis mon domaine authentifié par SPF et DKIM pour ne pas finir en spam.",
+    "Les emails transactionnels partent par l'API de Resend, depuis un domaine authentifié SPF et DKIM."],
+  ["Boxtal", "Plateforme d'expédition multi-transporteurs",
+    "Une seule API pour plusieurs transporteurs : prix en direct, points relais, création des étiquettes, suivi du colis renvoyé au site par webhook.",
+    "J'ai intégré l'API de Boxtal : devis en direct, étiquettes créées au paiement, suivi des colis par webhook."],
+  ["Dynadot", "Bureau d'enregistrement (registraire) et DNS",
+    "J'y loue le nom tbird68.fr et j'y écris les enregistrements DNS qui disent quelle adresse correspond à quel nom.",
+    "Le domaine est chez le registraire Dynadot, où je gère la zone DNS."],
+  ["GitHub", "Forge logicielle (hébergement de dépôts Git)",
+    "Garde le code et tout son historique ; chaque changement passe par une demande de fusion vérifiée avant d'arriver sur la branche principale.",
+    "Le code est versionné avec Git sur GitHub, avec des demandes de fusion relues avant chaque mise en production."],
+  ["GitHub Actions", "Intégration continue (CI) et tâches planifiées",
+    "Des scripts lancés par GitHub : vérification des types et tests à chaque demande de fusion, sauvegarde chaque nuit, contrôle du site chaque heure.",
+    "J'ai mis en place de l'intégration continue avec GitHub Actions : tests à chaque demande de fusion, sauvegardes et supervision planifiées."],
+  ["Dependabot", "Veille des dépendances et des vulnérabilités (CVE)",
+    "Repère les bibliothèques qui ont une faille connue et propose la mise à jour.",
+    "Dependabot me signale les vulnérabilités des dépendances ; je les corrige et je vérifie avant de fusionner."],
+  ["Sentry", "Supervision des erreurs applicatives",
+    "Reçoit chaque erreur du site, côté serveur et côté navigateur, avec son contexte, et me prévient.",
+    "Les erreurs de production remontent dans Sentry, hébergé en Europe, avec les emails masqués."],
+  ["Duplicati", "Logiciel de sauvegarde incrémentale chiffrée",
+    "Copie chaque semaine les photos du serveur vers Google Drive, chiffrées en AES-256 ; d'une fois sur l'autre, il n'envoie que ce qui a changé.",
+    "Les fichiers sont sauvegardés par Duplicati, chiffrés côté serveur avant de partir hors site."],
+  ["Google Drive", "Stockage cloud (destination hors site)",
+    "Reçoit les copies de secours, toujours chiffrées avant l'envoi : Google ne voit que des fichiers illisibles.",
+    "Les sauvegardes partent sur un stockage distant, chiffrées avant l'envoi."],
+  ["rclone", "Outil de synchronisation vers le cloud (ligne de commande)",
+    "Envoie un fichier vers presque n'importe quel stockage en ligne ; ici, la copie chiffrée du dimanche vers Google Drive, avec un accès limité à son propre dossier.",
+    "Une tâche GitHub Actions exporte le code et la base, les chiffre avec GPG et les envoie sur Drive avec rclone."],
+  ["GPG", "Chiffrement (norme OpenPGP)",
+    "Ferme un fichier avec une phrase secrète, en AES-256 ; sans la phrase, il est illisible.",
+    "Les sauvegardes sont chiffrées en AES-256 avec GPG ; la phrase est dans mon gestionnaire de mots de passe."],
+  ["CrowdSec", "IPS collaboratif (prévention d'intrusion)",
+    "Lit le journal des visites, repère les comportements d'attaque (scan de failles, force brute) et fait bloquer l'adresse par le pare-feu. Partage les adresses d'attaquants avec sa communauté.",
+    "J'ai ajouté CrowdSec, un IPS open source : il analyse les journaux de Traefik et bannit les adresses malveillantes au niveau du pare-feu."],
+  ["Pare-feu Hetzner", "Pare-feu réseau (filtrage par port)",
+    "N'ouvre que les ports 22 (SSH), 80 et 443 (le site) ; tout le reste est refusé avant même d'atteindre le serveur.",
+    "Le pare-feu n'ouvre que SSH et le web ; j'ai fermé le port d'administration en le mettant derrière le reverse proxy en HTTPS."],
+  ["KeePass", "Gestionnaire de mots de passe (coffre chiffré local)",
+    "Un fichier chiffré qui garde mots de passe et phrases secrètes ; un seul mot de passe principal l'ouvre.",
+    "Mes secrets sont dans un coffre KeePass, pas dans des fichiers en clair."],
+  ["Notion", "Wiki et outil de gestion de projets",
+    "Un tableau de tâches et une documentation partagés avec les propriétaires de la boutique.",
+    "Je documente et je suis les tâches dans Notion, avec un tableau Kanban partagé."],
+  ["Claude Code", "Assistant de programmation IA (agent)",
+    "Écrit, teste et documente le code à ma demande ; je décide, je relis et je valide chaque changement.",
+    "Je travaille avec un assistant IA : je définis le besoin, je relis et je valide chaque modification avant la mise en production."],
+];
+const MOTS = [
+  ["Serveur", "Machine ou logiciel qui rend un service",
+    "Un ordinateur allumé en permanence qui répond aux demandes des autres (les clients). Le mot désigne aussi le logiciel qui répond : serveur web, serveur de base de données.",
+    "Mon serveur est un VPS sur lequel tournent plusieurs services en conteneurs."],
+  ["VPS", "Serveur privé virtuel",
+    "Une part d'une grosse machine physique, découpée par virtualisation : on a son propre système et l'accès administrateur, sans le matériel.",
+    "J'administre un VPS Ubuntu en ligne de commande, par SSH."],
+  ["IaaS, PaaS, SaaS", "Les trois niveaux du cloud",
+    "IaaS : on loue la machine (Hetzner). PaaS : on donne son code, la plateforme le fait tourner (Coolify, Vercel). SaaS : on utilise un logiciel fini en ligne (Notion, Stripe).",
+    "Je suis passé d'un PaaS géré (Vercel) à un IaaS avec un PaaS auto-hébergé, pour maîtriser les coûts et les données."],
+  ["Auto-hébergement", "Self-hosting",
+    "Faire tourner soi-même un logiciel sur son serveur, au lieu de payer un service en ligne.",
+    "J'ai auto-hébergé l'outil de déploiement et l'outil de sauvegarde."],
+  ["Proxy", "Intermédiaire côté client",
+    "Se place entre des utilisateurs et Internet et fait les requêtes à leur place (filtrage, cache, anonymat). Typique dans une entreprise.",
+    "Un proxy agit pour le compte des clients ; un reverse proxy, pour le compte des serveurs."],
+  ["Reverse proxy", "Intermédiaire côté serveur (proxy inverse)",
+    "Reçoit toutes les visites à la place des serveurs et les répartit : un seul point d'entrée, le HTTPS au même endroit, les applications cachées derrière.",
+    "Traefik est mon reverse proxy : un point d'entrée unique, en HTTPS, pour le site, Coolify et Duplicati."],
+  ["DNS", "Annuaire d'Internet",
+    "Traduit un nom (tbird68.fr) en adresse IP. Un enregistrement A donne l'adresse IPv4 d'un nom ; un MX dit où livrer les emails ; un TXT sert aux vérifications (SPF, DKIM, Google).",
+    "J'ai créé un enregistrement A pour le sous-domaine de l'outil de déploiement."],
+  ["Nom de domaine, sous-domaine", "Adresse lisible",
+    "tbird68.fr est le domaine ; coolify.tbird68.fr et sauvegarde.tbird68.fr sont des sous-domaines, chacun pouvant mener à un service différent.",
+    "Chaque service a son sous-domaine, routé par le reverse proxy."],
+  ["HTTPS, TLS, certificat", "Chiffrement des échanges web",
+    "TLS chiffre la connexion entre le navigateur et le serveur ; le certificat prouve que le serveur est bien celui du domaine. HTTPS = HTTP par-dessus TLS.",
+    "Tout passe en HTTPS ; l'interface d'administration n'est plus accessible en HTTP simple."],
+  ["Port", "Numéro de porte d'un service",
+    "Une même machine offre plusieurs services, chacun sur son numéro : 22 pour SSH, 80 pour HTTP, 443 pour HTTPS.",
+    "N'exposer que les ports nécessaires réduit la surface d'attaque."],
+  ["Pare-feu", "Filtrage du trafic réseau",
+    "Laisse passer ou refuse les connexions selon des règles (port, adresse, protocole).",
+    "Règle par défaut : tout refuser, puis n'ouvrir que le strict nécessaire."],
+  ["SSH, clé SSH", "Accès à distance sécurisé",
+    "Ouvre un terminal sur le serveur à travers une connexion chiffrée ; avec une clé, il n'y a pas de mot de passe à deviner.",
+    "J'administre le serveur en SSH, par clé uniquement."],
+  ["API", "Interface de programmation",
+    "Une liste de demandes qu'un logiciel accepte de la part d'un autre, avec leur format : « crée un paiement de 49 € », « donne-moi le prix d'un colis ».",
+    "Mon site parle à Stripe, Resend et Boxtal par leurs API REST."],
+  ["API REST", "Style d'API web le plus courant",
+    "Des adresses web (ressources) qu'on appelle en HTTP avec un verbe (GET pour lire, POST pour créer…) et qui répondent en JSON.",
+    "Les routes d'API du site suivent le style REST et répondent en JSON."],
+  ["Clé d'API", "Identifiant secret d'un logiciel",
+    "Le mot de passe d'une application auprès d'une API ; elle se garde côté serveur, jamais dans le navigateur ni dans le code.",
+    "Les clés d'API sont en variables d'environnement, jamais dans le dépôt."],
+  ["Webhook", "Notification d'un service vers mon site",
+    "L'inverse d'un appel d'API : c'est le service qui appelle mon site quand un événement arrive (paiement réussi, colis livré). On vérifie la signature pour être sûr que l'appel vient bien de lui.",
+    "Stripe et Boxtal préviennent le site par webhooks signés, que je vérifie avant tout traitement."],
+  ["OAuth, jeton", "Autorisation déléguée",
+    "Permet de donner à une application un accès limité à un compte (Google, par exemple) sans lui donner le mot de passe : elle reçoit un jeton, révocable.",
+    "La connexion avec Google et l'accès au Drive passent par OAuth, avec le droit minimal nécessaire."],
+  ["JWT", "Jeton signé",
+    "Un petit texte signé que le serveur remet après la connexion ; il le reconnaît ensuite sans redemander le mot de passe.",
+    "Les sessions sont des JWT dans des cookies httpOnly, invisibles pour les scripts de la page."],
+  ["Variable d'environnement, secret", "Réglage hors du code",
+    "Une valeur donnée au programme au démarrage (adresse de la base, clés) : le même code tourne partout, et les secrets ne sont pas dans le dépôt.",
+    "Les secrets sont injectés en variables d'environnement par la plateforme de déploiement."],
+  ["Conteneur ou machine virtuelle", "Deux façons d'isoler",
+    "Une machine virtuelle a son propre système complet ; un conteneur partage le noyau du serveur. Il est donc plus léger et démarre en quelques secondes.",
+    "Mes services tournent en conteneurs sur une seule VM."],
+  ["Git, dépôt, branche, commit", "Gestion de versions",
+    "Le dépôt garde tout l'historique ; un commit est un changement enregistré ; une branche, une ligne de travail à part, fusionnée ensuite dans la principale.",
+    "Chaque chantier se fait sur une branche, fusionnée après vérification."],
+  ["Demande de fusion (pull request)", "Relecture avant intégration",
+    "Propose d'intégrer une branche dans la principale ; les tests tournent et quelqu'un relit avant d'accepter.",
+    "Rien n'arrive en production sans demande de fusion et tests au vert."],
+  ["CI/CD", "Intégration et déploiement continus",
+    "CI : tester automatiquement chaque changement. CD : le mettre en ligne automatiquement s'il est bon.",
+    "CI sur GitHub Actions, CD par Coolify à chaque fusion sur la branche principale."],
+  ["Rollback", "Retour arrière",
+    "Remettre la version d'avant quand une mise à jour casse quelque chose.",
+    "En cas de problème, je reviens à la version précédente en quelques minutes."],
+  ["Sauvegarde 3-2-1", "Règle de base des copies de secours",
+    "3 copies des données, sur 2 supports différents, dont 1 hors site. Une sauvegarde ne vaut que si on a déjà testé la restauration.",
+    "Base et code ont plusieurs copies chiffrées, dont une hors de GitHub ; la restauration est documentée et testée."],
+  ["Sauvegarde incrémentale", "Ne copier que ce qui change",
+    "La première copie est complète, les suivantes n'envoient que les différences : plus rapide et moins lourd.",
+    "Duplicati fait des sauvegardes incrémentales chiffrées."],
+  ["Chiffrement symétrique, AES-256", "Une seule clé pour fermer et ouvrir",
+    "La même phrase chiffre et déchiffre ; AES-256 est la norme actuelle, réputée incassable par force brute.",
+    "Les sauvegardes sont chiffrées en AES-256 avant de quitter le serveur."],
+  ["Journaux (logs)", "Historique de ce qui se passe",
+    "Chaque service écrit ce qu'il fait : visites, erreurs, connexions. C'est la matière première pour comprendre une panne ou repérer une attaque.",
+    "J'ai activé les journaux d'accès du reverse proxy pour diagnostiquer des erreurs 503."],
+  ["Supervision (monitoring)", "Surveiller pour être prévenu",
+    "Vérifier régulièrement qu'un service répond, et alerter s'il tombe.",
+    "Une tâche vérifie le site chaque heure et prévient par email en cas de panne."],
+  ["IDS, IPS, WAF", "Détecter et bloquer les attaques",
+    "IDS : détecte et alerte. IPS : détecte et bloque. WAF : pare-feu applicatif qui examine le contenu des requêtes web.",
+    "CrowdSec joue le rôle d'IPS : il bloque au pare-feu les adresses qui attaquent."],
+  ["Base relationnelle, SQL", "Données en tables",
+    "Les données vivent en tables reliées par des identifiants ; SQL est le langage pour les lire et les modifier.",
+    "Je conçois le schéma et j'écris des requêtes SQL quand l'ORM ne suffit pas."],
+  ["ORM", "Pont entre le code et la base",
+    "Traduit des objets du code en lignes de la base et inversement.",
+    "J'utilise un ORM (Prisma) pour un accès à la base typé et sûr."],
+  ["Front-end, back-end, full-stack", "Les deux côtés d'une application",
+    "Front-end : ce qui tourne dans le navigateur. Back-end : le serveur, la base, les API. Full-stack : les deux.",
+    "Next.js me permet de faire front-end et back-end dans le même projet."],
+  ["Cache", "Garder une réponse pour la resservir",
+    "Au lieu de recalculer une page à chaque visite, on garde le résultat et on le resert, jusqu'à ce qu'une donnée change.",
+    "Les pages sont en cache et rafraîchies seulement quand le catalogue change, pour réduire la charge."],
+  ["Open source", "Code public et réutilisable",
+    "Le code source est publié sous une licence qui permet de le lire, de le modifier et de l'utiliser.",
+    "Je privilégie les briques open source (Coolify, Traefik, CrowdSec) pour ne pas dépendre d'un seul fournisseur."],
+  ["Souveraineté des données, RGPD", "Qui a la main sur les données",
+    "Le RGPD encadre les données personnelles en Europe ; un fournisseur américain reste soumis au droit américain (Cloud Act), même avec des serveurs en Europe.",
+    "J'ai rapatrié serveur et base en Allemagne et je chiffre les sauvegardes avant de les confier à un tiers."],
+  ["PKM", "Gestion des connaissances personnelles",
+    "Personal Knowledge Management : sa méthode et ses outils pour noter, relier et retrouver ce qu'on apprend (Obsidian, Notion…).",
+    "Je tiens mes notes techniques dans Obsidian, synchronisées entre mes appareils."],
+];
+function rendre(id, liste) {
+  const zone = document.getElementById(id);
+  liste.forEach(([terme, famille, marche, dire]) => {
+    const f = document.createElement('article'); f.className = 'fiche';
+    const h = document.createElement('h3'); h.textContent = terme;
+    const fa = document.createElement('span'); fa.className = 'famille'; fa.textContent = famille;
+    const m = document.createElement('p'); m.className = 'marche'; m.textContent = marche;
+    const d = document.createElement('p'); d.className = 'dire'; d.textContent = dire;
+    f.append(h, fa, m, d);
+    f.dataset.texte = (terme + ' ' + famille + ' ' + marche + ' ' + dire).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    zone.appendChild(f);
+  });
+}
+rendre('outils', OUTILS); rendre('mots', MOTS);
+const filtre = document.getElementById('filtre');
+filtre.addEventListener('input', () => {
+  const q = filtre.value.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+  let n = 0;
+  document.querySelectorAll('.fiche').forEach(f => { const ok = !q || f.dataset.texte.includes(q); f.hidden = !ok; if (ok) n++; });
+  document.querySelectorAll('section').forEach(s => { s.hidden = !s.querySelector('.fiche:not([hidden])'); });
+  document.getElementById('aucun').hidden = n > 0;
+});
+</script>
+</body>
+</html>

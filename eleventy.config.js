@@ -7,6 +7,11 @@ export default function (eleventyConfig) {
   // Fichiers copiés tels quels : feuille de style, script, images, CV.
   eleventyConfig.addPassthroughCopy("src/assets");
 
+  // Fiches de révision : des pages HTML autonomes (styles et scripts à elles), copiées telles quelles
+  // vers /revisions/<nom>/, sans passer par les gabarits. La page qui les liste est src/revisions.njk.
+  eleventyConfig.ignores.add("src/revisions-fichiers/**");
+  eleventyConfig.addPassthroughCopy({ "src/revisions-fichiers": "revisions" });
+
   // Polices hébergées avec le site (pas d'appel à Google : rien ne part chez un tiers).
   const polices = {
     // Bricolage Grotesque : titres et texte. Kalam : les notes au stylo dans les marges.
