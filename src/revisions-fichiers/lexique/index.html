@@ -8,11 +8,12 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* Fiche de révision : chaque terme est une fiche bristol (nom en machine à écrire, famille surlignée,
-   fonctionnement, phrase d'entretien). Un champ de recherche filtre tout, à lire sur téléphone. */
+/* Fiches bristol : la fiche fermée tient en quatre lignes (nom, famille, fonctionnement, phrase d'entretien) ;
+   un clic la déplie sur toute la largeur avec « Pour aller plus loin » et « Concrètement chez moi ».
+   Trois parties : les outils, les gestes pas à pas, les mots du métier. Recherche en haut. */
 :root {
   --papier: #f4f1ea; --fiche: #fffdf8; --encre: #1f2a37; --doux: #5b6573; --trait: #ddd6c8;
-  --surligneur: #fbe38a; --accent: #2457a6;
+  --surligneur: #fbe38a; --accent: #2457a6; --geste: #2f7d5b;
   --titre: "Source Serif 4", Georgia, serif; --corps: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
   --machine: "IBM Plex Mono", ui-monospace, Consolas, monospace;
   color-scheme: light;
@@ -20,12 +21,12 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     --papier: #15191f; --fiche: #1d232b; --encre: #e8e4da; --doux: #a3abb6; --trait: #313a46;
-    --surligneur: #6b5a1c; --accent: #8db4f0; color-scheme: dark;
+    --surligneur: #6b5a1c; --accent: #8db4f0; --geste: #7fcfa8; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
   --papier: #15191f; --fiche: #1d232b; --encre: #e8e4da; --doux: #a3abb6; --trait: #313a46;
-  --surligneur: #6b5a1c; --accent: #8db4f0; color-scheme: dark;
+  --surligneur: #6b5a1c; --accent: #8db4f0; --geste: #7fcfa8; color-scheme: dark;
 }
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--papier); color: var(--encre); font: 17px/1.55 var(--corps); }
@@ -42,16 +43,33 @@ p { margin: 0; }
 .recherche label { font: 600 13px var(--corps); color: var(--doux); }
 .recherche input { font: 17px var(--corps); color: var(--encre); background: var(--fiche); border: 1px solid var(--trait); border-radius: 8px; padding: 12px 14px; width: 100%; }
 .recherche input:focus-visible { outline: 3px solid var(--accent); outline-offset: 1px; }
-section { display: grid; gap: 14px; }
-.sous { color: var(--doux); font-size: 15px; }
-.fiches { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; }
-.fiche { background: var(--fiche); border: 1px solid var(--trait); border-radius: 8px; padding: 16px 18px; display: grid; gap: 8px; align-content: start;
-  background-image: linear-gradient(var(--fiche) 46px, var(--trait) 46px, var(--trait) 47px, var(--fiche) 47px); background-repeat: no-repeat; }
-.fiche h3 { margin: 0; font: 600 17px var(--machine); display: flex; justify-content: space-between; gap: 10px; align-items: baseline; }
-.fiche .famille { justify-self: start; font: 600 13.5px var(--corps); background: linear-gradient(transparent 45%, var(--surligneur) 45%); padding: 0 3px; margin-top: 4px; }
+.sommaire { display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 15px; }
+.sommaire a { color: var(--accent); }
+section { display: grid; gap: 14px; scroll-margin-top: 90px; }
+.sous { color: var(--doux); font-size: 15px; max-width: 70ch; }
+.fiches { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 14px; align-items: start; }
+details.fiche { background: var(--fiche); border: 1px solid var(--trait); border-radius: 8px; }
+details.fiche[open] { grid-column: 1 / -1; border-color: var(--accent); box-shadow: 0 6px 20px rgba(0,0,0,.08); }
+details.fiche > summary { list-style: none; cursor: pointer; padding: 16px 18px; display: grid; gap: 8px; }
+details.fiche > summary::-webkit-details-marker { display: none; }
+details.fiche > summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 8px; }
+.fiche h3 { margin: 0; font: 600 17px var(--machine); display: flex; justify-content: space-between; gap: 10px; align-items: baseline;
+  padding-bottom: 8px; border-bottom: 1px solid var(--trait); }
+.fiche h3 .ouvrir { font: 600 12px var(--corps); color: var(--accent); white-space: nowrap; }
+.fiche h3 .ouvrir::after { content: " +"; }
+details.fiche[open] h3 .ouvrir::after { content: " −"; }
+.geste h3 { color: var(--geste); }
+.fiche .famille { justify-self: start; font: 600 13.5px var(--corps); background: linear-gradient(transparent 45%, var(--surligneur) 45%); padding: 0 3px; }
 .fiche .marche { font-size: 15.5px; }
 .fiche .dire { font: italic 15px/1.5 var(--titre); color: var(--doux); border-top: 1px dashed var(--trait); padding-top: 8px; }
 .fiche .dire::before { content: "À dire : "; font: 600 12px var(--machine); font-style: normal; color: var(--accent); letter-spacing: .04em; }
+.deplie { padding: 0 18px 18px; display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); }
+.deplie div { display: grid; gap: 6px; align-content: start; }
+.deplie h4 { margin: 0; font: 600 12px var(--machine); letter-spacing: .06em; text-transform: uppercase; color: var(--accent); }
+.deplie .concret h4 { color: var(--geste); }
+.deplie p, .deplie li { font-size: 15.5px; max-width: 65ch; }
+.deplie ol { margin: 0; padding-left: 22px; display: grid; gap: 4px; }
+.deplie code { font: 500 13.5px var(--machine); background: var(--papier); border: 1px solid var(--trait); border-radius: 4px; padding: 0 4px; }
 .vide { color: var(--doux); font-style: italic; }
 [hidden] { display: none !important; }
 footer { color: var(--doux); font-size: 14px; border-top: 1px solid var(--trait); padding-top: 14px; }
@@ -63,8 +81,8 @@ footer { color: var(--doux); font-size: 14px; border-top: 1px solid var(--trait)
 
 <header>
   <h1>Lexique de mon infra</h1>
-  <p class="chapeau">Chaque outil du site T-Bird avec le nom de sa famille, son fonctionnement en une phrase et une phrase
-    prête pour un entretien. Puis les mots du métier qui reviennent partout.</p>
+  <p class="chapeau">Chaque fiche tient en quatre lignes. Touchez-la pour aller plus loin et voir comment ça se
+    concrétise dans mon infrastructure. Trois parties : les outils, les gestes que je fais, les mots du métier.</p>
 </header>
 
 <div class="resume">
@@ -79,16 +97,23 @@ footer { color: var(--doux); font-size: 14px; border-top: 1px solid var(--trait)
 
 <div class="recherche">
   <label for="filtre">Chercher un terme</label>
-  <input id="filtre" type="search" placeholder="ex. proxy, API, Stripe, sauvegarde" autocomplete="off">
+  <input id="filtre" type="search" placeholder="ex. proxy, fusion, API, sauvegarde" autocomplete="off">
+  <nav class="sommaire" aria-label="Parties"><a href="#t-outils">Les outils</a><a href="#t-gestes">Les gestes pas à pas</a><a href="#t-mots">Les mots du métier</a></nav>
 </div>
 
-<section aria-labelledby="t-outils">
-  <div><h2 id="t-outils">Les outils que j'utilise</h2><p class="sous">Du serveur jusqu'au client.</p></div>
+<section id="t-outils" aria-labelledby="h-outils">
+  <div><h2 id="h-outils">Les outils que j'utilise</h2><p class="sous">Du serveur jusqu'au client.</p></div>
   <div class="fiches" id="outils"></div>
 </section>
 
-<section aria-labelledby="t-mots">
-  <div><h2 id="t-mots">Les mots du métier</h2><p class="sous">Les notions derrière ces outils.</p></div>
+<section id="t-gestes" aria-labelledby="h-gestes">
+  <div><h2 id="h-gestes">Ce que je fais, pas à pas</h2><p class="sous">Les gestes que je répète, et ce qui se passe vraiment
+    derrière le bouton. Les comprendre, c'est pouvoir les faire seul et réparer quand ça coince.</p></div>
+  <div class="fiches" id="gestes"></div>
+</section>
+
+<section id="t-mots" aria-labelledby="h-mots">
+  <div><h2 id="h-mots">Les mots du métier</h2><p class="sous">Les notions derrière ces outils.</p></div>
   <div class="fiches" id="mots"></div>
 </section>
 
@@ -98,217 +123,429 @@ footer { color: var(--doux); font-size: 14px; border-top: 1px solid var(--trait)
 </main>
 
 <script>
-/* [terme, famille, fonctionnement, phrase d'entretien] */
+/* Une fiche : t = terme, f = famille, m = fonctionnement, d = à dire,
+   plus = pour aller plus loin, concret = chez moi (texte, ou liste d'étapes). Les `codes` sont entre accents graves. */
 const OUTILS = [
-  ["Hetzner", "Hébergeur cloud (IaaS), location d'un VPS",
-    "Je loue un serveur virtuel en Allemagne : processeur ARM, 4 Go de mémoire, Ubuntu, 7,79 € par mois. J'y installe ce que je veux.",
-    "J'héberge le site sur un VPS Hetzner sous Ubuntu, que j'administre moi-même."],
-  ["Coolify", "PaaS auto-hébergé (plateforme de déploiement open source)",
-    "Une interface web installée sur mon serveur, qui pilote Docker : à chaque fusion sur GitHub, elle construit l'application, la remplace sans coupure, et gère certificats, variables d'environnement et tâches planifiées.",
-    "J'ai installé Coolify, un PaaS open source, en alternative auto-hébergée à Vercel : il déploie automatiquement l'application en conteneurs à chaque mise à jour."],
-  ["Docker", "Conteneurisation",
-    "Emballe l'application et tout ce dont elle a besoin dans une image ; un conteneur est cette image qui tourne, isolée du reste du serveur.",
-    "L'application est construite en image Docker à partir d'un Dockerfile, et tourne en conteneur."],
-  ["Traefik", "Reverse proxy (proxy inverse) et terminaison TLS",
-    "La porte d'entrée du serveur : il reçoit toutes les connexions sur les ports 80 et 443, déchiffre le HTTPS et transmet chaque requête au bon conteneur selon le nom de domaine.",
-    "Traefik sert de reverse proxy : il route chaque sous-domaine vers son conteneur et gère les certificats Let's Encrypt automatiquement."],
-  ["Let's Encrypt", "Autorité de certification gratuite (protocole ACME)",
-    "Délivre les certificats qui permettent le HTTPS ; Traefik les demande et les renouvelle seul tous les trois mois.",
-    "Les certificats TLS viennent de Let's Encrypt et se renouvellent automatiquement."],
-  ["Neon", "Base de données managée (DBaaS) PostgreSQL",
-    "Une base PostgreSQL hébergée à Francfort : Neon gère le serveur, les mises à jour et les copies ; je n'ai qu'une adresse de connexion.",
-    "La base est un PostgreSQL managé chez Neon, en Europe, que j'ai migré d'une région à l'autre."],
-  ["PostgreSQL", "SGBD relationnel (SGBDR)",
-    "Range les données en tables liées entre elles (articles, commandes, clients), interrogées en SQL, avec des transactions et des verrous.",
-    "Les données sont dans PostgreSQL ; j'utilise des transactions et des verrous pour ne jamais vendre deux fois le dernier article."],
-  ["Prisma", "ORM (mapping objet-relationnel)",
-    "Décrit les tables dans un fichier de schéma et permet de lire et d'écrire la base depuis le code, sans écrire le SQL à la main.",
-    "J'accède à la base avec l'ORM Prisma, qui gère aussi le schéma."],
-  ["Next.js", "Framework web full-stack (React)",
-    "Fabrique à la fois les pages vues par le client et les routes d'API côté serveur ; les pages sont mises en cache et recalculées quand le catalogue change.",
-    "Le site est une application Next.js : rendu côté serveur pour le référencement, routes d'API pour les commandes."],
-  ["Stripe", "Prestataire de services de paiement (PSP)",
-    "Encaisse cartes, Apple Pay et Google Pay. Le formulaire de carte vient de Stripe : les numéros ne passent jamais par mon serveur. Stripe prévient le site par webhook quand un paiement aboutit.",
-    "Le paiement passe par Stripe, intégré par son API et ses webhooks signés ; les données de carte restent chez Stripe, ce qui simplifie la conformité PCI DSS."],
-  ["Resend", "Service d'envoi d'emails transactionnels (ESP)",
-    "Envoie les emails du site (confirmations, expéditions, alertes) par une API, depuis mon domaine authentifié par SPF et DKIM pour ne pas finir en spam.",
-    "Les emails transactionnels partent par l'API de Resend, depuis un domaine authentifié SPF et DKIM."],
-  ["Boxtal", "Plateforme d'expédition multi-transporteurs",
-    "Une seule API pour plusieurs transporteurs : prix en direct, points relais, création des étiquettes, suivi du colis renvoyé au site par webhook.",
-    "J'ai intégré l'API de Boxtal : devis en direct, étiquettes créées au paiement, suivi des colis par webhook."],
-  ["Dynadot", "Bureau d'enregistrement (registraire) et DNS",
-    "J'y loue le nom tbird68.fr et j'y écris les enregistrements DNS qui disent quelle adresse correspond à quel nom.",
-    "Le domaine est chez le registraire Dynadot, où je gère la zone DNS."],
-  ["GitHub", "Forge logicielle (hébergement de dépôts Git)",
-    "Garde le code et tout son historique ; chaque changement passe par une demande de fusion vérifiée avant d'arriver sur la branche principale.",
-    "Le code est versionné avec Git sur GitHub, avec des demandes de fusion relues avant chaque mise en production."],
-  ["GitHub Actions", "Intégration continue (CI) et tâches planifiées",
-    "Des scripts lancés par GitHub : vérification des types et tests à chaque demande de fusion, sauvegarde chaque nuit, contrôle du site chaque heure.",
-    "J'ai mis en place de l'intégration continue avec GitHub Actions : tests à chaque demande de fusion, sauvegardes et supervision planifiées."],
-  ["Dependabot", "Veille des dépendances et des vulnérabilités (CVE)",
-    "Repère les bibliothèques qui ont une faille connue et propose la mise à jour.",
-    "Dependabot me signale les vulnérabilités des dépendances ; je les corrige et je vérifie avant de fusionner."],
-  ["Sentry", "Supervision des erreurs applicatives",
-    "Reçoit chaque erreur du site, côté serveur et côté navigateur, avec son contexte, et me prévient.",
-    "Les erreurs de production remontent dans Sentry, hébergé en Europe, avec les emails masqués."],
-  ["Duplicati", "Logiciel de sauvegarde incrémentale chiffrée",
-    "Copie chaque semaine les photos du serveur vers Google Drive, chiffrées en AES-256 ; d'une fois sur l'autre, il n'envoie que ce qui a changé.",
-    "Les fichiers sont sauvegardés par Duplicati, chiffrés côté serveur avant de partir hors site."],
-  ["Google Drive", "Stockage cloud (destination hors site)",
-    "Reçoit les copies de secours, toujours chiffrées avant l'envoi : Google ne voit que des fichiers illisibles.",
-    "Les sauvegardes partent sur un stockage distant, chiffrées avant l'envoi."],
-  ["rclone", "Outil de synchronisation vers le cloud (ligne de commande)",
-    "Envoie un fichier vers presque n'importe quel stockage en ligne ; ici, la copie chiffrée du dimanche vers Google Drive, avec un accès limité à son propre dossier.",
-    "Une tâche GitHub Actions exporte le code et la base, les chiffre avec GPG et les envoie sur Drive avec rclone."],
-  ["GPG", "Chiffrement (norme OpenPGP)",
-    "Ferme un fichier avec une phrase secrète, en AES-256 ; sans la phrase, il est illisible.",
-    "Les sauvegardes sont chiffrées en AES-256 avec GPG ; la phrase est dans mon gestionnaire de mots de passe."],
-  ["CrowdSec", "IPS collaboratif (prévention d'intrusion)",
-    "Lit le journal des visites, repère les comportements d'attaque (scan de failles, force brute) et fait bloquer l'adresse par le pare-feu. Partage les adresses d'attaquants avec sa communauté.",
-    "J'ai ajouté CrowdSec, un IPS open source : il analyse les journaux de Traefik et bannit les adresses malveillantes au niveau du pare-feu."],
-  ["Pare-feu Hetzner", "Pare-feu réseau (filtrage par port)",
-    "N'ouvre que les ports 22 (SSH), 80 et 443 (le site) ; tout le reste est refusé avant même d'atteindre le serveur.",
-    "Le pare-feu n'ouvre que SSH et le web ; j'ai fermé le port d'administration en le mettant derrière le reverse proxy en HTTPS."],
-  ["KeePass", "Gestionnaire de mots de passe (coffre chiffré local)",
-    "Un fichier chiffré qui garde mots de passe et phrases secrètes ; un seul mot de passe principal l'ouvre.",
-    "Mes secrets sont dans un coffre KeePass, pas dans des fichiers en clair."],
-  ["Notion", "Wiki et outil de gestion de projets",
-    "Un tableau de tâches et une documentation partagés avec les propriétaires de la boutique.",
-    "Je documente et je suis les tâches dans Notion, avec un tableau Kanban partagé."],
-  ["Claude Code", "Assistant de programmation IA (agent)",
-    "Écrit, teste et documente le code à ma demande ; je décide, je relis et je valide chaque changement.",
-    "Je travaille avec un assistant IA : je définis le besoin, je relis et je valide chaque modification avant la mise en production."],
+  { t: "Hetzner", f: "Hébergeur cloud (IaaS), location d'un VPS",
+    m: "Je loue un serveur virtuel en Allemagne : processeur ARM, 4 Go de mémoire, Ubuntu. J'y installe ce que je veux.",
+    d: "J'héberge le site sur un VPS Hetzner sous Ubuntu, que j'administre moi-même.",
+    plus: "Un VPS est une part d'une grosse machine physique, découpée par un hyperviseur. Je n'ai pas accès au matériel mais j'ai le compte root : je suis responsable du système, des mises à jour et de la sécurité. C'est la différence avec Vercel, où tout cela était géré pour moi.",
+    concret: ["Serveur CAX11 (2 cœurs ARM, 4 Go, 40 Go) à Falkenstein, choisi en novembre 2026 après le blocage du site par les quotas de Vercel.", "Accès par SSH avec une clé, pare-feu Hetzner qui n'ouvre que 22, 80 et 443.", "Prix fixe, quel que soit le trafic : c'était la raison du départ de Vercel."] },
+  { t: "Coolify", f: "PaaS auto-hébergé (plateforme de déploiement open source)",
+    m: "Une interface web installée sur mon serveur, qui pilote Docker : construction, mise en ligne sans coupure, certificats, variables, tâches planifiées.",
+    d: "J'ai installé Coolify, un PaaS open source, en alternative auto-hébergée à Vercel : il déploie automatiquement l'application en conteneurs à chaque mise à jour.",
+    plus: "Coolify fait ce que ferait un administrateur à la main : récupérer le code, lancer `docker build`, démarrer le nouveau conteneur, attendre qu'il réponde (healthcheck), basculer le trafic, arrêter l'ancien. Il configure aussi Traefik pour chaque domaine. Il tourne lui-même en conteneurs sur le même serveur.",
+    concret: ["Branché sur GitHub par une application en lecture seule.", "Une fusion sur `main` déclenche une mise en ligne, 1 à 5 minutes.", "Il garde les variables d'environnement (clés Stripe, base…) et lance les tâches planifiées (nettoyage des commandes, opérations de minuit).", "Il gère aussi Duplicati. Depuis le 6 novembre, il s'ouvre en HTTPS sur coolify.tbird68.fr."] },
+  { t: "Docker", f: "Conteneurisation",
+    m: "Emballe l'application et tout ce dont elle a besoin dans une image ; un conteneur est cette image qui tourne, isolée du reste du serveur.",
+    d: "L'application est construite en image Docker à partir d'un Dockerfile, et tourne en conteneur.",
+    plus: "Une image est une recette figée : système de base, dépendances, code compilé. Le Dockerfile décrit les étapes. Un conteneur partage le noyau du serveur, donc démarre en secondes, mais a ses propres fichiers et processus. On peut détruire et recréer un conteneur sans rien perdre, sauf ce qui est dans un volume.",
+    concret: ["Mon Dockerfile construit en deux temps : une étape avec tous les outils pour compiler, une image finale légère qui ne garde que le serveur Node autonome.", "Les photos vivent dans un volume monté sur `/app/medias` : elles survivent à chaque nouvelle version.", "Sur le serveur tournent aussi Traefik, Coolify, Duplicati, chacun dans son conteneur."] },
+  { t: "Traefik", f: "Reverse proxy (proxy inverse) et terminaison TLS",
+    m: "La porte d'entrée : il reçoit toutes les connexions sur 80 et 443, déchiffre le HTTPS et passe chaque requête au bon conteneur selon le nom de domaine.",
+    d: "Traefik sert de reverse proxy : il route chaque sous-domaine vers son conteneur et gère les certificats Let's Encrypt automatiquement.",
+    plus: "Traefik lit des étiquettes (labels) posées sur les conteneurs, ou des fichiers de configuration, et en déduit les routes : « tbird68.fr va au conteneur du site ». Il demande seul les certificats, redirige HTTP vers HTTPS et peut journaliser chaque visite (access log).",
+    concret: ["tbird68.fr va au site, coolify.tbird68.fr au panneau Coolify, sauvegarde.tbird68.fr à Duplicati.", "J'ai activé son journal des visites pour enquêter sur des erreurs 503, puis pour nourrir CrowdSec.", "Il tourne dans le conteneur `coolify-proxy`, configuré depuis Coolify (Servers → Proxy)."] },
+  { t: "Let's Encrypt", f: "Autorité de certification gratuite (protocole ACME)",
+    m: "Délivre les certificats qui permettent le HTTPS ; Traefik les demande et les renouvelle seul tous les trois mois.",
+    d: "Les certificats TLS viennent de Let's Encrypt et se renouvellent automatiquement.",
+    plus: "Pour prouver que je contrôle le domaine, Let's Encrypt pose un défi (challenge) : par exemple, servir un fichier précis sur le port 80. C'est pourquoi le DNS doit pointer vers le serveur avant que le certificat puisse être délivré.",
+    concret: "Quand j'ai donné l'adresse coolify.tbird68.fr à Coolify, la première requête a échoué, puis la deuxième, 20 secondes plus tard, a réussi en HTTPS : c'était le temps que Traefik obtienne le certificat." },
+  { t: "Neon", f: "Base de données managée (DBaaS) PostgreSQL",
+    m: "Une base PostgreSQL hébergée à Francfort : Neon gère le serveur, les mises à jour et les copies ; je n'ai qu'une adresse de connexion.",
+    d: "La base est un PostgreSQL managé chez Neon, en Europe, que j'ai migré d'une région à l'autre.",
+    plus: "Neon sépare le stockage et le calcul : la base peut s'endormir quand personne ne l'utilise et se réveiller en une seconde. Il propose des branches, comme Git : une copie instantanée de la base pour faire des essais sans toucher à la production.",
+    concret: ["Branche de production à Francfort depuis le 4 novembre 2026 (avant : en Virginie, aux États-Unis).", "Une branche `dev` pour mes essais en local : les clés de paiement y sont vides, pour ne jamais débiter une vraie carte.", "Deux adresses : une « poolée » pour le site (beaucoup de petites connexions), une directe pour les sauvegardes et les changements de schéma."] },
+  { t: "PostgreSQL", f: "SGBD relationnel (SGBDR)",
+    m: "Range les données en tables liées entre elles (articles, commandes, clients), interrogées en SQL, avec des transactions et des verrous.",
+    d: "Les données sont dans PostgreSQL ; j'utilise des transactions et des verrous pour ne jamais vendre deux fois le dernier article.",
+    plus: "Une transaction regroupe plusieurs opérations qui réussissent ou échouent ensemble (ACID). Un verrou `SELECT … FOR UPDATE` empêche deux commandes simultanées de lire le même stock avant que l'une l'ait décrémenté.",
+    concret: "À chaque commande : la transaction relit les articles sous verrou, vérifie le stock, le décrémente et crée la commande. Si deux clients achètent le dernier exemplaire à la même seconde, le second attend, puis voit le stock à zéro." },
+  { t: "Prisma", f: "ORM (mapping objet-relationnel)",
+    m: "Décrit les tables dans un fichier de schéma et permet de lire et d'écrire la base depuis le code, sans écrire le SQL à la main.",
+    d: "J'accède à la base avec l'ORM Prisma, qui gère aussi le schéma.",
+    plus: "Le fichier `schema.prisma` est la source de vérité des tables. `prisma db push` aligne la base sur ce fichier. Prisma génère un client typé : si j'écris un champ qui n'existe pas, le code ne compile pas.",
+    concret: "Règle apprise à la dure : ne jamais pousser un changement destructif (colonne supprimée, contrainte d'unicité ajoutée sur une table existante). La mise à jour automatique de la base refuse, et tous les déploiements suivants échouent sans bruit." },
+  { t: "Next.js", f: "Framework web full-stack (React)",
+    m: "Fabrique les pages vues par le client et les routes d'API côté serveur ; les pages sont mises en cache et recalculées quand le catalogue change.",
+    d: "Le site est une application Next.js : rendu côté serveur pour le référencement, routes d'API pour les commandes.",
+    plus: "Une page peut être calculée à la construction (statique), à chaque visite (dynamique), ou gardée en cache et recalculée à la demande (ISR). Le code serveur et le code navigateur vivent dans le même projet, en TypeScript.",
+    concret: ["Les fiches article sont en cache un jour et rafraîchies dès qu'un article change dans l'admin.", "Les routes `/api/...` reçoivent les commandes, les webhooks de Stripe et de Boxtal.", "Construit en mode autonome (`output: standalone`) pour tourner dans une petite image Docker."] },
+  { t: "Stripe", f: "Prestataire de services de paiement (PSP)",
+    m: "Encaisse cartes, Apple Pay et Google Pay. Le formulaire de carte vient de Stripe : les numéros ne passent jamais par mon serveur.",
+    d: "Le paiement passe par Stripe, intégré par son API et ses webhooks signés ; les données de carte restent chez Stripe, ce qui simplifie la conformité PCI DSS.",
+    plus: "Le parcours : mon serveur crée un PaymentIntent (« le client va payer 89 € ») et reçoit un secret ; le navigateur affiche le formulaire Stripe avec ce secret ; le client paie chez Stripe ; Stripe appelle mon webhook pour confirmer. Je ne fais jamais confiance au navigateur pour dire « c'est payé » : seul le webhook signé fait foi.",
+    concret: ["Clés en mode réel (`sk_live`), stockées en base et saisies depuis l'admin.", "Le webhook vérifie la signature, marque la commande payée, envoie les emails, crée l'étiquette.", "Stripe rejoue ses notifications : le traitement est conçu pour être rejoué sans double effet."] },
+  { t: "Resend", f: "Service d'envoi d'emails transactionnels (ESP)",
+    m: "Envoie les emails du site par une API, depuis mon domaine authentifié par SPF et DKIM pour ne pas finir en spam.",
+    d: "Les emails transactionnels partent par l'API de Resend, depuis un domaine authentifié SPF et DKIM.",
+    plus: "Transactionnel = déclenché par une action (commande, inscription), par opposition au marketing. SPF dit quels serveurs ont le droit d'envoyer pour le domaine ; DKIM signe chaque email. Ce sont des enregistrements TXT dans le DNS.",
+    concret: ["Offre gratuite : 100 emails par jour. Le site compte ses envois et garde une réserve pour les confirmations de commande.", "Les alertes promo partent en « diffusion », hors de ce quota.", "Une adresse qui rejette un email est mise sur liste noire par Resend : à surveiller si les propriétaires ne reçoivent plus rien."] },
+  { t: "Boxtal", f: "Plateforme d'expédition multi-transporteurs",
+    m: "Une seule API pour plusieurs transporteurs : prix en direct, points relais, étiquettes, suivi renvoyé au site par webhook.",
+    d: "J'ai intégré l'API de Boxtal : devis en direct, étiquettes créées au paiement, suivi des colis par webhook.",
+    plus: "Un agrégateur évite d'intégrer Colissimo, Mondial Relay et Chronopost séparément. Deux versions d'API cohabitent : la v1 pour les devis, la v3 pour les étiquettes et le suivi.",
+    concret: ["Au paiement confirmé, l'étiquette est créée chez Boxtal, avec un verrou pour ne jamais la payer deux fois.", "Colis pris en charge : la commande passe seule en « Expédiée » et le client reçoit l'email.", "Livraison possible dans 10 pays européens, au prix réel du transporteur."] },
+  { t: "Dynadot", f: "Bureau d'enregistrement (registraire) et DNS",
+    m: "J'y loue le nom tbird68.fr et j'y écris les enregistrements DNS qui disent quelle adresse correspond à quel nom.",
+    d: "Le domaine est chez le registraire Dynadot, où je gère la zone DNS.",
+    plus: "Le registraire réserve le nom auprès du registre (l'AFNIC pour les .fr). La zone DNS est la liste des enregistrements du domaine. Dynadot fait aussi la redirection d'emails : contact@ arrive dans la boîte des propriétaires.",
+    concret: "Le 6 novembre, j'y ai ajouté l'enregistrement A `coolify` → adresse du serveur, pour donner une adresse HTTPS au panneau Coolify." },
+  { t: "GitHub", f: "Forge logicielle (hébergement de dépôts Git)",
+    m: "Garde le code et tout son historique ; chaque changement passe par une demande de fusion vérifiée avant d'arriver sur la branche principale.",
+    d: "Le code est versionné avec Git sur GitHub, avec des demandes de fusion relues avant chaque mise en production.",
+    plus: "Git est l'outil, GitHub le service qui héberge le dépôt et ajoute la collaboration : demandes de fusion, revues, tâches automatiques, alertes de sécurité, secrets.",
+    concret: ["Dépôt privé, plus de 120 demandes de fusion depuis septembre 2026.", "La branche `main` est ce qui tourne en production : Coolify la déploie à chaque fusion.", "Copie chiffrée du dépôt complet chaque dimanche sur Google Drive, au cas où le compte serait perdu."] },
+  { t: "GitHub Actions", f: "Intégration continue (CI) et tâches planifiées",
+    m: "Des scripts lancés par GitHub : vérification à chaque demande de fusion, sauvegarde chaque nuit, contrôle du site chaque heure.",
+    d: "J'ai mis en place de l'intégration continue avec GitHub Actions : tests à chaque demande de fusion, sauvegardes et supervision planifiées.",
+    plus: "Un workflow est un fichier YAML dans `.github/workflows/` : quand le lancer (à chaque demande de fusion, à heure fixe en cron, à la main), sur quelle machine, et les étapes. GitHub fournit une machine virtuelle neuve à chaque exécution, puis la détruit.",
+    concret: ["`verifications.yml` : types et tests à chaque demande de fusion ; fusionner seulement au vert.", "`sauvegarde.yml` : export de la base chaque nuit, chiffré, gardé 30 jours.", "`secours-externe.yml` : code + base chiffrés vers Google Drive chaque dimanche.", "`surveillance.yml` : vérifie que le site répond."] },
+  { t: "Dependabot", f: "Veille des dépendances et des vulnérabilités (CVE)",
+    m: "Repère les bibliothèques qui ont une faille connue et propose la mise à jour.",
+    d: "Dependabot me signale les vulnérabilités des dépendances ; je les corrige et je vérifie avant de fusionner.",
+    plus: "Une CVE est le numéro public d'une faille. Dependabot compare les versions de mes dépendances (`package-lock.json`) à la base des failles connues, et ouvre une demande de fusion avec la version corrigée.",
+    concret: "Exemple : six failles sur Next.js 16.3.6, dont deux graves (SSRF de la retouche d'images), corrigées en passant à 16.3.8, puis vérification des pages et des photos avant la mise en ligne." },
+  { t: "Sentry", f: "Supervision des erreurs applicatives",
+    m: "Reçoit chaque erreur du site, côté serveur et côté navigateur, avec son contexte, et me prévient.",
+    d: "Les erreurs de production remontent dans Sentry, hébergé en Europe, avec les emails masqués.",
+    plus: "Les logs disent tout ce qui se passe ; Sentry ne garde que les erreurs, les regroupe (« cette erreur, 40 fois, sur iPhone ») et montre la ligne de code. On filtre le bruit : erreurs d'extensions de navigateur, robots.",
+    concret: "Il a révélé qu'une page traduite par Chrome plantait chez les visiteurs étrangers : corrigé en rendant le site tolérant à la traduction automatique." },
+  { t: "Duplicati", f: "Logiciel de sauvegarde incrémentale chiffrée",
+    m: "Copie chaque semaine les photos du serveur vers Google Drive, chiffrées en AES-256 ; il n'envoie que ce qui a changé.",
+    d: "Les fichiers sont sauvegardés par Duplicati, chiffrés côté serveur avant de partir hors site.",
+    plus: "Duplicati découpe les fichiers en blocs, ne renvoie que les blocs nouveaux, et garde plusieurs versions. Sans sa phrase de chiffrement, la sauvegarde est inutilisable, même pour moi.",
+    concret: "Il tourne dans Coolify, ouvert sur sauvegarde.tbird68.fr, et sauvegarde le dossier des photos et vidéos chaque semaine (choix volontaire : je ne suis pas en wifi tous les jours)." },
+  { t: "Google Drive", f: "Stockage cloud (destination hors site)",
+    m: "Reçoit les copies de secours, toujours chiffrées avant l'envoi : Google ne voit que des fichiers illisibles.",
+    d: "Les sauvegardes partent sur un stockage distant, chiffrées avant l'envoi.",
+    plus: "Hors site = dans un autre lieu que les données d'origine : si le serveur brûle, la copie survit. Chiffrer avant l'envoi évite de devoir faire confiance à l'hébergeur de la copie.",
+    concret: ["Dossier de Duplicati : les photos.", "Dossier `tbird-secours` : `tbird-secours.tar.gpg` (code + base) et la copie de la semaine d'avant."] },
+  { t: "rclone", f: "Outil de synchronisation vers le cloud (ligne de commande)",
+    m: "Envoie un fichier vers presque n'importe quel stockage en ligne ; ici, la copie chiffrée du dimanche vers Google Drive.",
+    d: "Une tâche GitHub Actions exporte le code et la base, les chiffre avec GPG et les envoie sur Drive avec rclone.",
+    plus: "rclone se connecte au Drive avec un jeton OAuth. J'ai demandé le droit le plus étroit, `drive.file` : il ne voit que les fichiers qu'il a créés lui-même, pas le reste du Drive.",
+    concret: "Le jeton, créé une fois avec `rclone authorize`, est rangé en secret GitHub. Piège rencontré : les versions récentes le donnent encodé en base64, la tâche a dû apprendre à le décoder." },
+  { t: "GPG", f: "Chiffrement (norme OpenPGP)",
+    m: "Ferme un fichier avec une phrase secrète, en AES-256 ; sans la phrase, il est illisible.",
+    d: "Les sauvegardes sont chiffrées en AES-256 avec GPG ; la phrase est dans mon gestionnaire de mots de passe.",
+    plus: "GPG sait faire du chiffrement symétrique (une phrase) ou asymétrique (une clé publique pour fermer, une clé privée pour ouvrir). Pour des sauvegardes, la phrase suffit, à condition de la garder ailleurs que les sauvegardes elles-mêmes.",
+    concret: "J'ai changé la phrase le 6 novembre 2026 en m'apercevant que je ne connaissais pas l'ancienne : les copies faites avec elle étaient donc perdues pour moi aussi. Elle est désormais dans KeePass." },
+  { t: "CrowdSec", f: "IPS collaboratif (prévention d'intrusion)",
+    m: "Lit le journal des visites, repère les comportements d'attaque et fait bloquer l'adresse par le pare-feu. Partage les adresses d'attaquants avec sa communauté.",
+    d: "J'ai ajouté CrowdSec, un IPS open source : il analyse les journaux de Traefik et bannit les adresses malveillantes au niveau du pare-feu.",
+    plus: "Trois pièces : l'agent lit les journaux et applique des scénarios (« 30 pages introuvables en une minute = scan »), l'API locale enregistre les décisions, le bouncer (videur) les applique dans le pare-feu. La communauté lui envoie aussi une liste d'adresses déjà repérées ailleurs.",
+    concret: ["Installé sur le serveur lui-même, pas dans Coolify.", "Piège : son API voulait le port 8080, déjà pris par Traefik ; déplacée sur 8081.", "Règles ajoutées à la chaîne DOCKER-USER, sinon les conteneurs échappaient au blocage.", "`cscli decisions list` montre les adresses bannies."] },
+  { t: "Pare-feu Hetzner", f: "Pare-feu réseau (filtrage par port)",
+    m: "N'ouvre que les ports 22 (SSH), 80 et 443 (le site) ; tout le reste est refusé avant même d'atteindre le serveur.",
+    d: "Le pare-feu n'ouvre que SSH et le web ; j'ai fermé le port d'administration en le mettant derrière le reverse proxy en HTTPS.",
+    plus: "Ce pare-feu est chez Hetzner, devant le serveur : il filtre avant que le trafic n'arrive. Celui de CrowdSec est dans le serveur. Deux couches valent mieux qu'une (défense en profondeur).",
+    concret: "Le 6 novembre, fermeture de 8000, 6001 et 6002 (panneau, temps réel et terminal de Coolify) : le mot de passe de Coolify passait en clair sur le port 8000." },
+  { t: "KeePass", f: "Gestionnaire de mots de passe (coffre chiffré local)",
+    m: "Un fichier chiffré qui garde mots de passe et phrases secrètes ; un seul mot de passe principal l'ouvre.",
+    d: "Mes secrets sont dans un coffre KeePass, pas dans des fichiers en clair.",
+    plus: "Le coffre est un fichier : il faut en garder une copie ailleurs (clé USB, cloud, puisqu'il est chiffré). Si le mot de passe principal est perdu, tout est perdu : il se note sur papier, hors de chez soi.",
+    concret: "Y vivent la phrase des sauvegardes et, à terme, celle de Duplicati, les codes de secours de la double authentification et une copie des clés de Coolify." },
+  { t: "Notion", f: "Wiki et outil de gestion de projets",
+    m: "Un tableau de tâches et une documentation partagés avec les propriétaires de la boutique.",
+    d: "Je documente et je suis les tâches dans Notion, avec un tableau Kanban partagé.",
+    plus: "Un Kanban range les tâches en colonnes (Idées, À prendre, En cours, Terminé) : on voit d'un coup d'œil où en est chaque chose.",
+    concret: "L'Espace de travail T-Bird pour les propriétaires, avec le mode d'emploi du site et un lien vers la carte de l'infrastructure." },
+  { t: "Claude Code", f: "Assistant de programmation IA (agent)",
+    m: "Écrit, teste et documente le code à ma demande ; je décide, je relis et je valide chaque changement.",
+    d: "Je travaille avec un assistant IA : je définis le besoin, je relis et je valide chaque modification avant la mise en production.",
+    plus: "Un agent ne se contente pas de répondre : il lit le projet, lance des commandes, modifie des fichiers, ouvre des demandes de fusion. Les gestes sensibles (mots de passe, fusion, pare-feu de production) restent à moi.",
+    concret: "La mémoire du projet est un fichier `CLAUDE.md` dans le dépôt : décisions, pièges déjà rencontrés, règles. Chaque session repart de là." },
 ];
+
+const GESTES = [
+  { t: "Fusionner une demande de fusion", f: "Merge d'une pull request (PR)",
+    m: "Intégrer les changements d'une branche dans la branche principale, `main`, après vérification.",
+    d: "Chaque changement passe par une pull request : tests automatiques, relecture, puis fusion qui déclenche la mise en production.",
+    plus: "Une branche est une copie de travail du code. La pull request montre la différence avec `main` (le diff) et lance les vérifications. Fusionner, c'est ajouter ces commits à `main`. Chez moi, `main` = la production : fusionner, c'est mettre en ligne.",
+    concret: ["Une session de travail crée une branche (ex. `cartes-en-ligne`) et y enregistre des commits.", "Elle pousse la branche sur GitHub et ouvre la pull request.", "GitHub Actions lance les vérifications : le rond devient vert ou rouge.", "Je relis le résumé, puis « Merge pull request ».", "GitHub prévient Coolify, qui construit et met en ligne la nouvelle version.", "Piège vécu : si de nouveaux commits arrivent sur la branche après la fusion, ils ne sont pas en ligne. Il faut une nouvelle pull request (c'est arrivé avec la n° 117)."] },
+  { t: "Mettre en ligne (déployer)", f: "Déploiement continu (CD)",
+    m: "Construire la nouvelle version, la démarrer, vérifier qu'elle répond, puis lui passer le trafic.",
+    d: "Chaque fusion déclenche un déploiement sans coupure : nouvelle image, healthcheck, bascule.",
+    plus: "Sans coupure (rolling update) : l'ancienne version sert les visiteurs pendant que la nouvelle démarre. Le healthcheck est une adresse que le conteneur doit faire répondre avant de recevoir du trafic. S'il échoue, l'ancienne reste en place.",
+    concret: ["Coolify récupère le code de `main`.", "`docker build` suit le Dockerfile (1 à 5 minutes).", "Le nouveau conteneur démarre ; Coolify attend qu'il réponde.", "Traefik bascule le trafic, l'ancien conteneur s'arrête.", "À ne pas faire : cliquer « Redeploy » pendant une mise en ligne automatique (deux constructions se marchent dessus)."] },
+  { t: "Revenir en arrière", f: "Rollback",
+    m: "Remettre la version d'avant quand une mise à jour casse le site.",
+    d: "En cas de régression, je reviens à la version précédente en quelques minutes, puis je corrige tranquillement.",
+    plus: "Deux façons : relancer l'ancienne image (rapide, Coolify la garde), ou annuler le changement dans Git (`git revert`) et redéployer, ce qui laisse une trace propre dans l'historique.",
+    concret: "Dans Coolify : l'application → Deployments → une version qui marchait → Rollback. Puis on cherche la cause sans pression." },
+  { t: "Ajouter une ligne DNS", f: "Créer un enregistrement A",
+    m: "Dire au monde quelle adresse IP correspond à un nom, par exemple coolify.tbird68.fr.",
+    d: "J'ai créé un enregistrement A pour donner un sous-domaine en HTTPS à l'interface d'administration.",
+    plus: "Chaque enregistrement a une durée de vie (TTL) : les serveurs DNS du monde gardent la réponse en cache pendant ce temps. Un changement peut donc mettre de quelques minutes à quelques heures à être vu partout (la propagation).",
+    concret: ["Dynadot → tbird68.fr → DNS Settings → Subdomain Records : `coolify`, type A, adresse du serveur.", "Vérifier : `nslookup coolify.tbird68.fr 1.1.1.1` doit rendre l'adresse.", "Ensuite seulement, donner le domaine au service (sinon le certificat échoue)."] },
+  { t: "Donner un domaine à un service", f: "Routage par nom d'hôte + certificat",
+    m: "Faire répondre un conteneur sur son propre sous-domaine, en HTTPS.",
+    d: "Je publie chaque service derrière le reverse proxy, sur son sous-domaine, avec un certificat automatique.",
+    plus: "Le DNS amène le visiteur au serveur ; c'est ensuite Traefik qui lit le nom demandé (en-tête Host) et choisit le conteneur. C'est ce qui permet d'avoir plusieurs sites sur une seule adresse IP.",
+    concret: ["Coolify → Settings → URL : `https://coolify.tbird68.fr`.", "Coolify écrit la route pour Traefik.", "Traefik obtient le certificat Let's Encrypt.", "Vérifier en HTTPS, puis seulement fermer l'ancien accès (port 8000)."] },
+  { t: "Fermer un port", f: "Règle de pare-feu",
+    m: "Retirer une règle entrante pour qu'un service ne soit plus joignable depuis Internet.",
+    d: "J'ai réduit la surface d'attaque en ne laissant ouverts que SSH et le web.",
+    plus: "Toujours vérifier l'accès de remplacement avant de fermer, et garder un moyen de revenir : Hetzner offre une console de secours dans le navigateur si on se coupe soi-même du serveur.",
+    concret: ["Hetzner Console → Firewalls → tbird-web → Rules : supprimer la ligne (ex. TCP 8000).", "Vérifier : `curl http://ADRESSE:8000` ne répond plus.", "Vérifier : le service répond toujours par son domaine en HTTPS."] },
+  { t: "Créer un secret", f: "Secret GitHub Actions / variable d'environnement",
+    m: "Ranger une clé ou un mot de passe là où la tâche automatique peut l'utiliser sans que personne ne puisse le relire.",
+    d: "Les secrets ne sont jamais dans le code : ils sont injectés à l'exécution depuis un coffre (secrets GitHub, variables Coolify).",
+    plus: "GitHub chiffre les secrets ; une fois enregistrés, on ne peut plus que les remplacer. Dans les journaux d'exécution, ils apparaissent masqués (***).",
+    concret: ["`gh secret set NOM --repo Psychoseidon/T-bird-Paris`, puis coller la valeur à la demande.", "Vérifier : `gh secret list` montre le nom et la date, jamais la valeur.", "Noter la valeur dans KeePass d'abord si elle n'existe nulle part ailleurs."] },
+  { t: "Lancer une tâche à la main", f: "Déclenchement manuel d'un workflow",
+    m: "Exécuter tout de suite une tâche planifiée (sauvegarde, copie de secours) sans attendre son heure.",
+    d: "Après chaque changement sur une sauvegarde, je la lance à la main pour vérifier qu'elle passe.",
+    plus: "Le workflow doit prévoir `workflow_dispatch` pour être lançable à la main, et il doit exister sur `main`. On peut viser une autre branche pour tester une correction avant de la fusionner.",
+    concret: ["GitHub → Actions → la tâche → Run workflow.", "Ou : `gh workflow run secours-externe.yml --ref main`, puis `gh run watch` pour suivre.", "Lire le journal en cas d'échec : la ligne `##[error]` dit pourquoi."] },
+  { t: "Installer et relancer un service", f: "Administration Linux (apt, systemctl)",
+    m: "Ajouter un logiciel au serveur et le faire tourner en tâche de fond.",
+    d: "J'administre le serveur en ligne de commande : installation de paquets, services systemd, lecture des journaux.",
+    plus: "`apt` installe les paquets d'Ubuntu. systemd démarre les services au boot et les relance s'ils tombent : `systemctl restart`, `status`, `is-active`. Chaque service a son journal, lu avec `journalctl -u nom`.",
+    concret: ["`apt install crowdsec`.", "Il ne démarre pas : `journalctl -u crowdsec` dit « address already in use » sur 8080.", "Changer le port dans `/etc/crowdsec/config.yaml`.", "`systemctl restart crowdsec`, puis `systemctl is-active crowdsec` : active."] },
+  { t: "Lire les journaux", f: "Diagnostic (logs)",
+    m: "Chercher dans ce que les programmes ont écrit pour comprendre une panne.",
+    d: "Face à une panne, je pars des journaux : ceux du service, du conteneur et du reverse proxy.",
+    plus: "Remonter la chaîne : le visiteur voit une erreur → Traefik l'a-t-il reçue et à qui l'a-t-il passée ? → le conteneur a-t-il répondu ? → l'application a-t-elle levé une erreur (Sentry) ? Filtrer avec `grep` sur « error » ou une heure précise.",
+    concret: ["`docker logs coolify-proxy --since 10m` : les visites vues par Traefik.", "`journalctl -u crowdsec -n 30` : les messages d'un service.", "Sentry pour les erreurs du site ; Coolify → Logs pour le conteneur du site."] },
+  { t: "Restaurer une sauvegarde", f: "Reprise après incident (PRA)",
+    m: "Remettre des données à partir d'une copie, dans une base neuve, sans écraser la production.",
+    d: "Ma procédure de restauration est écrite : déchiffrer, restaurer dans une base neuve, vérifier, puis basculer.",
+    plus: "Une sauvegarde jamais restaurée est une hypothèse. On restaure à côté, on compare (nombre d'articles, de commandes), et seulement ensuite on fait pointer le site vers la base restaurée.",
+    concret: ["Télécharger la sauvegarde (GitHub Actions ou Drive).", "`gpg --decrypt fichier.gpg > tbird.dump` (demande la phrase).", "Créer une base vide (une branche Neon), puis `pg_restore` dedans.", "Vérifier les chiffres, puis changer `DATABASE_URL` dans Coolify et redéployer."] },
+];
+
 const MOTS = [
-  ["Serveur", "Machine ou logiciel qui rend un service",
-    "Un ordinateur allumé en permanence qui répond aux demandes des autres (les clients). Le mot désigne aussi le logiciel qui répond : serveur web, serveur de base de données.",
-    "Mon serveur est un VPS sur lequel tournent plusieurs services en conteneurs."],
-  ["VPS", "Serveur privé virtuel",
-    "Une part d'une grosse machine physique, découpée par virtualisation : on a son propre système et l'accès administrateur, sans le matériel.",
-    "J'administre un VPS Ubuntu en ligne de commande, par SSH."],
-  ["IaaS, PaaS, SaaS", "Les trois niveaux du cloud",
-    "IaaS : on loue la machine (Hetzner). PaaS : on donne son code, la plateforme le fait tourner (Coolify, Vercel). SaaS : on utilise un logiciel fini en ligne (Notion, Stripe).",
-    "Je suis passé d'un PaaS géré (Vercel) à un IaaS avec un PaaS auto-hébergé, pour maîtriser les coûts et les données."],
-  ["Auto-hébergement", "Self-hosting",
-    "Faire tourner soi-même un logiciel sur son serveur, au lieu de payer un service en ligne.",
-    "J'ai auto-hébergé l'outil de déploiement et l'outil de sauvegarde."],
-  ["Proxy", "Intermédiaire côté client",
-    "Se place entre des utilisateurs et Internet et fait les requêtes à leur place (filtrage, cache, anonymat). Typique dans une entreprise.",
-    "Un proxy agit pour le compte des clients ; un reverse proxy, pour le compte des serveurs."],
-  ["Reverse proxy", "Intermédiaire côté serveur (proxy inverse)",
-    "Reçoit toutes les visites à la place des serveurs et les répartit : un seul point d'entrée, le HTTPS au même endroit, les applications cachées derrière.",
-    "Traefik est mon reverse proxy : un point d'entrée unique, en HTTPS, pour le site, Coolify et Duplicati."],
-  ["DNS", "Annuaire d'Internet",
-    "Traduit un nom (tbird68.fr) en adresse IP. Un enregistrement A donne l'adresse IPv4 d'un nom ; un MX dit où livrer les emails ; un TXT sert aux vérifications (SPF, DKIM, Google).",
-    "J'ai créé un enregistrement A pour le sous-domaine de l'outil de déploiement."],
-  ["Nom de domaine, sous-domaine", "Adresse lisible",
-    "tbird68.fr est le domaine ; coolify.tbird68.fr et sauvegarde.tbird68.fr sont des sous-domaines, chacun pouvant mener à un service différent.",
-    "Chaque service a son sous-domaine, routé par le reverse proxy."],
-  ["HTTPS, TLS, certificat", "Chiffrement des échanges web",
-    "TLS chiffre la connexion entre le navigateur et le serveur ; le certificat prouve que le serveur est bien celui du domaine. HTTPS = HTTP par-dessus TLS.",
-    "Tout passe en HTTPS ; l'interface d'administration n'est plus accessible en HTTP simple."],
-  ["Port", "Numéro de porte d'un service",
-    "Une même machine offre plusieurs services, chacun sur son numéro : 22 pour SSH, 80 pour HTTP, 443 pour HTTPS.",
-    "N'exposer que les ports nécessaires réduit la surface d'attaque."],
-  ["Pare-feu", "Filtrage du trafic réseau",
-    "Laisse passer ou refuse les connexions selon des règles (port, adresse, protocole).",
-    "Règle par défaut : tout refuser, puis n'ouvrir que le strict nécessaire."],
-  ["SSH, clé SSH", "Accès à distance sécurisé",
-    "Ouvre un terminal sur le serveur à travers une connexion chiffrée ; avec une clé, il n'y a pas de mot de passe à deviner.",
-    "J'administre le serveur en SSH, par clé uniquement."],
-  ["API", "Interface de programmation",
-    "Une liste de demandes qu'un logiciel accepte de la part d'un autre, avec leur format : « crée un paiement de 49 € », « donne-moi le prix d'un colis ».",
-    "Mon site parle à Stripe, Resend et Boxtal par leurs API REST."],
-  ["API REST", "Style d'API web le plus courant",
-    "Des adresses web (ressources) qu'on appelle en HTTP avec un verbe (GET pour lire, POST pour créer…) et qui répondent en JSON.",
-    "Les routes d'API du site suivent le style REST et répondent en JSON."],
-  ["Clé d'API", "Identifiant secret d'un logiciel",
-    "Le mot de passe d'une application auprès d'une API ; elle se garde côté serveur, jamais dans le navigateur ni dans le code.",
-    "Les clés d'API sont en variables d'environnement, jamais dans le dépôt."],
-  ["Webhook", "Notification d'un service vers mon site",
-    "L'inverse d'un appel d'API : c'est le service qui appelle mon site quand un événement arrive (paiement réussi, colis livré). On vérifie la signature pour être sûr que l'appel vient bien de lui.",
-    "Stripe et Boxtal préviennent le site par webhooks signés, que je vérifie avant tout traitement."],
-  ["OAuth, jeton", "Autorisation déléguée",
-    "Permet de donner à une application un accès limité à un compte (Google, par exemple) sans lui donner le mot de passe : elle reçoit un jeton, révocable.",
-    "La connexion avec Google et l'accès au Drive passent par OAuth, avec le droit minimal nécessaire."],
-  ["JWT", "Jeton signé",
-    "Un petit texte signé que le serveur remet après la connexion ; il le reconnaît ensuite sans redemander le mot de passe.",
-    "Les sessions sont des JWT dans des cookies httpOnly, invisibles pour les scripts de la page."],
-  ["Variable d'environnement, secret", "Réglage hors du code",
-    "Une valeur donnée au programme au démarrage (adresse de la base, clés) : le même code tourne partout, et les secrets ne sont pas dans le dépôt.",
-    "Les secrets sont injectés en variables d'environnement par la plateforme de déploiement."],
-  ["Conteneur ou machine virtuelle", "Deux façons d'isoler",
-    "Une machine virtuelle a son propre système complet ; un conteneur partage le noyau du serveur. Il est donc plus léger et démarre en quelques secondes.",
-    "Mes services tournent en conteneurs sur une seule VM."],
-  ["Git, dépôt, branche, commit", "Gestion de versions",
-    "Le dépôt garde tout l'historique ; un commit est un changement enregistré ; une branche, une ligne de travail à part, fusionnée ensuite dans la principale.",
-    "Chaque chantier se fait sur une branche, fusionnée après vérification."],
-  ["Demande de fusion (pull request)", "Relecture avant intégration",
-    "Propose d'intégrer une branche dans la principale ; les tests tournent et quelqu'un relit avant d'accepter.",
-    "Rien n'arrive en production sans demande de fusion et tests au vert."],
-  ["CI/CD", "Intégration et déploiement continus",
-    "CI : tester automatiquement chaque changement. CD : le mettre en ligne automatiquement s'il est bon.",
-    "CI sur GitHub Actions, CD par Coolify à chaque fusion sur la branche principale."],
-  ["Rollback", "Retour arrière",
-    "Remettre la version d'avant quand une mise à jour casse quelque chose.",
-    "En cas de problème, je reviens à la version précédente en quelques minutes."],
-  ["Sauvegarde 3-2-1", "Règle de base des copies de secours",
-    "3 copies des données, sur 2 supports différents, dont 1 hors site. Une sauvegarde ne vaut que si on a déjà testé la restauration.",
-    "Base et code ont plusieurs copies chiffrées, dont une hors de GitHub ; la restauration est documentée et testée."],
-  ["Sauvegarde incrémentale", "Ne copier que ce qui change",
-    "La première copie est complète, les suivantes n'envoient que les différences : plus rapide et moins lourd.",
-    "Duplicati fait des sauvegardes incrémentales chiffrées."],
-  ["Chiffrement symétrique, AES-256", "Une seule clé pour fermer et ouvrir",
-    "La même phrase chiffre et déchiffre ; AES-256 est la norme actuelle, réputée incassable par force brute.",
-    "Les sauvegardes sont chiffrées en AES-256 avant de quitter le serveur."],
-  ["Journaux (logs)", "Historique de ce qui se passe",
-    "Chaque service écrit ce qu'il fait : visites, erreurs, connexions. C'est la matière première pour comprendre une panne ou repérer une attaque.",
-    "J'ai activé les journaux d'accès du reverse proxy pour diagnostiquer des erreurs 503."],
-  ["Supervision (monitoring)", "Surveiller pour être prévenu",
-    "Vérifier régulièrement qu'un service répond, et alerter s'il tombe.",
-    "Une tâche vérifie le site chaque heure et prévient par email en cas de panne."],
-  ["IDS, IPS, WAF", "Détecter et bloquer les attaques",
-    "IDS : détecte et alerte. IPS : détecte et bloque. WAF : pare-feu applicatif qui examine le contenu des requêtes web.",
-    "CrowdSec joue le rôle d'IPS : il bloque au pare-feu les adresses qui attaquent."],
-  ["Base relationnelle, SQL", "Données en tables",
-    "Les données vivent en tables reliées par des identifiants ; SQL est le langage pour les lire et les modifier.",
-    "Je conçois le schéma et j'écris des requêtes SQL quand l'ORM ne suffit pas."],
-  ["ORM", "Pont entre le code et la base",
-    "Traduit des objets du code en lignes de la base et inversement.",
-    "J'utilise un ORM (Prisma) pour un accès à la base typé et sûr."],
-  ["Front-end, back-end, full-stack", "Les deux côtés d'une application",
-    "Front-end : ce qui tourne dans le navigateur. Back-end : le serveur, la base, les API. Full-stack : les deux.",
-    "Next.js me permet de faire front-end et back-end dans le même projet."],
-  ["Cache", "Garder une réponse pour la resservir",
-    "Au lieu de recalculer une page à chaque visite, on garde le résultat et on le resert, jusqu'à ce qu'une donnée change.",
-    "Les pages sont en cache et rafraîchies seulement quand le catalogue change, pour réduire la charge."],
-  ["Open source", "Code public et réutilisable",
-    "Le code source est publié sous une licence qui permet de le lire, de le modifier et de l'utiliser.",
-    "Je privilégie les briques open source (Coolify, Traefik, CrowdSec) pour ne pas dépendre d'un seul fournisseur."],
-  ["Souveraineté des données, RGPD", "Qui a la main sur les données",
-    "Le RGPD encadre les données personnelles en Europe ; un fournisseur américain reste soumis au droit américain (Cloud Act), même avec des serveurs en Europe.",
-    "J'ai rapatrié serveur et base en Allemagne et je chiffre les sauvegardes avant de les confier à un tiers."],
-  ["PKM", "Gestion des connaissances personnelles",
-    "Personal Knowledge Management : sa méthode et ses outils pour noter, relier et retrouver ce qu'on apprend (Obsidian, Notion…).",
-    "Je tiens mes notes techniques dans Obsidian, synchronisées entre mes appareils."],
+  { t: "Serveur", f: "Machine ou logiciel qui rend un service",
+    m: "Un ordinateur allumé en permanence qui répond aux demandes des clients. Le mot désigne aussi le logiciel qui répond.",
+    d: "Mon serveur est un VPS sur lequel tournent plusieurs services en conteneurs.",
+    plus: "Le modèle client-serveur : le client (navigateur) demande, le serveur répond. Une même machine peut héberger plusieurs serveurs logiciels (web, base de données, sauvegarde), chacun sur son port.",
+    concret: "Une machine Hetzner fait tourner Traefik, le site, Coolify, Duplicati et CrowdSec." },
+  { t: "VPS", f: "Serveur privé virtuel",
+    m: "Une part d'une grosse machine physique, découpée par virtualisation : son propre système et l'accès root, sans le matériel.",
+    d: "J'administre un VPS Ubuntu en ligne de commande, par SSH.",
+    plus: "À l'opposé : le serveur dédié (toute une machine pour soi), plus cher. Le VPS partage processeur et disque avec d'autres clients, avec des garanties de ressources.",
+    concret: "CAX11 : 2 cœurs ARM, 4 Go de mémoire, 40 Go de disque." },
+  { t: "IaaS, PaaS, SaaS", f: "Les trois niveaux du cloud",
+    m: "IaaS : on loue la machine. PaaS : on donne son code, la plateforme le fait tourner. SaaS : on utilise un logiciel fini.",
+    d: "Je suis passé d'un PaaS géré (Vercel) à un IaaS avec un PaaS auto-hébergé, pour maîtriser les coûts et les données.",
+    plus: "Plus on monte (IaaS → PaaS → SaaS), moins on gère soi-même, et moins on contrôle. Le choix dépend du budget, des compétences et de la dépendance qu'on accepte.",
+    concret: "IaaS : Hetzner. PaaS : Coolify (auto-hébergé), Vercel avant. SaaS : Stripe, Notion, Sentry, Resend." },
+  { t: "Auto-hébergement", f: "Self-hosting",
+    m: "Faire tourner soi-même un logiciel sur son serveur, au lieu de payer un service en ligne.",
+    d: "J'ai auto-hébergé l'outil de déploiement et l'outil de sauvegarde.",
+    plus: "Avantages : coût fixe, données chez soi, pas de quotas. Prix à payer : les mises à jour, la sécurité et les pannes sont pour soi.",
+    concret: "Coolify, Duplicati et CrowdSec sur mon VPS, à la place de Vercel." },
+  { t: "Proxy", f: "Intermédiaire côté client",
+    m: "Se place entre des utilisateurs et Internet et fait les requêtes à leur place (filtrage, cache, anonymat).",
+    d: "Un proxy agit pour le compte des clients ; un reverse proxy, pour le compte des serveurs.",
+    plus: "En entreprise, le proxy filtre les sites interdits et garde une trace des connexions ; les postes ne sortent pas directement sur Internet.",
+    concret: "Je n'en utilise pas dans cette infra : c'est un équipement typique du réseau d'une entreprise (côté SISR)." },
+  { t: "Reverse proxy", f: "Intermédiaire côté serveur (proxy inverse)",
+    m: "Reçoit les visites à la place des serveurs et les répartit : un point d'entrée, le HTTPS au même endroit, les applications cachées derrière.",
+    d: "Traefik est mon reverse proxy : un point d'entrée unique, en HTTPS, pour le site, Coolify et Duplicati.",
+    plus: "Il peut aussi répartir la charge entre plusieurs copies d'une application (load balancing), ajouter des en-têtes de sécurité et journaliser toutes les visites.",
+    concret: "Traefik dans le conteneur `coolify-proxy`, seul à écouter sur 80 et 443." },
+  { t: "DNS", f: "Annuaire d'Internet",
+    m: "Traduit un nom (tbird68.fr) en adresse IP.",
+    d: "J'ai créé un enregistrement A pour le sous-domaine de l'outil de déploiement.",
+    plus: "Types courants : A (adresse IPv4), AAAA (IPv6), CNAME (alias vers un autre nom), MX (où livrer les emails), TXT (vérifications, SPF, DKIM). Chaque réponse est gardée en cache pendant son TTL.",
+    concret: "Zone gérée chez Dynadot : A pour tbird68.fr, coolify et sauvegarde ; TXT pour Resend et Google." },
+  { t: "Nom de domaine, sous-domaine", f: "Adresse lisible",
+    m: "tbird68.fr est le domaine ; coolify.tbird68.fr est un sous-domaine, qui peut mener à un autre service.",
+    d: "Chaque service a son sous-domaine, routé par le reverse proxy.",
+    plus: "De droite à gauche : .fr (extension), tbird68 (le nom loué), coolify (libre à moi, sans rien payer de plus).",
+    concret: "tbird68.fr (boutique), coolify.tbird68.fr (déploiement), sauvegarde.tbird68.fr (Duplicati)." },
+  { t: "HTTPS, TLS, certificat", f: "Chiffrement des échanges web",
+    m: "TLS chiffre la connexion ; le certificat prouve que le serveur est bien celui du domaine. HTTPS = HTTP par-dessus TLS.",
+    d: "Tout passe en HTTPS ; l'interface d'administration n'est plus accessible en HTTP simple.",
+    plus: "Le certificat est signé par une autorité de certification que le navigateur connaît. Sans HTTPS, tout ce qui passe (mots de passe compris) peut être lu sur le réseau.",
+    concret: "Avant le 6 novembre, le mot de passe de Coolify passait en clair sur http://…:8000." },
+  { t: "Port", f: "Numéro de porte d'un service",
+    m: "Une même machine offre plusieurs services, chacun sur son numéro : 22 pour SSH, 80 pour HTTP, 443 pour HTTPS.",
+    d: "N'exposer que les ports nécessaires réduit la surface d'attaque.",
+    plus: "Un service peut écouter sur toutes les interfaces (joignable de l'extérieur, si le pare-feu laisse passer) ou seulement sur 127.0.0.1 (le serveur lui-même).",
+    concret: "L'API de CrowdSec écoute sur 127.0.0.1:8081 : invisible depuis Internet." },
+  { t: "Pare-feu", f: "Filtrage du trafic réseau",
+    m: "Laisse passer ou refuse les connexions selon des règles (port, adresse, protocole).",
+    d: "Règle par défaut : tout refuser, puis n'ouvrir que le strict nécessaire.",
+    plus: "Pare-feu réseau (devant la machine, chez l'hébergeur) et pare-feu local (iptables / nftables, dans le système) se complètent. Docker écrit ses propres règles : la chaîne DOCKER-USER permet d'y ajouter les siennes.",
+    concret: "Hetzner : 22, 80, 443. Dans le serveur : CrowdSec ajoute les adresses bannies." },
+  { t: "SSH, clé SSH", f: "Accès à distance sécurisé",
+    m: "Ouvre un terminal sur le serveur à travers une connexion chiffrée ; avec une clé, pas de mot de passe à deviner.",
+    d: "J'administre le serveur en SSH, par clé uniquement.",
+    plus: "Une paire de clés : la publique est posée sur le serveur, la privée reste sur mon PC. Le serveur pose un défi que seule la clé privée sait résoudre.",
+    concret: "`ssh root@ADRESSE`, ou le terminal intégré à Coolify." },
+  { t: "API", f: "Interface de programmation",
+    m: "Une liste de demandes qu'un logiciel accepte de la part d'un autre, avec leur format.",
+    d: "Mon site parle à Stripe, Resend et Boxtal par leurs API REST.",
+    plus: "Une API, c'est un contrat : « envoie-moi ces champs à cette adresse, je te réponds ceci ». La documentation décrit le contrat ; la clé d'API dit qui demande.",
+    concret: "« Crée un paiement de 89 € » (Stripe), « envoie cet email » (Resend), « donne-moi le prix d'un colis de 600 g pour Lyon » (Boxtal)." },
+  { t: "API REST", f: "Style d'API web le plus courant",
+    m: "Des adresses web (ressources) qu'on appelle en HTTP avec un verbe et qui répondent en JSON.",
+    d: "Les routes d'API du site suivent le style REST et répondent en JSON.",
+    plus: "GET lit, POST crée, PUT ou PATCH modifie, DELETE supprime. Le code de réponse dit le résultat : 200 réussi, 401 pas connecté, 404 introuvable, 409 conflit, 500 erreur du serveur.",
+    concret: "`POST /api/orders` crée une commande ; elle répond 409 si le prix a changé entre-temps." },
+  { t: "Clé d'API", f: "Identifiant secret d'un logiciel",
+    m: "Le mot de passe d'une application auprès d'une API ; elle se garde côté serveur, jamais dans le navigateur.",
+    d: "Les clés d'API sont en variables d'environnement, jamais dans le dépôt.",
+    plus: "Bonne pratique : une clé par usage, avec le minimum de droits, et qu'on peut révoquer seule.",
+    concret: "Resend : une clé « Full access » est nécessaire pour les listes de diffusion ; « Sending access » ne suffit qu'aux emails simples." },
+  { t: "Webhook", f: "Notification d'un service vers mon site",
+    m: "L'inverse d'un appel d'API : c'est le service qui appelle mon site quand un événement arrive.",
+    d: "Stripe et Boxtal préviennent le site par webhooks signés, que je vérifie avant tout traitement.",
+    plus: "N'importe qui peut appeler l'adresse du webhook : la signature (calculée avec un secret partagé) prouve que l'appel vient bien du service. Le service rejoue l'appel s'il n'obtient pas de réponse : le traitement doit supporter les doublons.",
+    concret: "`/api/webhooks/stripe` : paiement confirmé. `/api/webhooks/boxtal` : colis pris en charge, livré." },
+  { t: "OAuth, jeton", f: "Autorisation déléguée",
+    m: "Donner à une application un accès limité à un compte sans lui donner le mot de passe : elle reçoit un jeton, révocable.",
+    d: "La connexion avec Google et l'accès au Drive passent par OAuth, avec le droit minimal nécessaire.",
+    plus: "Le scope est l'étendue du droit demandé. Le jeton d'accès expire vite ; un jeton de rafraîchissement permet d'en obtenir un neuf sans redemander.",
+    concret: "rclone a le scope `drive.file` : il ne voit que ses propres fichiers sur le Drive." },
+  { t: "JWT", f: "Jeton signé",
+    m: "Un petit texte signé que le serveur remet après la connexion ; il le reconnaît ensuite sans redemander le mot de passe.",
+    d: "Les sessions sont des JWT dans des cookies httpOnly, invisibles pour les scripts de la page.",
+    plus: "Le JWT contient des informations lisibles (qui, jusqu'à quand) et une signature. Le serveur vérifie la signature avec sa clé secrète : impossible de le falsifier sans elle.",
+    concret: "Le jeton admin porte un numéro de version : « Déconnecter tous les appareils » l'augmente, et tous les anciens jetons sont refusés." },
+  { t: "Variable d'environnement, secret", f: "Réglage hors du code",
+    m: "Une valeur donnée au programme au démarrage : le même code tourne partout, et les secrets ne sont pas dans le dépôt.",
+    d: "Les secrets sont injectés en variables d'environnement par la plateforme de déploiement.",
+    plus: "Le même code se comporte différemment selon l'environnement (développement, production) grâce à ces valeurs. Un fichier `.env` les donne en local ; il ne doit jamais être poussé sur Git.",
+    concret: "Coolify garde 32 variables pour la production. Leçon du déménagement : les variables « sensibles » de Vercel sont arrivées vides, il a fallu recréer les clés." },
+  { t: "Conteneur ou machine virtuelle", f: "Deux façons d'isoler",
+    m: "Une machine virtuelle a son propre système complet ; un conteneur partage le noyau du serveur, donc plus léger.",
+    d: "Mes services tournent en conteneurs sur une seule VM.",
+    plus: "VM : isolation forte, démarrage en minutes, plusieurs Go. Conteneur : isolation par le noyau, démarrage en secondes, quelques centaines de Mo.",
+    concret: "Mon VPS est une VM ; à l'intérieur, chaque service est un conteneur Docker." },
+  { t: "Git, dépôt, branche, commit", f: "Gestion de versions",
+    m: "Le dépôt garde tout l'historique ; un commit est un changement enregistré ; une branche, une ligne de travail à part.",
+    d: "Chaque chantier se fait sur une branche, fusionnée après vérification.",
+    plus: "Un commit a un auteur, une date, un message et un identifiant unique. On peut toujours revenir à n'importe quel commit. `git log` montre l'historique, `git diff` les différences.",
+    concret: "Branches nommées par chantier : `coolify-https`, `secours-jeton`, `cartes-en-ligne`." },
+  { t: "Demande de fusion (pull request)", f: "Relecture avant intégration",
+    m: "Propose d'intégrer une branche dans la principale ; les tests tournent et quelqu'un relit avant d'accepter.",
+    d: "Rien n'arrive en production sans demande de fusion et tests au vert.",
+    plus: "Une pull request est un point de contrôle : on y voit le diff, les commentaires, le résultat des tests. Elle garde la trace de pourquoi un changement a été fait.",
+    concret: "Voir le geste « Fusionner une demande de fusion » plus haut." },
+  { t: "CI/CD", f: "Intégration et déploiement continus",
+    m: "CI : tester automatiquement chaque changement. CD : le mettre en ligne automatiquement s'il est bon.",
+    d: "CI sur GitHub Actions, CD par Coolify à chaque fusion sur la branche principale.",
+    plus: "Le but : des mises à jour petites et fréquentes, chacune vérifiée, plutôt que de grosses mises en production risquées.",
+    concret: "Pull request → vérifications vertes → fusion → Coolify déploie." },
+  { t: "Rollback", f: "Retour arrière",
+    m: "Remettre la version d'avant quand une mise à jour casse quelque chose.",
+    d: "En cas de problème, je reviens à la version précédente en quelques minutes.",
+    plus: "Ça marche pour le code. Pour la base, c'est plus délicat : un changement de schéma ne se défait pas toujours. D'où la règle de ne faire que des ajouts au schéma.",
+    concret: "Voir le geste « Revenir en arrière »." },
+  { t: "Sauvegarde 3-2-1", f: "Règle de base des copies de secours",
+    m: "3 copies des données, sur 2 supports différents, dont 1 hors site.",
+    d: "Base et code ont plusieurs copies chiffrées, dont une hors de GitHub ; la restauration est documentée.",
+    plus: "On ajoute souvent : une copie hors ligne (déconnectée, à l'abri d'un rançongiciel) et des restaurations testées (3-2-1-1-0).",
+    concret: "Base : Neon + sauvegarde nocturne GitHub + copie hebdomadaire Drive. Code : GitHub + PC + Drive. Photos : serveur + Duplicati sur Drive." },
+  { t: "Sauvegarde incrémentale", f: "Ne copier que ce qui change",
+    m: "La première copie est complète, les suivantes n'envoient que les différences.",
+    d: "Duplicati fait des sauvegardes incrémentales chiffrées.",
+    plus: "Complète : tout, à chaque fois. Incrémentale : les changements depuis la dernière copie. Différentielle : les changements depuis la dernière complète.",
+    concret: "Duplicati pour les photos ; la base et le code sont copiés en entier (quelques dizaines de Mo)." },
+  { t: "Chiffrement symétrique, AES-256", f: "Une seule clé pour fermer et ouvrir",
+    m: "La même phrase chiffre et déchiffre ; AES-256 est la norme actuelle.",
+    d: "Les sauvegardes sont chiffrées en AES-256 avant de quitter le serveur.",
+    plus: "Asymétrique : une clé publique ferme, une clé privée ouvre (HTTPS, SSH). Symétrique : plus simple et plus rapide, mais la phrase doit être gardée avec soin.",
+    concret: "Une seule phrase pour toutes les sauvegardes de la base et du code, rangée dans KeePass." },
+  { t: "Journaux (logs)", f: "Historique de ce qui se passe",
+    m: "Chaque service écrit ce qu'il fait : visites, erreurs, connexions.",
+    d: "J'ai activé les journaux d'accès du reverse proxy pour diagnostiquer des erreurs 503.",
+    plus: "Une ligne de journal d'accès contient l'adresse du visiteur, la date, la page, le code de réponse, la taille et la durée. C'est ce que lit CrowdSec.",
+    concret: "Voir le geste « Lire les journaux »." },
+  { t: "Supervision (monitoring)", f: "Surveiller pour être prévenu",
+    m: "Vérifier régulièrement qu'un service répond, et alerter s'il tombe.",
+    d: "Une tâche vérifie le site et prévient par email en cas de panne.",
+    plus: "Supervision de disponibilité (le site répond-il ?), de performances (en combien de temps ?), d'erreurs (Sentry). Outils classiques en entreprise : Zabbix, Nagios, Uptime Kuma.",
+    concret: "GitHub Actions ouvre le site régulièrement ; Sentry pour les erreurs ; Coolify montre l'état des conteneurs." },
+  { t: "IDS, IPS, WAF", f: "Détecter et bloquer les attaques",
+    m: "IDS : détecte et alerte. IPS : détecte et bloque. WAF : pare-feu applicatif qui examine le contenu des requêtes web.",
+    d: "CrowdSec joue le rôle d'IPS : il bloque au pare-feu les adresses qui attaquent.",
+    plus: "Un pare-feu classique regarde les ports et les adresses ; un WAF lit la requête elle-même (tentative d'injection SQL, chemin suspect).",
+    concret: "CrowdSec + règles `http-cve` (failles web connues) sur les journaux de Traefik." },
+  { t: "Base relationnelle, SQL", f: "Données en tables",
+    m: "Les données vivent en tables reliées par des identifiants ; SQL est le langage pour les lire et les modifier.",
+    d: "Je conçois le schéma et j'écris des requêtes SQL quand l'ORM ne suffit pas.",
+    plus: "Clé primaire : l'identifiant unique d'une ligne. Clé étrangère : la référence vers une ligne d'une autre table (une ligne de commande pointe vers sa commande).",
+    concret: "`Order` et `OrderItem` : une commande a plusieurs lignes, chacune vers un article." },
+  { t: "ORM", f: "Pont entre le code et la base",
+    m: "Traduit des objets du code en lignes de la base et inversement.",
+    d: "J'utilise un ORM (Prisma) pour un accès à la base typé et sûr.",
+    plus: "Il protège aussi des injections SQL : les valeurs sont toujours passées à part de la requête, jamais collées dedans.",
+    concret: "Pour le verrou du stock, on écrit le SQL directement (`FOR UPDATE`), l'ORM ne le proposant pas." },
+  { t: "Front-end, back-end, full-stack", f: "Les deux côtés d'une application",
+    m: "Front-end : ce qui tourne dans le navigateur. Back-end : le serveur, la base, les API. Full-stack : les deux.",
+    d: "Next.js me permet de faire front-end et back-end dans le même projet.",
+    plus: "Règle d'or : ne jamais faire confiance au front. Tout ce qui compte (prix, stock, paiement) est revérifié côté serveur.",
+    concret: "Le panier vit dans le navigateur, mais le serveur recalcule le total et refuse si le prix a changé." },
+  { t: "Cache", f: "Garder une réponse pour la resservir",
+    m: "Au lieu de recalculer une page à chaque visite, on garde le résultat et on le resert, jusqu'à ce qu'une donnée change.",
+    d: "Les pages sont en cache et rafraîchies seulement quand le catalogue change, pour réduire la charge.",
+    plus: "La difficulté est l'invalidation : savoir quand jeter la copie. Trop tôt, on recalcule pour rien ; trop tard, le visiteur voit un ancien prix.",
+    concret: "Changer un article rafraîchit seulement ses pages (une dizaine) et pas tout le site." },
+  { t: "Open source", f: "Code public et réutilisable",
+    m: "Le code source est publié sous une licence qui permet de le lire, de le modifier et de l'utiliser.",
+    d: "Je privilégie les briques open source (Coolify, Traefik, CrowdSec) pour ne pas dépendre d'un seul fournisseur.",
+    plus: "Licences permissives (MIT, Apache) : presque tout est permis. Licences à réciprocité (GPL) : les modifications distribuées doivent rester ouvertes.",
+    concret: "Coolify, Traefik, CrowdSec, Duplicati, PostgreSQL, Docker, Next.js : tous open source." },
+  { t: "Souveraineté des données, RGPD", f: "Qui a la main sur les données",
+    m: "Le RGPD encadre les données personnelles en Europe ; un fournisseur américain reste soumis au droit américain (Cloud Act).",
+    d: "J'ai rapatrié serveur et base en Allemagne et je chiffre les sauvegardes avant de les confier à un tiers.",
+    plus: "Le RGPD impose de savoir quelles données on garde, pourquoi, combien de temps, et de pouvoir les effacer sur demande. Le Cloud Act permet à la justice américaine de demander des données à une entreprise américaine, où qu'elles soient stockées.",
+    concret: "Européens : Hetzner, Neon à Francfort, Sentry en UE, CrowdSec. Américains : GitHub, Google, Stripe, Resend. Chantier noté pour plus tard." },
+  { t: "PKM", f: "Gestion des connaissances personnelles",
+    m: "Personal Knowledge Management : sa méthode et ses outils pour noter, relier et retrouver ce qu'on apprend.",
+    d: "Je tiens mes notes techniques dans Obsidian, synchronisées entre mes appareils.",
+    plus: "L'idée : des notes courtes, une idée par note, reliées entre elles plutôt que rangées dans des dossiers. On construit sa carte mentale en écrivant.",
+    concret: "Ce lexique suit le même principe : une fiche courte, puis un clic pour approfondir." },
 ];
-function rendre(id, liste) {
+
+const nettoie = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+function avecCode(el, texte) {
+  texte.split(/`([^`]+)`/).forEach((morceau, i) => {
+    if (i % 2) { const c = document.createElement('code'); c.textContent = morceau; el.appendChild(c); }
+    else el.append(morceau);
+  });
+  return el;
+}
+function rendre(id, liste, classe) {
   const zone = document.getElementById(id);
-  liste.forEach(([terme, famille, marche, dire]) => {
-    const f = document.createElement('article'); f.className = 'fiche';
-    const h = document.createElement('h3'); h.textContent = terme;
-    const fa = document.createElement('span'); fa.className = 'famille'; fa.textContent = famille;
-    const m = document.createElement('p'); m.className = 'marche'; m.textContent = marche;
-    const d = document.createElement('p'); d.className = 'dire'; d.textContent = dire;
-    f.append(h, fa, m, d);
-    f.dataset.texte = (terme + ' ' + famille + ' ' + marche + ' ' + dire).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  liste.forEach(e => {
+    const f = document.createElement('details'); f.className = 'fiche' + (classe ? ' ' + classe : '');
+    const s = document.createElement('summary');
+    const h = document.createElement('h3'); h.append(e.t);
+    const o = document.createElement('span'); o.className = 'ouvrir'; o.textContent = 'Aller plus loin'; h.appendChild(o);
+    const fa = document.createElement('span'); fa.className = 'famille'; fa.textContent = e.f;
+    const m = avecCode(document.createElement('p'), e.m); m.className = 'marche';
+    const d = document.createElement('p'); d.className = 'dire'; d.textContent = e.d;
+    s.append(h, fa, m, d);
+    const dep = document.createElement('div'); dep.className = 'deplie';
+    const a = document.createElement('div');
+    const ha = document.createElement('h4'); ha.textContent = 'Pour aller plus loin';
+    a.append(ha, avecCode(document.createElement('p'), e.plus));
+    const c = document.createElement('div'); c.className = 'concret';
+    const hc = document.createElement('h4'); hc.textContent = classe === 'geste' ? 'Pas à pas, chez moi' : 'Concrètement, chez moi';
+    c.appendChild(hc);
+    if (Array.isArray(e.concret)) {
+      const ol = document.createElement(classe === 'geste' ? 'ol' : 'ul');
+      if (classe !== 'geste') { ol.style.margin = '0'; ol.style.paddingLeft = '20px'; ol.style.display = 'grid'; ol.style.gap = '4px'; }
+      e.concret.forEach(x => ol.appendChild(avecCode(document.createElement('li'), x)));
+      c.appendChild(ol);
+    } else c.appendChild(avecCode(document.createElement('p'), e.concret));
+    dep.append(a, c);
+    f.append(s, dep);
+    f.dataset.texte = nettoie([e.t, e.f, e.m, e.d, e.plus, [].concat(e.concret).join(' ')].join(' '));
     zone.appendChild(f);
   });
 }
-rendre('outils', OUTILS); rendre('mots', MOTS);
+rendre('outils', OUTILS); rendre('gestes', GESTES, 'geste'); rendre('mots', MOTS);
 const filtre = document.getElementById('filtre');
 filtre.addEventListener('input', () => {
-  const q = filtre.value.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+  const q = nettoie(filtre.value).trim();
   let n = 0;
   document.querySelectorAll('.fiche').forEach(f => { const ok = !q || f.dataset.texte.includes(q); f.hidden = !ok; if (ok) n++; });
   document.querySelectorAll('section').forEach(s => { s.hidden = !s.querySelector('.fiche:not([hidden])'); });
