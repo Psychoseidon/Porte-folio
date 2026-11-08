@@ -3,7 +3,7 @@ title: "T-Bird Paris : une boutique en ligne"
 resume: "Le site e-commerce d’une boutique parisienne, en production : je l’administre sur mon propre serveur Linux (Docker, Coolify, DNS, HTTPS, sauvegardes chiffrées). Construit avec un agent IA de développement."
 date: 2026-08-13
 periode: "Depuis août 2026"
-statut: "En ligne depuis le 22 septembre 2026, mis à jour en continu"
+statut: "En ligne depuis le 22 septembre 2026, mis à jour en continu (fiche à jour au 8 novembre 2026)"
 lien: "https://tbird68.fr"
 liens:
   - titre: "Visite guidée en images"
@@ -26,8 +26,8 @@ competencesBTS:
   - "Travailler en mode projet"
   - "Mettre à disposition des utilisateurs un service informatique"
   - "Répondre aux incidents et aux demandes d’assistance et d’évolution"
-domaines: ["Développement web", "Hébergement", "Sécurité", "Sauvegarde et supervision"]
-technologies: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Boxtal", "Resend", "Linux (VPS)", "Docker", "Coolify", "GitHub Actions", "Sentry", "Git", "Claude Code"]
+domaines: ["Développement web", "Administration Linux", "Hébergement et DNS", "Sécurité", "Sauvegarde et supervision"]
+technologies: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Boxtal", "Resend", "Linux (VPS)", "Docker", "Coolify", "CrowdSec", "Duplicati", "GitHub Actions", "Sentry", "Git", "Claude Code"]
 ---
 
 ## Contexte
@@ -53,10 +53,10 @@ T-Bird Paris est une boutique de vêtements et d’accessoires biker et american
 - Catalogue produits, stocks par taille, promotions et avis clients
 - Tunnel de commande et paiement en ligne sécurisé (Stripe)
 - Livraison en point relais ou à domicile, avec étiquettes d’expédition créées automatiquement (Boxtal)
-- Comptes clients avec vérification de l’adresse email, et connexion Google
+- Comptes clients avec vérification de l’adresse email
 - Emails de confirmation et de suivi de commande
 - Une interface d’administration pensée pour des propriétaires peu à l’aise avec le numérique : gros boutons, textes lisibles, confirmation avant toute suppression
-- Hébergé sur mon propre serveur Linux (VPS) avec Docker et Coolify depuis novembre 2026 (auparavant sur Vercel), base de données PostgreSQL hébergée (Neon), historique complet sous Git
+- Première mise en ligne sur Vercel, base de données PostgreSQL hébergée (Neon), historique complet sous Git
 - Nom de domaine, référencement sur Google (Search Console) et pages légales : mentions légales, CGV, politique de confidentialité
 - Ouverture au public après un achat test réel de bout en bout : paiement, étiquette d’expédition, puis remboursement
 - Le lendemain de l’ouverture, un audit du site en ligne (sécurité, affichage sur mobile, référencement, obligations légales), puis la correction des points relevés
@@ -79,7 +79,7 @@ T-Bird Paris est une boutique de vêtements et d’accessoires biker et american
 - « Vendu en boutique » : retirer du site un article vendu au magasin, pour ne jamais le vendre deux fois
 - Annuler une commande rembourse le client automatiquement, avec un motif et un email d’excuses
 - Brouillons d’articles enregistrés pendant la saisie, publiés quand la fiche est complète
-- Un mode d’emploi de l’espace boutique pour les propriétaires, consultable dans l’admin et imprimable
+- Un mode d’emploi de l’espace boutique écrit pour les propriétaires
 
 **Visibilité**
 
@@ -125,6 +125,24 @@ T-Bird Paris est une boutique de vêtements et d’accessoires biker et american
 - Correctifs de sécurité appliqués le jour de leur publication (Next.js)
 - Moins de calcul côté serveur : pages gardées en cache et rafraîchies seulement quand un article change
 
+### En novembre 2026
+
+**Hébergement : du service clé en main à mon propre serveur**
+
+- Migration vers un serveur Linux (VPS sous Ubuntu) le jour où l’ancien hébergeur a coupé le site : Docker, Coolify pour la mise en ligne automatique, DNS et certificat HTTPS
+- Base de données PostgreSQL déplacée en Europe, à Francfort
+- Photos et vidéos gardées sur le disque du serveur, avec une copie chiffrée chaque semaine sur un stockage externe (Duplicati)
+- Pare-feu réduit aux seuls accès nécessaires, panneau d’administration du serveur passé en HTTPS, et CrowdSec pour bannir automatiquement les adresses qui attaquent
+- Une carte de l’infrastructure, service par service : ce qui est vital, ce qui est remplaçable, ce qui dépend de quoi
+
+**Pour la boutique et ses clients**
+
+- Connexion avec un compte Google, branchée et vérifiée
+- Codes promo : livraison offerte, et codes personnels à usage unique tirés au hasard
+- Un rappel de la prochaine fête commerciale, et ce qui s’est vendu ce mois-ci par catégorie
+- Une recherche en tête de l’espace boutique : taper « code » ou « colis » mène directement au bon outil
+- Le mode d’emploi déplacé dans l’espace de travail des propriétaires, pour alléger l’espace boutique
+
 ## Construire avec une IA : qui fait quoi
 
 <div class="comparaison">
@@ -154,7 +172,7 @@ Je n’ai pas écrit ce code à la main, et je ne le prétends pas. Mon travail 
 
 ## Difficultés rencontrées
 
-Six problèmes réels, repérés puis corrigés :
+Huit problèmes réels, repérés puis corrigés :
 
 **Les paiements n’étaient jamais confirmés.** Le mot de passe de pré-ouverture protégeait tout le site, y compris l’adresse que Stripe appelle pour signaler un paiement réussi. Stripe était redirigé vers la page de mot de passe : aucune commande n’était validée. Correction : une liste d’adresses accessibles sans mot de passe, réservée aux services extérieurs. C’est le même raisonnement qu’avec un pare-feu : une règle d’accès bloque aussi ce qu’on n’avait pas prévu.
 
@@ -167,6 +185,10 @@ Six problèmes réels, repérés puis corrigés :
 **La sauvegarde de la nuit sautait parfois.** GitHub ne lance pas toujours les tâches planifiées à l’heure. Correction : trois créneaux par jour (le premier qui passe fait la sauvegarde du jour), et la surveillance horaire relance la sauvegarde si la dernière date de plus de 26 heures.
 
 **Une erreur invisible, environ 500 fois par semaine.** La page d’accueil était reconstruite entièrement dans le navigateur à chaque visite. L’outil de suivi des erreurs n’en montrait rien : un filtre réglé par défaut jetait ce type d’erreur avant même de l’enregistrer. En cherchant dans les événements écartés, la cause est apparue : la version gardée en cache par l’hébergeur croyait être une autre page que l’accueil, et n’affichait pas le même logo que le navigateur. Correction : la page dit elle-même qu’elle est l’accueil. Leçon : un tableau de bord vide ne prouve pas qu’il n’y a pas d’erreur, il faut aussi savoir ce qu’il filtre.
+
+**Le site coupé du jour au lendemain.** Le 3 novembre, le site a répondu par une erreur : l’hébergeur l’avait désactivé, les limites de son offre gratuite étant dépassées. Correction : un serveur à prix fixe que j’administre, mis en place et en service le soir même. Leçon : une alerte de quota n’est pas un détail, et un hébergement doit avoir un plan de repli.
+
+**Des clés arrivées vides après la migration.** Certaines variables marquées « sensibles » chez l’ancien hébergeur n’ont pas pu être recopiées : le transporteur et les emails ne fonctionnaient plus. Plus tard, une adresse interne du conteneur cassait aussi la vérification d’email. Correction : recréer les clés et corriger les redirections. Leçon : après une migration, chaque service se teste pour de vrai, même s’il semble configuré.
 
 ## Ce que j’en retiens
 
