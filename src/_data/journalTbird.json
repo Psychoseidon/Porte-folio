@@ -32,6 +32,6 @@
     { "date": "18 septembre", "titre": "Suivi des erreurs en production", "detail": "Mise en place de Sentry avant l’ouverture." }
   ]},
   { "mois": "Août 2026", "entrees": [
-    { "date": "13 août", "titre": "Début du projet", "detail": "Premiers échanges avec la boutique, puis construction du catalogue, du tunnel de commande et de l’espace boutique." }
+    { "date": "13 août", "titre": "Début du projet", "detail": "Début de la construction : catalogue, tunnel de commande et espace boutique." }
   ]}
 ]
