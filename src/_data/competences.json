@@ -2,27 +2,60 @@
   "techniques": [
     {
       "titre": "Systèmes",
-      "points": ["Windows 10 / 11 : installation, réglages, réinstallation", "Comptes utilisateurs et permissions", "Bureau à distance (RDP)"]
+      "points": [
+        "Windows 10 / 11 : administration, diagnostic, réinstallation",
+        "Windows Server et Active Directory (labo)",
+        "Linux Debian / Ubuntu : apt, ligne de commande"
+      ]
+    },
+    {
+      "titre": "Déploiement",
+      "points": [
+        "PXE et WAPT : déploiement de postes, paquets",
+        "Réglages BIOS / UEFI et Secure Boot"
+      ]
     },
     {
       "titre": "Réseaux",
-      "points": ["TCP/IP, DHCP, DNS, adressage local", "Box et routeur : redirection de ports, pare-feu", "Diagnostic de connectivité et de latence"]
+      "points": [
+        "TCP/IP, DHCP, DNS",
+        "Pare-feu pfSense (labo), redirection de ports",
+        "Diagnostic de connectivité"
+      ]
     },
     {
-      "titre": "Matériel",
-      "points": ["Assemblage et upgrade de PC", "Entretien : nettoyage, pâte thermique, composants", "Diagnostic de pannes courantes"]
+      "titre": "Serveurs",
+      "points": [
+        "Serveur Linux (VPS), Docker, Coolify",
+        "PostgreSQL, HTTPS",
+        "Sauvegardes chiffrées"
+      ]
+    },
+    {
+      "titre": "Support",
+      "points": [
+        "GLPI (tickets), iTop (CMDB, interventions)",
+        "Prise en main à distance : TeamViewer, RDP"
+      ]
+    },
+    {
+      "titre": "Sécurité",
+      "points": [
+        "BitLocker, KeePassXC",
+        "Durcissement de poste, RGPD"
+      ]
     },
     {
       "titre": "Scripting",
-      "points": ["Scripts simples en Bash, PowerShell et Python", "Automatisation de tâches répétitives", "Lecture et adaptation de scripts existants"]
+      "points": [
+        "Bash, PowerShell, Python : automatisation de tâches"
+      ]
     },
     {
-      "titre": "Conteneurs",
-      "points": ["Docker : déploiement d’applications en local", "Gestion d’images locales"]
-    },
-    {
-      "titre": "Outils et développement",
-      "points": ["Microsoft 365", "Développement web avec un agent IA (Claude Code)", "Git"]
+      "titre": "Matériel",
+      "points": [
+        "Assemblage de PC, diagnostic de pannes, remplacement de composants"
+      ]
     }
   ],
   "humaines": [
@@ -40,15 +73,44 @@
     }
   ],
   "langues": [
-    { "langue": "Français", "niveau": "langue maternelle" },
-    { "langue": "Anglais", "niveau": "B2" },
-    { "langue": "Espagnol", "niveau": "B1" }
+    {
+      "langue": "Français",
+      "niveau": "langue maternelle"
+    },
+    {
+      "langue": "Anglais",
+      "niveau": "B2"
+    },
+    {
+      "langue": "Espagnol",
+      "niveau": "B1"
+    }
   ],
   "interets": [
-    { "titre": "Jeu vidéo", "texte": "Là où tout a commencé : faire tourner les jeux, monter mes PC, héberger un serveur pour jouer entre amis.", "couleur": "ciel" },
-    { "titre": "Mode", "texte": "", "couleur": "rose" },
-    { "titre": "Longboard", "texte": "", "couleur": "menthe" },
-    { "titre": "Judo", "texte": "Ceinture noire, 1er dan.", "couleur": "fluo" },
-    { "titre": "Ski et snowboard", "texte": "", "couleur": "ciel" }
+    {
+      "titre": "Jeu vidéo",
+      "texte": "Là où tout a commencé : faire tourner les jeux, monter mes PC, héberger un serveur pour jouer entre amis.",
+      "couleur": "ciel"
+    },
+    {
+      "titre": "Mode",
+      "texte": "",
+      "couleur": "rose"
+    },
+    {
+      "titre": "Longboard",
+      "texte": "",
+      "couleur": "menthe"
+    },
+    {
+      "titre": "Judo",
+      "texte": "Ceinture noire, 1er dan.",
+      "couleur": "fluo"
+    },
+    {
+      "titre": "Ski et snowboard",
+      "texte": "",
+      "couleur": "ciel"
+    }
   ]
 }

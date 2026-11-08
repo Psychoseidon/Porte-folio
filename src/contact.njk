@@ -6,8 +6,8 @@ permalink: /contact/
 <header class="bandeau">
   <div class="conteneur">
     <p class="surtitre">Contact</p>
-    <h1>Échangeons</h1>
-    <p class="chapeau">Une question sur une réalisation, un conseil, une idée de projet : écris-moi.</p>
+    <h1>Me contacter</h1>
+    <p class="chapeau">Vous cherchez un alternant en systèmes et réseaux, ou vous avez besoin d’un site pour votre activité : écrivez-moi.</p>
   </div>
 </header>
 
@@ -33,6 +33,12 @@ permalink: /contact/
     <div>
       <dt>GitHub</dt>
       <dd><a href="{{ site.github }}" rel="noopener">Voir mes dépôts</a>{% if site.depot %} · <a href="{{ site.depot }}" rel="noopener">le code de ce site</a>{% endif %}</dd>
+    </div>
+    {%- endif %}
+    {%- if site.cv %}
+    <div>
+      <dt>CV</dt>
+      <dd><a href="{{ site.cv }}">Télécharger mon CV (PDF)</a></dd>
     </div>
     {%- endif %}
     <div>

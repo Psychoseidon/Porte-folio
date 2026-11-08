@@ -1,9 +1,9 @@
 ---
 title: "T-Bird Paris : une boutique en ligne"
-resume: "Le site e-commerce d’une boutique parisienne, construit avec un agent IA de développement : catalogue, paiement, livraison, administration — et son exploitation au quotidien."
+resume: "Le site e-commerce d’une boutique parisienne, en production : je l’administre sur mon propre serveur Linux (Docker, Coolify, DNS, HTTPS, sauvegardes chiffrées). Construit avec un agent IA de développement."
 date: 2026-08-13
 periode: "Depuis août 2026"
-statut: "En ligne depuis le 22 septembre 2026, mis à jour en continu (fiche à jour au 14 octobre 2026)"
+statut: "En ligne depuis le 22 septembre 2026, mis à jour en continu"
 lien: "https://tbird68.fr"
 liens:
   - titre: "Visite guidée en images"
@@ -27,7 +27,7 @@ competencesBTS:
   - "Mettre à disposition des utilisateurs un service informatique"
   - "Répondre aux incidents et aux demandes d’assistance et d’évolution"
 domaines: ["Développement web", "Hébergement", "Sécurité", "Sauvegarde et supervision"]
-technologies: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Boxtal", "Resend", "Vercel", "GitHub Actions", "Sentry", "Git", "Claude Code"]
+technologies: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Boxtal", "Resend", "Linux (VPS)", "Docker", "Coolify", "GitHub Actions", "Sentry", "Git", "Claude Code"]
 ---
 
 ## Contexte
@@ -56,7 +56,7 @@ T-Bird Paris est une boutique de vêtements et d’accessoires biker et american
 - Comptes clients avec vérification de l’adresse email, et connexion Google
 - Emails de confirmation et de suivi de commande
 - Une interface d’administration pensée pour des propriétaires peu à l’aise avec le numérique : gros boutons, textes lisibles, confirmation avant toute suppression
-- Déploiement sur Vercel, base de données PostgreSQL hébergée (Neon), historique complet sous Git
+- Hébergé sur mon propre serveur Linux (VPS) avec Docker et Coolify depuis novembre 2026 (auparavant sur Vercel), base de données PostgreSQL hébergée (Neon), historique complet sous Git
 - Nom de domaine, référencement sur Google (Search Console) et pages légales : mentions légales, CGV, politique de confidentialité
 - Ouverture au public après un achat test réel de bout en bout : paiement, étiquette d’expédition, puis remboursement
 - Le lendemain de l’ouverture, un audit du site en ligne (sécurité, affichage sur mobile, référencement, obligations légales), puis la correction des points relevés

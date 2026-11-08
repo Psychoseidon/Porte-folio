@@ -2,10 +2,7 @@
   ["/realisations/", "Réalisations"],
   ["/parcours/", "Parcours"],
   ["/competences/", "Compétences"],
-  ["/objectifs/", "Objectifs"],
   ["/veille/", "Veille"],
-  ["/revisions/", "Révisions"],
-  ["/journal/", "Journal"],
   ["/contact/", "Contact"]
 ] -%}
 <!doctype html>
@@ -44,7 +41,7 @@
   <footer class="pied">
     <div class="conteneur pied-ligne">
       <p>{{ site.nom }}. {{ site.titre }}.</p>
-      <p><a href="mailto:{{ site.email }}">{{ site.email }}</a>{% if site.depot %}<span class="pied-sep"></span><a href="{{ site.depot }}" rel="noopener">Code source du site</a>{% endif %}</p>
+      <p><a href="mailto:{{ site.email }}">{{ site.email }}</a><span class="pied-sep"></span><a href="/revisions/">Révisions</a><span class="pied-sep"></span><a href="/journal/">Journal</a><span class="pied-sep"></span><a href="/objectifs/">Objectifs</a>{% if site.depot %}<span class="pied-sep"></span><a href="{{ site.depot }}" rel="noopener">Code source du site</a>{% endif %}</p>
     </div>
   </footer>
 

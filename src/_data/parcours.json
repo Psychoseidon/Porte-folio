@@ -1,14 +1,48 @@
 {
   "formation": [
-    { "periode": "2026 – 2028", "titre": "BTS SIO — option SISR", "lieu": "UTEC de Melun (77)", "detail": "Services informatiques aux organisations, systèmes et réseaux. En alternance." },
-    { "periode": "2020", "titre": "Master 2 MEEF — Conseiller principal d’éducation", "lieu": "INSPE de Créteil (94)", "detail": "Mention Assez Bien." },
-    { "periode": "2017", "titre": "Licence de Psychologie", "lieu": "Université Paris 13 Nord (93)", "detail": "" },
-    { "periode": "2014", "titre": "Baccalauréat Littéraire", "lieu": "Lycée Branly, Nogent-sur-Marne (94)", "detail": "" }
+    {
+      "periode": "2026 – 2028",
+      "titre": "BTS SIO — option SISR",
+      "lieu": "UTEC de Melun (77)",
+      "detail": "Services informatiques aux organisations, systèmes et réseaux. Recherche d’alternance en cours."
+    },
+    {
+      "periode": "2020",
+      "titre": "Master 2 MEEF — Conseiller principal d’éducation",
+      "lieu": "INSPE de Créteil (94)",
+      "detail": "Mention Assez Bien."
+    },
+    {
+      "periode": "2017",
+      "titre": "Licence de Psychologie",
+      "lieu": "Université Paris 13 Nord (93)",
+      "detail": ""
+    },
+    {
+      "periode": "2014",
+      "titre": "Baccalauréat Littéraire",
+      "lieu": "Lycée Branly, Nogent-sur-Marne (94)",
+      "detail": ""
+    }
   ],
   "experience": [
-    { "periode": "Rentrée 2026", "titre": "Alternance en informatique", "lieu": "En parallèle du BTS SIO option SISR", "detail": "Entreprise et missions à préciser." },
-    { "periode": "Depuis 2025", "titre": "Enseignant de français langue étrangère, indépendant", "lieu": "COZ’FLE, auto-entrepreneur", "detail": "Facturation, suivi des clients, organisation des sessions." },
-    { "periode": "Depuis 2024", "titre": "Enseignant de français langue étrangère", "lieu": "ISEP Paris / Institut Catholique de Paris", "detail": "Accompagnement des étudiants sur les outils numériques et les plateformes d’enseignement en ligne." },
-    { "periode": "Depuis 2020", "titre": "Informatique en autodidacte", "lieu": "Projets personnels et pour des proches", "detail": "Montage de PC, serveur de jeu, scripts, conteneurs, site web." }
+    {
+      "periode": "Octobre – novembre 2026",
+      "titre": "Alternant technicien informatique",
+      "lieu": "DMSI, Communauté d’agglomération Melun Val de Seine",
+      "detail": "Préparation et déploiement de postes Windows 11 par le réseau (PXE, WAPT). Installation d’un poste de supervision sous Ubuntu. Suivi des tickets (GLPI) et traçabilité des interventions dans la CMDB (iTop)."
+    },
+    {
+      "periode": "Depuis 2020",
+      "titre": "Systèmes, réseau et web : projets personnels",
+      "lieu": "Site e-commerce en production, labo virtualisé, serveur de jeu",
+      "detail": "Administration d’un site marchand sur serveur Linux (Docker, Coolify, DNS, HTTPS, sauvegardes chiffrées), avec l’aide d’outils d’IA. Labo pfSense, Windows Server, Active Directory, Debian."
+    },
+    {
+      "periode": "2024 – 2026",
+      "titre": "Enseignant de français langue étrangère",
+      "lieu": "ISEP Paris / Institut Catholique de Paris, puis auto-entrepreneur (COZ’FLE)",
+      "detail": "Accompagnement des apprenants aux outils numériques. Publics variés, situations complexes, gestion administrative autonome."
+    }
   ]
 }

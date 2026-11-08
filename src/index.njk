@@ -8,21 +8,22 @@ layout: base.njk
     <div class="accueil-texte">
       <h1 class="accueil-nom">{{ site.nom | replace(" ", "<br>") | safe }}</h1>
       <p class="accueil-titre">{{ site.titre }}.</p>
-      <p class="accueil-intro">Je suis venu à l’informatique par le jeu vidéo, après un premier parcours dans l’éducation. Ici, mes réalisations, ce que j’apprends et ce que je vise.</p>
+      <p class="accueil-intro">Technicien support et systèmes en formation à l’UTEC de Melun, après un premier métier dans l’enseignement. Je cherche une équipe où toucher au support, aux systèmes et au réseau.</p>
       <div class="actions">
-        <a class="bouton" href="/realisations/">Voir mes réalisations</a>
-        <a class="bouton bouton-secondaire" href="/contact/">Me contacter</a>
+        <a class="bouton" href="/contact/">Me contacter</a>
+        <a class="bouton bouton-secondaire" href="/realisations/tbird-paris/">Voir mon projet principal</a>
       </div>
     </div>
 
-    {#- La planche de stickers : la photo détourée et ce qui m'occupe. #}
-    <div class="planche" aria-label="Photo et centres d’intérêt">
-      <img class="planche-photo" src="/assets/img/photo.png" alt="Photo de {{ site.nom }}" width="112" height="112">
-      <ul class="planche-stickers">
-        <li class="sticker sticker-bic">Systèmes et réseaux</li>
-        {%- for i in competences.interets %}<li class="sticker sticker-{{ i.couleur }}">{{ i.titre }}</li>{% endfor %}
-      </ul>
-      <p class="note note-planche" aria-hidden="true">pas de fond noir ni de code vert qui défile ici. c’était la version 1</p>
+    <div class="profil">
+      <img class="profil-photo" src="/assets/img/photo.jpg" alt="Photo de {{ site.nom }}" width="494" height="622">
+      <dl class="profil-faits">
+        <div><dt>Recherche</dt><dd>Alternance, 1 semaine sur 2</dd></div>
+        <div><dt>Disponibilité</dt><dd>Immédiate</dd></div>
+        <div><dt>Secteur</dt><dd>Melun, Sénart, Évry, ligne du RER D</dd></div>
+        <div><dt>École</dt><dd>{{ site.ecole }}</dd></div>
+        <div><dt>Mobilité</dt><dd>{{ site.permis }}</dd></div>
+      </dl>
     </div>
   </div>
 </section>
@@ -30,7 +31,7 @@ layout: base.njk
 <section class="section">
   <div class="conteneur">
     <div class="titre-ligne">
-      <h2>Ce que j’ai construit</h2>
+      <h2>Mon projet principal</h2>
       <a class="lien-discret" href="/realisations/">Toutes les réalisations</a>
     </div>
 
@@ -64,7 +65,6 @@ layout: base.njk
       </li>
       {%- endif %}{% endfor %}
     </ul>
-    <p class="note note-realisations" aria-hidden="true">chaque fiche dit ce qui vient de moi, et ce qui vient d’un guide ou d’une IA</p>
   </div>
 </section>
 
@@ -72,11 +72,11 @@ layout: base.njk
   <div class="conteneur deux-colonnes deux-colonnes-egales">
     <div>
       <div class="titre-ligne">
-        <h2>D’où je viens</h2>
+        <h2>Expérience</h2>
         <a class="lien-discret" href="/parcours/">Tout le parcours</a>
       </div>
       <ol class="frise">
-        {%- for e in parcours.formation.slice(0, 3) %}
+        {%- for e in parcours.experience %}
         <li>
           <span class="frise-periode">{{ e.periode }}</span>
           <h3>{{ e.titre }}</h3>
@@ -87,46 +87,34 @@ layout: base.njk
     </div>
     <div>
       <div class="titre-ligne">
-        <h2>Où je vais</h2>
-        <a class="lien-discret" href="/objectifs/">Ma feuille de route</a>
+        <h2>Compétences</h2>
+        <a class="lien-discret" href="/competences/">Le détail</a>
       </div>
-      <ul class="objectifs objectifs-compacts">
-        {%- for etape in objectifs.etapes %}
-          {%- for o in etape.objectifs %}
-            {%- if o.statut == "en-cours" or o.statut == "prevu" %}
-            <li class="objectif objectif-{{ o.statut }}">
-              <span class="pastille-statut">{{ objectifs.legende[o.statut] }}</span>
-              <h3>{{ o.titre }}</h3>
-            </li>
-            {%- endif %}
-          {%- endfor %}
+      <ul class="accueil-competences">
+        {%- for t in competences.techniques.slice(0, 5) %}
+        <li><h3>{{ t.titre }}</h3><p>{{ t.points | join(" · ") }}</p></li>
         {%- endfor %}
       </ul>
-      {%- if derniere %}
-      <p class="derniere-note">Dernière note du journal : <a href="{{ derniere.url }}">{{ derniere.data.title }}</a>, le {{ derniere.date | dateLongue }}.</p>
-      {%- endif %}
     </div>
   </div>
 </section>
 
 <section class="section">
-  <div class="conteneur a-cote">
-    <h2>À côté de l’informatique</h2>
-    <ul class="a-cote-liste">
-      {%- for i in competences.interets %}
-      <li>
-        <span class="sticker sticker-{{ i.couleur }}">{{ i.titre }}</span>
-        {%- if i.texte %}<p>{{ i.texte }}</p>{% endif %}
-      </li>
-      {%- endfor %}
-    </ul>
-    <p class="note note-a-cote" aria-hidden="true">touche-à-tout, oui. c’est un peu le sujet</p>
+  <div class="conteneur creation-site">
+    <h2>Besoin d’un site pour votre activité ?</h2>
+    <p>Je crée aussi des sites pour les commerces et les indépendants : conception avec un agent IA de développement, mise en ligne sur un serveur que j’administre, puis suivi dans le temps. Vous échangez avec une seule personne, qui vous explique les choses simplement.</p>
+    <p>Mon premier client, <a href="/realisations/tbird-paris/">la boutique parisienne T-Bird</a>, vend en ligne depuis septembre 2026 : catalogue, paiement, livraison, et une administration pensée pour ses propriétaires.</p>
+    <div class="actions">
+      <a class="bouton" href="/contact/">Parler de votre projet</a>
+      <a class="bouton bouton-secondaire" href="https://tbird68.fr" rel="noopener">Voir le site en ligne</a>
+    </div>
   </div>
 </section>
 
 <section class="section contact-bloc">
   <div class="conteneur">
-    <h2>Une question sur un projet, ou envie d’échanger ?</h2>
+    <h2>Vous cherchez un alternant en systèmes et réseaux ?</h2>
     <p><a class="contact-email" href="mailto:{{ site.email }}">{{ site.email }}</a></p>
+    <p><a href="{{ site.linkedin }}" rel="noopener">Mon profil LinkedIn</a></p>
   </div>
 </section>

@@ -443,3 +443,16 @@ strong { font-weight: 680; }
 .pied p { margin: 0; }
 .pied a { color: var(--graphite-doux); }
 .pied-sep::before { content: "·"; margin-inline: 0.5rem; }
+
+/* Accueil : la fiche de présentation */
+.profil { display: grid; gap: 1.25rem; justify-items: center; }
+.profil-photo { width: min(15rem, 70%); height: auto; border-radius: 0.75rem; display: block; }
+.profil-faits { margin: 0; width: 100%; max-width: 26rem; }
+.profil-faits div { display: grid; grid-template-columns: 7.5rem 1fr; gap: 0.75rem; padding: 0.55rem 0; border-top: 1px solid rgba(30, 33, 39, 0.14); }
+.profil-faits dt { color: var(--graphite-doux); }
+.profil-faits dd { margin: 0; font-weight: 600; }
+.accueil-competences { list-style: none; margin: 0; padding: 0; }
+.accueil-competences li { padding: 0.7rem 0; border-top: 1px solid rgba(30, 33, 39, 0.14); }
+.accueil-competences h3 { margin: 0 0 0.2rem; font-size: 1.05rem; }
+.accueil-competences p { margin: 0; color: var(--graphite-doux); }
+.creation-site { max-width: 44rem; }
