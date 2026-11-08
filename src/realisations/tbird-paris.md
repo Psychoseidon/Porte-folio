@@ -8,6 +8,8 @@ lien: "https://tbird68.fr"
 liens:
   - titre: "Visite guidée en images"
     url: "/realisations/tbird-paris/visite/"
+  - titre: "Journal de travail"
+    url: "/realisations/tbird-paris/journal/"
   - titre: "Le site"
     url: "https://tbird68.fr"
   - titre: "La boutique (photos et vidéo)"
@@ -45,6 +47,8 @@ T-Bird Paris est une boutique de vêtements et d’accessoires biker et american
 </div>
 
 <p><a class="bouton" href="/realisations/tbird-paris/visite/">Voir la visite guidée : le site et l’espace boutique en images</a></p>
+
+<p><a class="bouton bouton-secondaire" href="/realisations/tbird-paris/journal/">Lire le journal de travail, date par date</a></p>
 
 ## Ce que j’ai fait
 

@@ -456,3 +456,5 @@ strong { font-weight: 680; }
 .accueil-competences h3 { margin: 0 0 0.2rem; font-size: 1.05rem; }
 .accueil-competences p { margin: 0; color: var(--graphite-doux); }
 .creation-site { max-width: 44rem; }
+
+.journal-mois { margin-bottom: 2.5rem; }

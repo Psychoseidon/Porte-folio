@@ -1,0 +1,30 @@
+---
+layout: base.njk
+title: "T-Bird Paris : journal de travail"
+resume: "Ce qui a été fait sur le site T-Bird Paris, date par date, de l’ouverture à l’administration du serveur."
+permalink: /realisations/tbird-paris/journal/
+---
+<header class="bandeau">
+  <div class="conteneur">
+    <p class="surtitre"><a href="/realisations/tbird-paris/">T-Bird Paris</a></p>
+    <h1>Journal de travail</h1>
+    <p class="chapeau">Les principales étapes du site <a href="https://tbird68.fr" rel="noopener">tbird68.fr</a>, de la plus récente à la plus ancienne. Le code est écrit avec un agent IA de développement ; je décide, je teste et je fais corriger.</p>
+  </div>
+</header>
+
+<div class="conteneur section">
+  {%- for bloc in journalTbird %}
+  <section class="journal-mois">
+    <h2>{{ bloc.mois }}</h2>
+    <ol class="frise">
+      {%- for e in bloc.entrees %}
+      <li>
+        <span class="frise-periode">{{ e.date }}</span>
+        <h3>{{ e.titre }}</h3>
+        <p>{{ e.detail }}</p>
+      </li>
+      {%- endfor %}
+    </ol>
+  </section>
+  {%- endfor %}
+</div>

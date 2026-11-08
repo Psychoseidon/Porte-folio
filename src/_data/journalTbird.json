@@ -1,0 +1,37 @@
+[
+  { "mois": "Novembre 2026", "entrees": [
+    { "date": "7 novembre", "titre": "Codes promo et recherche dans l’espace boutique", "detail": "Codes « livraison offerte » et codes personnels à usage unique. Une recherche en tête de l’espace boutique pour trouver un outil en tapant un mot de tous les jours. Rappel de la prochaine fête commerciale, ventes du mois par catégorie." },
+    { "date": "6 novembre", "titre": "Sécuriser le serveur", "detail": "Panneau d’administration du serveur passé en HTTPS, accès réduits au strict nécessaire, CrowdSec pour bannir les adresses qui attaquent. Copie de secours chiffrée sur un stockage externe. Carte de l’infrastructure, service par service." },
+    { "date": "5 novembre", "titre": "Finir la migration", "detail": "Vérification d’email et connexion Google réparées : dans le conteneur, le site ne connaissait plus sa propre adresse. Connexion Google branchée pour de bon. Le mode d’emploi rejoint l’espace de travail des propriétaires." },
+    { "date": "4 novembre", "titre": "Base de données et photos rapatriées", "detail": "Base PostgreSQL déplacée à Francfort. Photos et vidéos sur le disque du serveur. Clés du transporteur et des emails recréées : elles étaient arrivées vides, et chaque service a été retesté." },
+    { "date": "3 novembre", "titre": "L’hébergeur coupe le site, migration le soir même", "detail": "Limites de l’offre gratuite dépassées, site désactivé. Serveur Linux (VPS sous Ubuntu) mis en place avec Docker et Coolify, DNS et certificat HTTPS basculés, notifications de paiement redirigées." }
+  ]},
+  { "mois": "Octobre 2026", "entrees": [
+    { "date": "31 octobre", "titre": "Audit du code et traitement de texte", "detail": "Relecture complète du code et ordre des corrections. Traitement de texte dans l’éditeur de pages (titres, gras, couleurs), zoom sur les photos, images animées converties en vidéo." },
+    { "date": "30 octobre", "titre": "Ne plus perdre son travail", "detail": "Les modifications non enregistrées d’une page sont gardées dans le navigateur et proposées au retour. Bandeau défilant corrigé : ses lettres se mélangeaient sur téléphone." },
+    { "date": "29 octobre", "titre": "Vidéos et mise en page article", "detail": "Conversion des vidéos dans le navigateur avant l’envoi (une vidéo de téléphone ne jouait pas sur la plupart des ordinateurs). Mise en page article, blocs à glisser-déposer. Animation d’arrivée rendue fluide après mesure image par image." },
+    { "date": "27 octobre", "titre": "Comprendre le parcours des visiteurs", "detail": "Compteur maison sans cookie : visites, panier, paiement, provenance. Des phrases simples pour les propriétaires plutôt qu’un tableau de bord." },
+    { "date": "23 octobre", "titre": "Un seul format de photo", "detail": "Photos d’articles en 3:4 partout, listes sur deux colonnes sur téléphone." },
+    { "date": "22 octobre", "titre": "Ajouter un article, une question à la fois", "detail": "Parcours guidé pour les propriétaires, catégorie et marque devinées d’après le nom, toujours corrigeables. Fiche produit allégée sur téléphone." },
+    { "date": "15 octobre", "titre": "Couper les sessions à distance", "detail": "Changer le mot de passe de l’espace boutique déconnecte tous les autres appareils." },
+    { "date": "14 octobre", "titre": "Simplifier l’espace boutique", "detail": "Relevé complet, puis accueil « Aujourd’hui » conçu pour le téléphone et réglages rangés une partie à la fois. Réglages sensibles mis à part." },
+    { "date": "12 octobre", "titre": "Une erreur invisible, 500 fois par semaine", "detail": "L’accueil était reconstruit à chaque visite, et un filtre de l’outil de suivi cachait l’erreur. Cause trouvée dans les événements écartés, puis corrigée." },
+    { "date": "10 octobre", "titre": "Vitrines, Journal et annonce d’arrivée", "detail": "Pages façon magazine composées par les propriétaires, articles signés, annonce en grand pour les arrivages. Correctifs de sécurité de Next.js appliqués le jour même." },
+    { "date": "8 octobre", "titre": "Faire connaître la boutique", "detail": "Gestes à cocher chaque semaine, suggestions tirées du site, carrousel des coups de cœur." },
+    { "date": "7 octobre", "titre": "Avis clients", "detail": "Un seul email une semaine après la livraison, avis possible sans compte." },
+    { "date": "6 octobre", "titre": "Livraison en Europe", "detail": "Neuf pays en plus de la France, au prix réel du transporteur, après la demande d’un client belge. Appels inutiles au serveur supprimés pour les visiteurs anonymes." },
+    { "date": "3 octobre", "titre": "Échanges par la poste et statistiques", "detail": "La nouvelle taille est mise de côté puis envoyée au retour de l’article. Compteur de consultations par article." },
+    { "date": "2 octobre", "titre": "Retours et avoirs", "detail": "Le client annonce son retour en ligne, la boutique l’enregistre en un bouton : remboursement, remise en stock et email partent seuls. Pages gardées en cache pour réduire le calcul." }
+  ]},
+  { "mois": "Septembre 2026", "entrees": [
+    { "date": "28 septembre", "titre": "Google Shopping", "detail": "Flux Merchant Center, une ligne par couleur et par taille." },
+    { "date": "27 septembre", "titre": "Sauvegardes et surveillance", "detail": "Sauvegarde chiffrée de la base, surveillance du site, mises à jour proposées chaque mois. Apple Pay et Google Pay. « Vendu en boutique » pour ne jamais vendre deux fois le même article." },
+    { "date": "25 septembre", "titre": "Promotions", "detail": "Opérations programmées, codes promo, alertes par email avec double accord. Polices hébergées par le site, descriptions d’articles réécrites." },
+    { "date": "23 septembre", "titre": "Suivi des colis et audit", "detail": "La commande passe seule en « Expédiée ». Audit du site en ligne le lendemain de l’ouverture, puis corrections." },
+    { "date": "22 septembre", "titre": "Ouverture au public", "detail": "Achat test réel de bout en bout : paiement, étiquette d’expédition, remboursement." },
+    { "date": "18 septembre", "titre": "Suivi des erreurs en production", "detail": "Mise en place de Sentry avant l’ouverture." }
+  ]},
+  { "mois": "Août 2026", "entrees": [
+    { "date": "13 août", "titre": "Début du projet", "detail": "Premiers échanges avec la boutique, puis construction du catalogue, du tunnel de commande et de l’espace boutique." }
+  ]}
+]
