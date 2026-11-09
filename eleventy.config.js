@@ -79,6 +79,17 @@ export default function (eleventyConfig) {
     String(texte).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9]+/g, "-")
   );
 
+  // Tous les liens s’ouvrent dans un nouvel onglet (sauf les ancres, mails et téléphones).
+  eleventyConfig.addTransform("liens-nouvel-onglet", function (contenu, chemin) {
+    if (!chemin || !chemin.endsWith(".html")) return contenu;
+    return contenu.replace(/<a( [^>]*)?>/g, (balise, attributs = "") => {
+      const href = attributs.match(/href="([^"]*)"/);
+      if (!href || href[1].startsWith("#") || /^(mailto|tel):/.test(href[1]) || /target=/.test(attributs)) return balise;
+      const rel = /rel=/.test(attributs) ? "" : ' rel="noopener"';
+      return "<a" + attributs + ' target="_blank"' + rel + ">";
+    });
+  });
+
   return {
     dir: { input: "src", output: "_site" },
     markdownTemplateEngine: "njk",
