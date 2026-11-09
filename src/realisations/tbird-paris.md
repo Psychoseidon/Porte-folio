@@ -36,6 +36,8 @@ technologies: ["Next.js", "TypeScript", "PostgreSQL", "Stripe", "Boxtal", "Resen
 
 T-Bird Paris est une boutique de vêtements et d’accessoires biker et americana, dans le 6ᵉ arrondissement. Elle n’avait pas de site. J’ai construit sa boutique en ligne avec **un agent IA de développement (Claude Code)**. Après quelques semaines de pré-ouverture protégée par un mot de passe, le site est ouvert au public depuis le 22 septembre 2026, à l’adresse [tbird68.fr](https://tbird68.fr).
 
+Je me suis lancé dans ce site presque par hasard : on m’a demandé un site, sans que le besoin soit précis, après que j’ai dit vouloir faire de l’informatique. Je ne savais pas construire un site au départ. Je l’ai appris sur le tas, pour rendre service, et pour éviter que la boutique reste enfermée dans une plateforme comme Shopify : elle garde la maîtrise de son site, de ses données et de ce qu’elle peut en faire.
+
 <div class="captures captures-ordi">
   <figure><img src="/assets/img/tbird/accueil-ordi.jpg" alt="Page d’accueil de T-Bird Paris sur ordinateur" width="1440" height="900" loading="lazy"><figcaption>Accueil, sur ordinateur</figcaption></figure>
   <figure><img src="/assets/img/tbird/produit-ordi.jpg" alt="Fiche d’un t-shirt sur ordinateur : photos, prix, tailles et boutons d’achat" width="1440" height="900" loading="lazy"><figcaption>Fiche produit, sur ordinateur</figcaption></figure>
