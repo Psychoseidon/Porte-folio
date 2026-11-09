@@ -30,7 +30,7 @@
       "objectifs": [
         { "titre": "Une licence", "statut": "prevu", "note": "Parcours à choisir." },
         { "titre": "Un master", "statut": "idee", "note": "Peut-être, selon la suite." },
-        { "titre": "Héberger ce site sur mon propre NAS ou serveur", "statut": "idee", "note": "" }
+        { "titre": "Mettre en place un serveur d’hébergement 24/7 chez moi pour mes sites", "statut": "prevu", "note": "Un serveur allumé en permanence, à la maison, pour mes sites." }
       ]
     }
   ]

@@ -21,11 +21,9 @@ Les ordinateurs de la maison vieillissent, et personne d’autre que moi ne s’
 - Choisir les machines à acheter selon l’usage réel, pas selon la fiche technique
 - Optimiser les machines existantes : démarrage, mises à jour, espace disque
 - Monter et upgrader des postes (mémoire, stockage)
+- Installer un système depuis une image ISO, et flasher le BIOS d’une carte mère
+- Réparer ce qui peut l’être : j’ai ressoudé une prise USB-C dessoudée sur un ordinateur portable (réparation rudimentaire)
 - Tenir à jour les systèmes et les logiciels, avec une sauvegarde avant chaque grosse modification
-
-## Difficultés rencontrées
-
-<!-- À compléter avec une difficulté réelle, et ce qui l’a résolue. -->
 
 ## Ce que j’en retiens
 

@@ -22,13 +22,10 @@ Mes photos, mes documents et mes accès sont sur mes propres machines. Je voulai
 - Une sauvegarde chiffrée chaque semaine avec Duplicati, vers un stockage en ligne
 - Une règle 3-2-1 : trois copies, sur deux supports, dont une hors de chez moi
 - Un coffre KeePassXC qui contient mes mots de passe et mes clés de déchiffrement, et rien d’autre
+- Des sessions personnelles et professionnelles séparées grâce aux partitions de mes ordinateurs
 - Un dossier chiffré avec Cryptomator pour les fichiers les plus sensibles
 - Une double authentification : biométrie sur mon téléphone, codes TOTP sur les comptes importants, plutôt que les SMS
 - Aucun mot de passe ni coordonnée bancaire enregistré dans le navigateur
-
-## Difficultés rencontrées
-
-<!-- À compléter avec une difficulté réelle, et ce qui l’a résolue. -->
 
 ## Ce que j’en retiens
 
